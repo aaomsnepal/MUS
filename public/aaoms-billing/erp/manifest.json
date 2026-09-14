@@ -1,0 +1,12 @@
+{
+  "name": "AAOMS Nepal Billing",
+  "short_name": "AAOMS Billing",
+  "start_url": "./Billing.dc.html",
+  "display": "standalone",
+  "background_color": "#f5ead8",
+  "theme_color": "#c67139",
+  "icons": [
+    { "src": "assets/aaoms-logo.jpeg", "sizes": "192x192", "type": "image/jpeg" },
+    { "src": "assets/aaoms-logo.jpeg", "sizes": "512x512", "type": "image/jpeg" }
+  ]
+}

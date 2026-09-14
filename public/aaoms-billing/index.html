@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>AAOMS Nepal — Billing &amp; Inventory</title>
+  <link rel="manifest" href="tax-invoice/manifest.json">
+  <style>
+    :root {
+      --bg: #f5ead8; --card: #fdfbf7; --line: #dcd6cd; --ink: #2c221e; --muted: #5a4f4c;
+      --accent: #c67139; --accent-dark: #b87333; --primary: #0b2545; --teal: #00a896;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Roboto, Arial, sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; }
+
+    /* HEADER */
+    header {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 14px 16px; background: var(--primary); color: #fff; position: sticky; top: 0; z-index: 100;
+    }
+    header .brand { display: flex; align-items: center; gap: 10px; }
+    header img { width: 38px; height: 38px; border-radius: 50%; }
+    header h1 { font-size: 16px; margin: 0; }
+    header p { font-size: 11px; color: var(--teal); margin: 0; }
+    .badge-live { background: var(--teal); color: #fff; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+
+    /* TABS */
+    .tabs {
+      display: flex; background: var(--card); border-bottom: 2px solid var(--line);
+      overflow-x: auto; -webkit-overflow-scrolling: touch; position: sticky; top: 62px; z-index: 99;
+    }
+    .tabs button {
+      flex: 1; min-width: 0; background: transparent; border: none; padding: 12px 10px;
+      font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer;
+      border-bottom: 3px solid transparent; white-space: nowrap; font-family: inherit;
+    }
+    .tabs button.on { color: var(--accent); border-bottom-color: var(--accent); }
+    .tabs button:hover { color: var(--ink); background: rgba(198,113,57,.04); }
+
+    /* PANELS */
+    .panel { display: none; padding: 16px; min-height: calc(100vh - 110px); }
+    .panel.on { display: block; }
+
+    /* TAX INVOICE PANEL */
+    .tax-panel { background: var(--bg); }
+    .form-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+    .form-row > * { flex: 1; min-width: 120px; }
+    input, select { width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 14px; background: #fff; font-family: inherit; }
+    label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+    .card h2 { font-size: 16px; margin: 0 0 12px; color: var(--primary); }
+    .items-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+    .items-table th { background: var(--primary); color: #fff; padding: 8px; text-align: left; font-size: 11px; text-transform: uppercase; }
+    .items-table td { padding: 8px; border-bottom: 1px solid var(--line); }
+    .items-table tr:hover td { background: rgba(198,113,57,.04); }
+    .totals { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-top: 12px; }
+    .totals .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px; }
+    .totals .grand { font-size: 18px; font-weight: 700; color: var(--accent); border-top: 2px solid var(--accent); padding-top: 8px; margin-top: 8px; }
+    .btn { padding: 10px 18px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-dark); }
+    .btn-teal { background: var(--teal); color: #fff; }
+    .btn-outline { background: transparent; border: 1px solid var(--line); color: var(--ink); }
+    .action-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .mode-toggle { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    .mode-toggle label { padding: 8px 14px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; font-size: 13px; background: #fff; }
+    .mode-toggle input:checked + label { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    /* INVENTORY PANEL */
+    .inv-panel { background: var(--bg); }
+    .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 14px; }
+    .stat { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px; text-align: center; }
+    .stat .n { font-size: 20px; font-weight: 700; color: var(--accent-dark); }
+    .stat .l { font-size: 11px; color: var(--muted); }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .toolbar input[type=search] { padding: 8px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; min-width: 140px; }
+    table.inv-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    table.inv-table th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .03em; padding: 8px; border-bottom: 2px solid var(--line); }
+    table.inv-table td { padding: 8px; border-bottom: 1px solid var(--line); }
+    table.inv-table tr:hover td { background: rgba(198,113,57,.04); }
+    .btn-danger { background: transparent; color: #b3261e; padding: 4px 8px; font-size: 12px; border: none; cursor: pointer; }
+    .btn-export { background: var(--accent-dark); color: #fff; padding: 8px 14px; font-size: 13px; border: none; border-radius: 6px; cursor: pointer; }
+
+    /* ERP PANEL */
+    .erp-panel { background: #fff; }
+    .erp-panel iframe { width: 100%; border: 0; min-height: 600px; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 20px; border-radius: 24px; font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 999; }
+    .toast.show { opacity: 1; }
+
+    /* PWA install */
+    .install-btn { background: var(--teal); color: #fff; padding: 6px 14px; border-radius: 6px; font-size: 12px; border: none; cursor: pointer; }
+
+    /* Mobile responsive */
+    @media (max-width: 600px) {
+      header { padding: 10px 12px; }
+      header h1 { font-size: 14px; }
+      .tabs button { padding: 10px 6px; font-size: 12px; }
+      .panel { padding: 12px; }
+      .form-row > * { min-width: 100%; }
+      .items-table { font-size: 12px; }
+      .summary-row { grid-template-columns: repeat(2, 1fr); }
+      .erp-panel iframe { min-height: 500px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <img src="assets/aaoms-logo.jpeg" alt="AAOMS">
+    <div>
+      <h1>AAOMS Nepal</h1>
+      <p>Billing &amp; Inventory Management</p>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <span class="badge-live">● Live</span>
+    <button class="install-btn" id="installBtn" style="display:none">Install App</button>
+  </div>
+</header>
+
+<div class="tabs" id="tabs">
+  <button type="button" class="on" data-tab="tax">💰 Tax Invoice</button>
+  <button type="button" data-tab="inventory">📦 Inventory</button>
+  <button type="button" data-tab="erp">⚙️ Full ERP</button>
+</div>
+
+<!-- TAX INVOICE PANEL -->
+<div class="panel tax-panel on" id="panel-tax">
+  <div class="card">
+    <h2>Tax Invoice &amp; Tender Generator</h2>
+    <div class="mode-toggle">
+      <input type="radio" id="mode-tax" name="docMode" value="tax" checked>
+      <label for="mode-tax">Tax Invoice (13% VAT)</label>
+      <input type="radio" id="mode-tender" name="docMode" value="tender">
+      <label for="mode-tender">Government Tender</label>
+    </div>
+    <div class="form-row">
+      <div>
+        <label>Hospital / Buyer</label>
+        <select id="hospital-select" onchange="window.onHospitalSelect(this.value)">
+          <option value="">-- Select --</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div><input type="text" id="hospital-email-display" placeholder="Email" readonly></div>
+      <div><input type="text" id="hospital-phone-display" placeholder="Phone" readonly></div>
+    </div>
+    <div id="tender-fields-group" style="display:none">
+      <div class="card" style="background:#fff;border-color:var(--teal)">
+        <h2 style="color:var(--teal)">PPMO Tender Details</h2>
+        <div class="form-row">
+          <div><input type="text" id="tender-id" placeholder="Tender / IFB ID"></div>
+          <div><input type="text" id="bid-validity" placeholder="Validity" value="90 Days"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Add Item</h2>
+      <div class="form-row">
+        <div>
+          <label>Product</label>
+          <select id="catalog-select" onchange="window.autoFillCatalogItem(this.value)">
+            <option value="">-- Choose --</option>
+            <option value="MW-01">Surgical Scrub Set</option>
+            <option value="MW-02">Doctor Lab Coat</option>
+            <option value="MW-03">Bed Sheet &amp; Pillowcase</option>
+            <option value="SI-01">Surgical Tool Kit</option>
+            <option value="SI-02">Sterile OT Drapes</option>
+            <option value="HA-01">Instrument Trolley</option>
+            <option value="HA-02">Adjustable IV Stand</option>
+          </select>
+        </div>
+        <div><input type="number" id="item-qty-input" value="0" placeholder="Qty" oninput="window.calculateNepalVAT()"></div>
+      </div>
+      <div class="form-row">
+        <div><input type="number" id="item-price-input" placeholder="Unit Price" oninput="window.calculateNepalVAT()"></div>
+        <div><input type="text" id="item-desc-input" readonly placeholder="Description"></div>
+      </div>
+    </div>
+    <table class="items-table" id="invoice-items-table">
+      <thead><tr><th>Description</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
+      <tbody id="invoice-items-body">
+        <tr><td><input type="text" id="item-desc-input" value="Medical Equipment" style="width:100%;border:1px solid #ccc;padding:6px;box-sizing:border-box"></td><td><input type="number" id="item-qty-input" value="0" oninput="window.calculateNepalVAT()" style="width:60px"></td><td><input type="number" id="item-price-input" value="0" oninput="window.calculateNepalVAT()" style="width:80px"></td><td id="item-total-display" style="font-weight:600">NPR 0.00</td></tr>
+      </tbody>
+    </table>
+    <div class="totals">
+      <div class="row"><span>Taxable Subtotal:</span><span id="subtotal-val">NPR 0.00</span></div>
+      <div class="row"><span>VAT (13%):</span><span id="vat-val">NPR 0.00</span></div>
+      <div class="row grand"><span>Grand Total:</span><span id="grandtotal-val">NPR 0.00</span></div>
+    </div>
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="window.print()">🖨️ Print</button>
+      <button class="btn btn-teal" onclick="window.sendDocumentEmail()">✉️ Email</button>
+      <button class="btn btn-outline" onclick="window.sendWhatsAppMessage()">💬 WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- INVENTORY PANEL -->
+<div class="panel inv-panel" id="panel-inventory">
+  <div class="card">
+    <h2>📦 Inventory Purchases</h2>
+    <div class="summary-row">
+      <div class="stat"><div class="n" id="stat-total">0</div><div class="l">Total Items</div></div>
+      <div class="stat"><div class="n" id="stat-value">0</div><div class="l">Total Value (NPR)</div></div>
+      <div class="stat"><div class="n" id="stat-count">0</div><div class="l">Purchases</div></div>
+    </div>
+    <div class="toolbar">
+      <input type="search" id="inv-search" placeholder="Search items..." oninput="window.filterInventory()">
+      <button class="btn-export" onclick="window.exportInventory()">📊 Export CSV</button>
+    </div>
+    <table class="inv-table" id="inv-table">
+      <thead><tr><th>Item</th><th>Qty</th><th>Price</th><th>Date</th><th></th></tr></thead>
+      <tbody id="inv-body">
+        <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">No purchases logged yet</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h2>Log New Purchase</h2>
+    <form id="purchaseForm" onsubmit="window.addPurchase(event)">
+      <div class="form-row">
+        <div><label>Item Name</label><input type="text" id="pName" required placeholder="e.g. Surgical cotton fabric"></div>
+        <div><label>Qty</label><input type="number" id="pQty" required min="1"></div>
+      </div>
+      <div class="form-row">
+        <div><label>Price (NPR)</label><input type="number" id="pPrice" required min="0"></div>
+        <div><label>Supplier</label><input type="text" id="pSupplier" placeholder="Supplier name"></div>
+      </div>
+      <button class="btn btn-primary" type="submit" style="margin-top:8px">✅ Add Purchase</button>
+    </form>
+  </div>
+</div>
+
+<!-- ERP PANEL -->
+<div class="panel erp-panel" id="panel-erp">
+  <iframe id="erpFrame" src="erp/Billing.dc.html" title="Full ERP System"></iframe>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══ Tab Navigation ═══ */
+document.getElementById('tabs').addEventListener('click', function(e) {
+  var btn = e.target.closest('button[data-tab]');
+  if (!btn) return;
+  document.querySelectorAll('.tabs button').forEach(function(b) { b.classList.remove('on'); });
+  document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('panel-' + btn.dataset.tab).classList.add('on');
+});
+
+/* ═══ Toast ═══ */
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+/* ═══ PWA Install ═══ */
+var deferredPrompt;
+window.addEventListener('beforeinstallprompt', function(e) { e.preventDefault(); deferredPrompt = e; document.getElementById('installBtn').style.display = 'inline-block'; });
+document.getElementById('installBtn').addEventListener('click', function() { deferredPrompt.prompt(); deferredPrompt.userChoice.then(function() { deferredPrompt = null; document.getElementById('installBtn').style.display = 'none'; }); });
+
+/* ═══ Hospital Data ═══ */
+var hospitalsData = [
+  { name: 'Bir Hospital', address: 'Kathmandu', email: 'bir@hc.gov.np', phone: '+977-1-4232073' },
+  { name: 'Tribhuvan University Teaching Hospital', address: 'Kathmandu', email: 'tuthc@hc.gov.np', phone: '+977-1-4721573' },
+  { name: 'Patan Hospital', address: 'Lalitpur', email: 'patan@hc.gov.np', phone: '+977-1-5522003' },
+  { name: 'Birendra Hospital', address: 'Chitwan', email: 'birendra@hc.gov.np', phone: '+977-56-520438' },
+  { name: 'Paropakar Maternity Hospital', address: 'Kathmandu', email: 'pmw@hc.gov.np', phone: '+977-1-4700565' }
+];
+
+window.loadHospitals = function() {
+  var sel = document.getElementById('hospital-select');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">-- Select Hospital --</option>';
+  hospitalsData.forEach(function(h, i) {
+    var opt = document.createElement('option');
+    opt.value = i; opt.textContent = h.name;
+    sel.appendChild(opt);
+  });
+};
+window.onHospitalSelect = function(i) {
+  if (i === '') return;
+  var h = hospitalsData[i];
+  document.getElementById('hospital-email-display').value = h.email || '';
+  document.getElementById('hospital-phone-display').value = h.phone || '';
+};
+
+/* ═══ Tax Invoice Logic ═══ */
+window.currentDocMode = 'tax';
+window.currentInvoice = { invoiceNo: 'INV-' + Math.floor(100000 + Math.random() * 900000), date: new Date().toISOString().split('T')[0], hospitalName: '', taxableSubtotal: 0, vatAmount: 0, grandTotal: 0 };
+window.productCatalog = [
+  { id: 'MW-01', name: 'Surgical Scrub Set (Autoclavable Fabric)', unitPrice: 1800 },
+  { id: 'MW-02', name: 'Doctor Lab Coat (Anti-Microbial Fabric)', unitPrice: 1500 },
+  { id: 'MW-03', name: 'Hospital Bed Sheet & Pillowcase Set', unitPrice: 950 },
+  { id: 'SI-01', name: 'Maxillofacial Surgical Tool Kit', unitPrice: 45000 },
+  { id: 'SI-02', name: 'Sterile OT Surgical Drapes Set', unitPrice: 650 },
+  { id: 'HA-01', name: 'Stainless Steel Instrument Trolley', unitPrice: 12500 },
+  { id: 'HA-02', name: 'Adjustable IV Stand (Heavy Duty)', unitPrice: 3200 }
+];
+
+window.switchDocumentMode = function(mode) {
+  window.currentDocMode = mode;
+  var tg = document.getElementById('tender-fields-group');
+  if (tg) tg.style.display = mode === 'tender' ? 'block' : 'none';
+};
+
+window.autoFillCatalogItem = function(pid) {
+  var p = window.productCatalog.find(function(x) { return x.id === pid; });
+  if (!p) return;
+  document.getElementById('item-desc-input').value = p.name;
+  document.getElementById('item-price-input').value = p.unitPrice;
+  window.calculateNepalVAT();
+};
+
+window.calculateNepalVAT = function() {
+  var qty = parseFloat(document.getElementById('item-qty-input').value) || 0;
+  var price = parseFloat(document.getElementById('item-price-input').value) || 0;
+  var total = qty * price;
+  var vat = total * 0.13;
+  var grand = total + vat;
+  window.currentInvoice.taxableSubtotal = total;
+  window.currentInvoice.vatAmount = vat;
+  window.currentInvoice.grandTotal = grand;
+  var el = function(id) { return document.getElementById(id); };
+  if (el('item-total-display')) el('item-total-display').textContent = 'NPR ' + total.toFixed(2);
+  if (el('subtotal-val')) el('subtotal-val').textContent = 'NPR ' + total.toFixed(2);
+  if (el('vat-val')) el('vat-val').textContent = 'NPR ' + vat.toFixed(2);
+  if (el('grandtotal-val')) el('grandtotal-val').textContent = 'NPR ' + grand.toFixed(2);
+};
+
+window.sendDocumentEmail = function() { showToast('📧 Email sent (demo)'); };
+window.sendWhatsAppMessage = function() { showToast('💬 WhatsApp shared (demo)'); };
+
+window.loadHospitals();
+</script>
+
+<script>
+/* ═══ Inventory Logic ═══ */
+var inventoryData = [];
+
+function loadInventory() {
+  var saved = localStorage.getItem('aaoms_inventory');
+  if (saved) { try { inventoryData = JSON.parse(saved); } catch(e) {} }
+  renderInventory();
+}
+
+function saveInventory() { localStorage.setItem('aaoms_inventory', JSON.stringify(inventoryData)); }
+
+function renderInventory() {
+  var tbody = document.getElementById('inv-body');
+  if (!tbody) return;
+  if (!inventoryData.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">No purchases logged yet</td></tr>'; return; }
+  tbody.innerHTML = inventoryData.map(function(d, i) {
+    return '<tr><td>' + d.name + '</td><td>' + d.qty + '</td><td>NPR ' + d.price.toFixed(0) + '</td><td>' + d.date + '</td><td><button class="btn-danger" onclick="window.removePurchase(' + i + ')">✕</button></td></tr>';
+  }).join('');
+  // Stats
+  var totalItems = inventoryData.reduce(function(s, d) { return s + d.qty; }, 0);
+  var totalValue = inventoryData.reduce(function(s, d) { return s + d.qty * d.price; }, 0);
+  var el = function(id) { return document.getElementById(id); };
+  if (el('stat-total')) el('stat-total').textContent = totalItems;
+  if (el('stat-value')) el('stat-value').textContent = 'NPR ' + totalValue.toLocaleString();
+  if (el('stat-count')) el('stat-count').textContent = inventoryData.length;
+}
+
+window.addPurchase = function(e) {
+  e.preventDefault();
+  var name = document.getElementById('pName').value.trim();
+  var qty = parseInt(document.getElementById('pQty').value) || 0;
+  var price = parseFloat(document.getElementById('pPrice').value) || 0;
+  var supplier = document.getElementById('pSupplier').value.trim() || 'N/A';
+  if (!name || !qty) { showToast('⚠️ Fill in item name and quantity'); return; }
+  inventoryData.push({ name: name, qty: qty, price: price, supplier: supplier, date: new Date().toISOString().split('T')[0] });
+  saveInventory();
+  renderInventory();
+  document.getElementById('purchaseForm').reset();
+  showToast('✅ Purchase logged');
+};
+
+window.removePurchase = function(i) { inventoryData.splice(i, 1); saveInventory(); renderInventory(); showToast('Removed'); };
+window.filterInventory = function() {
+  var q = document.getElementById('inv-search').value.toLowerCase();
+  var rows = document.querySelectorAll('#inv-body tr');
+  rows.forEach(function(r) { var t = r.textContent.toLowerCase(); r.style.display = t.includes(q) ? '' : 'none'; });
+};
+window.exportInventory = function() {
+  if (!inventoryData.length) { showToast('No data to export'); return; }
+  var csv = 'Item,Qty,Price,Supplier,Date\n' + inventoryData.map(function(d) { return d.name + ',' + d.qty + ',' + d.price + ',' + d.supplier + ',' + d.date; }).join('\n');
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'aaoms_inventory.csv'; a.click();
+  showToast('📊 CSV exported');
+};
+
+loadInventory();
+</script>
+
+<!-- PWA Service Worker -->
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('tax-invoice/sw.js').catch(function() {});
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sector Heatmap — NEPSE Terminal · kkpramod.com.np</title>
+<meta name="description" content="NEPSE sector heatmap — visual breakdown of market sectors by turnover, % change and leaders.">
+<meta name="theme-color" content="#09090b">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://kkpramod.com.np/heatmap">
+<meta property="og:title" content="Sector Heatmap — NEPSE Terminal">
+<meta property="og:description" content="NEPSE sector heatmap — visual breakdown of market sectors by turnover, % change and leaders.">
+<meta property="og:url" content="https://kkpramod.com.np/heatmap">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="/assets/favicon-infinity.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/aaoms-core.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#09090b;--fg:#fafafa;--dim:rgba(255,255,255,.55);
+  --green:#22c55e;--red:#ef4444;--gold:#e8d5a3;
+  --card:rgba(255,255,255,.03);--line:rgba(255,255,255,.08);
+}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,sans-serif;line-height:1.5;min-height:100vh}
+a{color:var(--gold);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+
+/* back link */
+.back-bar{padding:18px 0 8px;font-size:13px;color:var(--dim)}
+.back-bar a{display:inline-flex;align-items:center;gap:4px}
+
+/* header */
+.hero{padding:20px 0 12px}
+.hero h1{font-size:clamp(1.4rem,3.5vw,1.8rem);font-weight:700;margin-bottom:4px}
+.hero p{font-size:13px;color:var(--dim);max-width:60ch}
+
+/* stats row */
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px;text-align:center;min-width:90px}
+.stat .n{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:600}
+.stat .l{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-top:2px}
+.stat.up .n{color:var(--green)} .stat.down .n{color:var(--red)}
+
+/* grid */
+.heatmap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin:12px 0 32px}
+@media(max-width:600px){.heatmap-grid{grid-template-columns:1fr}}
+
+.sector-tile{
+  border:1px solid var(--line);border-radius:12px;padding:14px 16px;
+  background:var(--card);cursor:pointer;transition:border-color .15s,background .15s;
+  display:flex;flex-direction:column;gap:6px;min-height:110px;
+}
+.sector-tile:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.05)}
+.sector-tile.filtered{border-color:var(--gold);background:rgba(232,213,163,.06)}
+
+.sector-name{font-weight:700;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.sector-pct{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:15px}
+.sector-pct.up{color:var(--green)} .sector-pct.down{color:var(--red)} .sector-pct.flat{color:var(--dim)}
+.sector-meta{font-size:11.5px;color:var(--dim);font-family:'JetBrains Mono',monospace;display:flex;gap:12px;flex-wrap:wrap}
+.sector-bar{height:3px;border-radius:2px;margin-top:2px;overflow:hidden;background:rgba(255,255,255,.06)}
+.sector-bar-fill{height:100%;border-radius:2px;transition:width .4s}
+.sector-leaders{font-size:11.5px;color:rgba(255,255,255,.45);margin-top:2px;line-height:1.4}
+.sector-leaders b{color:var(--gold);font-weight:500}
+
+.err{color:var(--red);font-size:13px;padding:12px 0}
+.empty{padding:32px;text-align:center;color:var(--dim);font-size:14px}
+
+footer{margin-top:32px;padding:20px 0;border-top:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.3);text-align:center}
+</style>
+</head>
+<body class="page">
+<header class="aa-header">
+  <nav class="aa-nav wrap">
+    <a class="aa-brand" href="/"><img src="/assets/logo-infinity.png" alt="aaoms infinity logo">Pramod KK</a>
+    <div class="aa-links">
+      <a href="/">Home</a>
+      <div class="navsub">
+        <a class="sub-top" href="/aaomsdigital">aaomsDigital <span class="car">&#9660;</span></a>
+        <div class="submenu">
+          <a href="/aaomsdigital"><b>Services</b><small>Software, AI, 3D, digitizing</small></a>
+          <a href="/aaomsdigital#store"><b>Digital Products</b><small>Embroidery files</small></a>
+          <div class="divider"></div>
+          <a href="/nepse"><b>NEPSE Screener</b><small>Gainers · losers · daily glance</small></a>
+          <a href="/moneycontrol"><b>MoneyControl</b><small>Charts · drawings · indicators</small></a>
+          <a href="/classroom"><b>Price Action Classroom</b><small>Darvas · candles · risk rules</small></a>
+          <a href="/e-aaoms"><b>e-aaoms</b><small>Billing · VAT · ops</small></a>
+          <a href="/print"><b>aaomsPrint</b><small>ID card studio</small></a>
+        </div>
+      </div>
+      <a href="/gurukul">Gurukul</a>
+      <a href="/sayhi">Say Hi</a>
+    </div>
+    <div class="flexrow">
+      <div class="live-pill"><i></i> DAILY</div>
+      <button class="aa-burger" type="button" aria-label="Menu">&#9776;</button>
+    </div>
+  </nav>
+</header>
+<div class="wrap">
+  <div class="back-bar"><a href="/nepse">&larr; Back to NEPSE Screener</a></div>
+  <section class="hero">
+    <h1>Sector Heatmap</h1>
+    <p>Weighted % change by sector (weighted by turnover). Click a tile to see that sector's stocks.</p>
+  </section>
+  <div class="stats" id="stats">
+    <div class="stat"><div class="n" id="sSectors">—</div><div class="l">Sectors</div></div>
+    <div class="stat up"><div class="n" id="sUp">—</div><div class="l">Up</div></div>
+    <div class="stat down"><div class="n" id="sDown">—</div><div class="l">Down</div></div>
+    <div class="stat"><div class="n" id="sFlat">—</div><div class="l">Flat</div></div>
+  </div>
+  <div id="filteredMsg" style="display:none;font-size:12px;color:var(--dim);margin-bottom:8px"></div>
+  <div class="heatmap-grid" id="grid">
+    <div class="empty">Loading live market data…</div>
+  </div>
+  <div class="err" id="err" style="display:none"></div>
+</div>
+<footer style="margin-top:32px;padding:20px 0;border-top:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.3);text-align:center">© 2025 Pramod KK · NEPSE Terminal · Sector Heatmap<br><a href="/" style="color:rgba(255,255,255,.4);margin:0 6px">Home</a> · <a href="/print" style="color:rgba(255,255,255,.4);margin:0 6px">aaomsPrint</a> · <a href="/aaomsdigital" style="color:rgba(255,255,255,.4);margin:0 6px">aaomsDigital</a> · <a href="/nepse" style="color:rgba(255,255,255,.4);margin:0 6px">NEPSE</a> · <a href="/aavnepse" style="color:#ef4444;margin:0 6px;font-weight:600">AVNEPSE</a> · <a href="/classroom" style="color:rgba(255,255,255,.4);margin:0 6px">Classroom</a> · <a href="/gurukul" style="color:rgba(255,255,255,.4);margin:0 6px">Gurukul</a> · <a href="/faq" style="color:rgba(255,255,255,.4);margin:0 6px">FAQ</a> · <a href="/sayhi" style="color:rgba(255,255,255,.4);margin:0 6px">Say Hi</a></footer>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+
+  function fmt(n,d){if(n==null||isNaN(Number(n)))return'—';return Number(n).toLocaleString('en-IN',{maximumFractionDigits:d!=null?d:2})}
+  function fmtCr(n){if(n==null||isNaN(n))return'—';n=Number(n);if(n>=1e7)return(n/1e7).toFixed(1)+'Cr';if(n>=1e5)return(n/1e5).toFixed(1)+'L';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return n.toFixed(0)}
+  function pctCls(p){if(isNaN(p)||p===0)return'flat';return p>0?'up':'down'}
+  function fmtPct(p){if(isNaN(Number(p)))return'—';var n=Number(p);return(n>=0?'+':'')+n.toFixed(2)+'%'}
+
+  var SECTOR_ALIASES = {
+    'commercial banks': 'Commercial Banks', 'bank': 'Commercial Banks', 'banks': 'Commercial Banks',
+    'hydro': 'Hydropower', 'hydro power': 'Hydropower', 'hydropower': 'Hydropower',
+    'insurance': 'Insurance', 'life insurance': 'Insurance', 'non-life insurance': 'Insurance',
+    'microfinance': 'Microfinance', 'finance': 'Finance',
+    'hotel': 'Hotels & Tourism', 'hotels': 'Hotels & Tourism', 'tourism': 'Hotels & Tourism',
+    'manufacturing': 'Manufacturing', 'industry': 'Manufacturing',
+    'development bank': 'Development Banks', 'dev bank': 'Development Banks',
+    'trading': 'Trading', 'market': 'Trading',
+    'investment': 'Investment', 'mutual fund': 'Mutual Funds',
+    'others': 'Others', 'other': 'Others',
+  };
+
+  function normalizeSector(s) {
+    if (!s) return 'Others';
+    s = s.trim();
+    if (SECTOR_ALIASES[s.toLowerCase()]) return SECTOR_ALIASES[s.toLowerCase()];
+    return s;
+  }
+
+  var liveData = null;
+  var filteredSector = null;
+
+  function groupBySector(stocks) {
+    var groups = {};
+    stocks.forEach(function(s) {
+      var sec = normalizeSector(s.sector || s.Sector || s.sectorName || s.subType || '');
+      if (!groups[sec]) groups[sec] = [];
+      groups[sec].push(s);
+    });
+    return groups;
+  }
+
+  function computeSectors(stocks) {
+    var groups = groupBySector(stocks);
+    var sectors = [];
+    Object.keys(groups).forEach(function(name) {
+      var list = groups[name];
+      var totalTurnover = 0, weightedChg = 0, up = 0, down = 0, flat = 0;
+      list.forEach(function(s) {
+        var pct = Number(s.pct || s.percChange || s.percentChange || 0);
+        var turnover = Number(s.turnover || s.amount || s.totalAmount || (Number(s.ltp||0) * Number(s.qty||s.quantity||0)));
+        totalTurnover += turnover;
+        weightedChg += pct * turnover;
+      });
+      var avgChg = totalTurnover > 0 ? weightedChg / totalTurnover : 0;
+      list.forEach(function(s) {
+        var pct = Number(s.pct || s.percChange || s.percentChange || 0);
+        if (pct > 0.01) up++;
+        else if (pct < -0.01) down++;
+        else flat++;
+      });
+      list.sort(function(a,b) {
+        return Number(b.pct||b.percChange||0) - Number(a.pct||a.percChange||0);
+      });
+      sectors.push({
+        name: name, pct: avgChg, turnover: totalTurnover,
+        count: list.length, up: up, down: down, flat: flat,
+        leaders: list.slice(0, 3)
+      });
+    });
+    sectors.sort(function(a,b) { return Math.abs(b.turnover) - Math.abs(a.turnover); });
+    return sectors;
+  }
+
+  function render(sectors) {
+    var grid = $('grid');
+    if (!sectors.length) {
+      grid.innerHTML = '<div class="empty">No sector data available</div>';
+      return;
+    }
+    var maxTurnover = Math.max.apply(null, sectors.map(function(s){return s.turnover}));
+    var sUp = 0, sDown = 0, sFlat = 0;
+    sectors.forEach(function(s) {
+      if (s.pct > 0.01) sUp++;
+      else if (s.pct < -0.01) sDown++;
+      else sFlat++;
+    });
+    $('sSectors').textContent = sectors.length;
+    $('sUp').textContent = sUp;
+    $('sDown').textContent = sDown;
+    $('sFlat').textContent = sFlat;
+
+    grid.innerHTML = sectors.map(function(s, i) {
+      var cls = pctCls(s.pct);
+      var pctWidth = maxTurnover > 0 ? Math.max(8, (s.turnover / maxTurnover) * 100) : 8;
+      var fillColor = s.pct > 0.01 ? 'var(--green)' : s.pct < -0.01 ? 'var(--red)' : 'rgba(255,255,255,.2)';
+      var leaders = s.leaders.map(function(l) {
+        var lp = pctCls(Number(l.pct||l.percChange||0));
+        return '<b>' + (l.sym||l.symbol||'?') + '</b> ' + fmtPct(l.pct||l.percChange||0);
+      }).join(' · ');
+      var isFiltered = filteredSector && filteredSector === s.name;
+      return '<div class="sector-tile' + (isFiltered ? ' filtered' : '') + '" data-idx="' + i + '" data-sector="' + s.name.replace(/"/g,'&quot;') + '">' +
+        '<div class="sector-name"><span>' + s.name + '</span><span class="sector-pct ' + cls + '">' + fmtPct(s.pct) + '</span></div>' +
+        '<div class="sector-meta"><span>' + s.count + ' stocks</span><span>' + (s.up) + '↑ ' + (s.down) + '↓ ' + (s.flat) + '—</span><span>' + fmtCr(s.turnover) + '</span></div>' +
+        '<div class="sector-bar"><div class="sector-bar-fill" style="width:' + pctWidth + '%;background:' + fillColor + '"></div></div>' +
+        '<div class="sector-leaders">' + (leaders || '—') + '</div>' +
+        '</div>';
+    }).join('');
+
+    grid.querySelectorAll('.sector-tile').forEach(function(tile) {
+      tile.addEventListener('click', function() {
+        var sector = tile.getAttribute('data-sector');
+        if (filteredSector === sector) {
+          filteredSector = null;
+          $('filteredMsg').style.display = 'none';
+        } else {
+          filteredSector = sector;
+          $('filteredMsg').style.display = 'block';
+          $('filteredMsg').innerHTML = 'Filtered: <b style="color:var(--gold)">' + sector + '</b> — <a href="javascript:void(0)" onclick="document.getElementById(\'grid\').querySelectorAll(\'.sector-tile\')[0].click()">clear</a>';
+        }
+        render(computeSectors(liveData.all || []));
+      });
+    });
+  }
+
+  async function load() {
+    try {
+      var r = await fetch('/api/nepse/live?t=' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      var d = await r.json();
+      liveData = d;
+      var stocks = d.all || d.ticks || [];
+      render(computeSectors(stocks));
+      $('err').style.display = 'none';
+    } catch(e) {
+      $('err').style.display = 'block';
+      $('err').textContent = 'Failed to load market data — retrying…';
+    }
+  }
+
+  load();
+  setInterval(load, 15000);
+})();
+</script>
+<script src="/assets/aaoms-core.js"></script>
+<div id="pwaBanner">
+  <div class="pwa-text">ðŸ“² Install <strong>kkpramod</strong> on your phone for instant NEPSE updates &amp; aaoms news</div>
+  <div class="pwa-actions">
+    <button id="pwaInstall">Install</button>
+    <button id="pwaNotify">ðŸ”” Notify Me</button>
+    <button id="pwaDismiss">Later</button>
+  </div>
+</div>
+<script src="/assets/pwa.js"></script>
+</body>
+</html>

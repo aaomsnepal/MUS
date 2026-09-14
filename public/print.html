@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>aaomsPrint — ID Card Design &amp; Printing Engine | aaomsDigital Nepal</title>
+<meta name="description" content="aaomsPrint — the ID card design and printing engine from aaomsDigital. Design CR-80 cards front and back with QR and barcode, merge a whole staff list, get an instant quotation and send the job to print. Hospitals, schools, offices and events across Nepal.">
+<meta name="keywords" content="ID card printing Nepal, PVC card printing Janakpur, hospital ID card Nepal, school ID card printing, staff ID card, CR-80 card design, bulk ID card printing Nepal, aaomsPrint">
+<link rel="canonical" href="https://kkpramod.com.np/print">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="aaomsPrint">
+<meta property="og:title" content="aaomsPrint — ID Card Design & Printing Engine">
+<meta property="og:description" content="Design CR-80 ID cards front and back, QR and barcode, merge a staff list, get an instant quotation and send the job to print — hospitals, schools, offices and events across Nepal.">
+<meta property="og:url" content="https://kkpramod.com.np/print">
+<meta property="og:image" content="https://kkpramod.com.np/assets/logo.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="aaomsPrint — ID Card Design & Printing Engine">
+<meta name="twitter:description" content="CR-80 ID card design and printing for hospitals, schools, offices and events across Nepal.">
+<meta name="twitter:image" content="https://kkpramod.com.np/assets/logo.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Service","serviceType":"ID card design and printing","provider":{"@type":"Organization","name":"aaomsPrint","url":"https://kkpramod.com.np/print"},"areaServed":"Nepal","description":"CR-80 PVC ID card design and printing for hospitals, schools, offices, gyms and events, with QR/barcode, batch staff-list merge and instant quotation.","url":"https://kkpramod.com.np/print"}
+</script>
+<meta name="theme-color" content="#050708">
+<link rel="icon" type="image/png" href="/assets/favicon-infinity.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Rajdhani:wght@500;600;700&family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/aaoms-core.css">
+<link rel="stylesheet" href="/assets/print-studio.css">
+</head>
+<body class="page">
+
+<div id="aaBoot"><div class="ring"></div><div class="txt">aaomsPrint · initialising studio</div></div>
+<div class="aa-field" aria-hidden="true"><canvas id="aaCanvas"></canvas></div>
+
+<header class="aa-header">
+  <nav class="aa-nav wrap">
+    <a class="aa-brand" href="/"><img src="/assets/logo.png" alt="">Pramod KK</a>
+    <div class="aa-links">
+      <a href="/">Home</a>
+      <div class="navsub">
+        <a class="sub-top" href="/aaomsdigital">aaomsDigital <span class="car">&#9660;</span></a>
+        <div class="submenu">
+          <a href="/aaomsdigital"><b>Services</b><small>Software, AI, 3D, digitizing</small></a>
+          <a href="/aaomsdigital#store"><b>Digital Products</b><small>Embroidery files</small></a>
+          <div class="divider"></div>
+          <a href="/nepse"><b>NEPSE Screener</b><small>Gainers · losers · daily glance</small></a>
+          <a href="/moneycontrol"><b>MoneyControl</b><small>Charts · drawings · indicators</small></a>
+          <a href="/classroom"><b>Price Action Classroom</b><small>Darvas · candles · risk rules</small></a>
+          <a href="/e-aaoms"><b>e-aaoms</b><small>Billing · VAT · ops</small></a>
+          <a href="/print"><b>aaomsPrint</b><small>ID card studio</small></a>
+        </div>
+      </div>
+      <a href="/gurukul">Gurukul</a>
+      <a href="/sayhi">Say Hi</a>
+    </div>
+    <div class="flexrow">
+      <div class="live-pill"><i></i> STUDIO</div>
+      <button class="aa-burger" type="button" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+</header>
+
+<section class="aa-hero wrap">
+  <div class="aa-crumb"><a href="/">home</a> / <a href="/aaomsdigital">aaomsDigital</a> / aaomsPrint / studio</div>
+  <div class="label">aaomsDigital · aaomsPrint engine</div>
+  <h1>The card printing engine</h1>
+  <p>A complete design and production interface for CR-80 cards. Front and back, QR and barcode, a whole staff list merged in one pass, live quotation and a queue that feeds the machine. Built as a service under aaomsDigital — hospitals, schools, offices, gyms and events across Nepal.</p>
+</section>
+
+<!-- ══ TOOLBAR ══ -->
+<div class="wrap">
+  <div class="studio-toolbar glass neon-edge">
+    <div class="tb-group">
+      <span class="tb-label">Side</span>
+      <div class="seg">
+        <button class="seg-btn active" data-side="front">Front</button>
+        <button class="seg-btn" data-side="back">Back</button>
+      </div>
+    </div>
+    <div class="tb-group">
+      <span class="tb-label">Orientation</span>
+      <div class="seg">
+        <button class="seg-btn active" data-orient="h">Landscape</button>
+        <button class="seg-btn" data-orient="v">Portrait</button>
+      </div>
+    </div>
+    <div class="tb-group">
+      <span class="tb-label">Zoom</span>
+      <input type="range" id="zoom" min="60" max="220" value="120" class="tb-range">
+      <span class="mono muted" id="zoomVal">120%</span>
+    </div>
+    <div class="tb-group">
+      <label class="tb-check"><input type="checkbox" id="optSnap" checked> Snap</label>
+      <label class="tb-check"><input type="checkbox" id="optGuides" checked> Safe zone</label>
+      <label class="tb-check"><input type="checkbox" id="optBleed" title="Adds the printer profile bleed margin to every export"> Bleed</label>
+      <label class="tb-check"><input type="checkbox" id="optGrid"> Grid</label>
+    </div>
+    <div class="spacer"></div>
+    <div class="tb-group">
+      <button class="btn btn-ghost btn-sm" id="btnUndo" title="Ctrl+Z">↶ Undo</button>
+      <button class="btn btn-ghost btn-sm" id="btnRedo" title="Ctrl+Y">↷ Redo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STUDIO ══ -->
+<main class="wrap studio-main">
+
+  <!-- LEFT RAIL -->
+  <aside class="rail rail-left">
+
+    <div class="blk glass" data-open="1">
+      <h3 class="blk-h">Templates <i>▾</i></h3>
+      <div class="blk-b">
+        <div class="tpl-filter">
+          <button class="tfx active" data-cat="all">All</button>
+          <button class="tfx" data-cat="health">Health</button>
+          <button class="tfx" data-cat="edu">Education</button>
+          <button class="tfx" data-cat="corp">Corporate</button>
+          <button class="tfx" data-cat="event">Event</button>
+        </div>
+        <div class="tpl-grid" id="tplGrid"></div>
+      </div>
+    </div>
+
+    <div class="blk glass" data-open="1">
+      <h3 class="blk-h">Card data <i>▾</i></h3>
+      <div class="blk-b">
+        <p class="hint">These fill any element that is bound to a field. Used again for batch merge.</p>
+        <div class="field"><label>Organization</label><input id="dOrg" value="AAOMS Nepal"></div>
+        <div class="field"><label>Sub-line / branch</label><input id="dSub" value="Mahendra Nagar · Dhanusha"></div>
+        <div class="row2">
+          <div class="field"><label>Full name</label><input id="dName" value="Sita Sharma"></div>
+          <div class="field"><label>Role / title</label><input id="dRole" value="Staff Nurse"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>ID number</label><input id="dId" value="NP-2026-0142"></div>
+          <div class="field"><label>Department</label><input id="dDept" value="Emergency"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Blood group</label><input id="dBlood" value="O+"></div>
+          <div class="field"><label>Valid till</label><input id="dValid" value="2027-12-31"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Phone</label><input id="dPhone" value="+977 9803840868"></div>
+          <div class="field"><label>Email</label><input id="dEmail" value="info@aaomsnepal.com"></div>
+        </div>
+        <div class="field"><label>Address / footer line</label><input id="dAddr" value="Bateshwor, Mahendra Nagar, Dhanusha"></div>
+        <div class="row2">
+          <div class="field"><label>Custom 1</label><input id="dC1" value=""></div>
+          <div class="field"><label>Custom 2</label><input id="dC2" value=""></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Photo</label><input id="dPhoto" type="file" accept="image/*"></div>
+          <div class="field"><label>Logo</label><input id="dLogo" type="file" accept="image/*"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Photo zoom</label><input id="dPhotoZoom" type="range" min="100" max="260" value="100"></div>
+          <div class="field"><label>Accent colour</label><input id="dAccent" type="color" value="#d4a84b"></div>
+        </div>
+        <div class="flexrow">
+          <button class="btn btn-ghost btn-sm" id="btnClearPhoto">Clear photo</button>
+          <button class="btn btn-ghost btn-sm" id="btnClearLogo">Clear logo</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="blk glass" data-open="0">
+      <h3 class="blk-h">Background <i>▾</i></h3>
+      <div class="blk-b">
+        <div class="field"><label>Style</label>
+          <select id="bgType">
+            <option value="gradient">Gradient</option>
+            <option value="solid">Solid colour</option>
+            <option value="image">Image</option>
+            <option value="grid">Tech grid</option>
+            <option value="circuit">Circuit</option>
+            <option value="wave">Wave</option>
+            <option value="dots">Dots</option>
+            <option value="hex">Hex mesh</option>
+            <option value="diagonal">Diagonal bands</option>
+          </select>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Colour A</label><input id="bgC1" type="color" value="#152030"></div>
+          <div class="field"><label>Colour B</label><input id="bgC2" type="color" value="#0b1118"></div>
+        </div>
+        <div class="field"><label>Angle <span class="mono muted" id="bgAngVal">135°</span></label><input id="bgAngle" type="range" min="0" max="360" value="135"></div>
+        <div class="field"><label>Background image</label><input id="bgImage" type="file" accept="image/*"></div>
+        <div class="row2">
+          <div class="field"><label>Image opacity</label><input id="bgOpacity" type="range" min="10" max="100" value="100"></div>
+          <div class="field"><label>Header bar %</label><input id="bgBar" type="range" min="0" max="30" value="4"></div>
+        </div>
+        <label class="tb-check"><input type="checkbox" id="bgSheen" checked> Holographic sheen</label>
+      </div>
+    </div>
+
+    <div class="blk glass" data-open="0">
+      <h3 class="blk-h">Saved designs <i>▾</i></h3>
+      <div class="blk-b">
+        <div class="field"><label>Design name</label><input id="dsgName" placeholder="Hospital staff v1"></div>
+        <div class="flexrow">
+          <button class="btn btn-gold btn-sm" id="btnSaveDesign">Save to server</button>
+          <button class="btn btn-ghost btn-sm" id="btnExportJson">Export .json</button>
+          <button class="btn btn-ghost btn-sm" id="btnImportJson">Import .json</button>
+          <input type="file" id="jsonFile" accept="application/json" class="hide">
+        </div>
+        <div class="dsg-list" id="dsgList"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CENTRE STAGE -->
+  <section class="stage-col">
+    <div class="stage glass neon-edge corner-tick">
+      <div class="stage-bar">
+        <span class="mono" id="stageSide">FRONT</span>
+        <span class="stage-meta mono" id="stageMeta">CR-80 · 85.6 × 53.98 mm · 300 dpi</span>
+      </div>
+      <div class="stage-frame" id="stageFrame">
+        <div class="card-shell" id="cardShell">
+          <canvas id="cardCanvas"></canvas>
+          <div class="ov" id="overlay"></div>
+        </div>
+      </div>
+      <div class="stage-foot">
+        <span class="mono muted">drag to move · corner to scale · arrows nudge · Del removes</span>
+        <span class="mono" id="posRead">—</span>
+      </div>
+    </div>
+
+    <!-- BACK / OTHER SIDE — always visible below the active side, click to edit it -->
+    <div class="stage stage-mini glass neon-edge corner-tick" id="stageOther">
+      <div class="stage-bar">
+        <span class="mono" id="stageOtherSide">BACK</span>
+        <span class="stage-meta mono">click to edit this side</span>
+      </div>
+      <div class="stage-frame stage-frame-mini">
+        <div class="card-shell" id="cardShellOther">
+          <canvas id="cardCanvasOther"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="addbar glass">      <span class="tb-label">Add</span>
+      <button class="btn btn-cyan btn-sm" data-add="text">Text</button>
+      <button class="btn btn-cyan btn-sm" data-add="label">Label</button>
+      <button class="btn btn-cyan btn-sm" data-add="mono">Mono</button>
+      <button class="btn btn-cyan btn-sm" data-add="photo">Photo</button>
+      <button class="btn btn-cyan btn-sm" data-add="logo">Logo</button>
+      <button class="btn btn-cyan btn-sm" data-add="qr">QR</button>
+      <button class="btn btn-cyan btn-sm" data-add="barcode">Barcode</button>
+      <button class="btn btn-cyan btn-sm" data-add="shape">Box</button>
+      <button class="btn btn-cyan btn-sm" data-add="line">Line</button>
+      <button class="btn btn-cyan btn-sm" data-add="signature">Sign line</button>
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="blk glass" data-open="1">
+      <h3 class="blk-h">Output &amp; print <i>▾</i></h3>
+      <div class="blk-b">
+        <div class="row2">
+          <div class="field"><label>Printer profile</label><select id="printerSel"></select></div>
+          <div class="field"><label>Print sides</label>
+            <select id="sidesSel"><option value="single">Single side</option><option value="double">Double side (duplex)</option></select>
+          </div>
+        </div>
+        <p class="printer-note mono muted" id="printerNote">—</p>
+        <div class="flexrow">
+          <button class="btn btn-gold btn-sm" id="btnPng300">PNG 300 dpi</button>
+          <button class="btn btn-gold btn-sm" id="btnPng600">PNG 600 dpi</button>
+          <button class="btn btn-ghost btn-sm" id="btnPdf">Print-ready PDF</button>
+          <button class="btn btn-ghost btn-sm" id="btnSheet">Print sheet</button>
+          <button class="btn btn-ghost btn-sm" id="btnBothSides">Both sides PNG</button>
+        </div>
+        <p class="hint mt8">PDF and sheet are sized to exact CR-80 mm with the bleed from the selected printer profile, so the card prints 1:1 with no scaling.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT RAIL -->
+  <aside class="rail rail-right">
+
+    <div class="blk glass" data-open="1">
+      <h3 class="blk-h">Layers <i>▾</i></h3>
+      <div class="blk-b">
+        <div class="el-list" id="elList"></div>
+        <div class="flexrow mt8">
+          <button class="btn btn-ghost btn-sm" id="btnDup">Duplicate</button>
+          <button class="btn btn-ghost btn-sm" id="btnUp">Bring up</button>
+          <button class="btn btn-ghost btn-sm" id="btnDown">Send down</button>
+          <button class="btn btn-red btn-sm" id="btnDel">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="blk glass" data-open="1">
+      <h3 class="blk-h">Element settings <i>▾</i></h3>
+      <div class="blk-b" id="inspector">
+        <p class="hint">Select an element on the card.</p>
+      </div>
+    </div>
+
+    <div class="blk glass" data-open="1">
+      <h3 class="blk-h">Quotation <i>▾</i></h3>
+      <div class="blk-b">
+        <div class="row2">
+          <div class="field"><label>Quantity</label><input id="qQty" type="number" min="1" value="50"></div>
+          <div class="field"><label>New design?</label><select id="qNew"><option value="yes">Yes</option><option value="no">No, reuse</option></select></div>
+        </div>
+        <div class="opt-grid" id="qOptions"></div>
+        <div class="quote-box mono" id="quoteBox">—</div>
+        <div class="flexrow">
+          <button class="btn btn-gold btn-sm" id="btnQuoteWa">Quote → WhatsApp</button>
+          <button class="btn btn-ghost btn-sm" id="btnQuoteMail">Quote → Email</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="blk glass" data-open="0">
+      <h3 class="blk-h">Send to print queue <i>▾</i></h3>
+      <div class="blk-b">
+        <div class="field"><label>Job title</label><input id="jTitle" placeholder="Hospital staff cards"></div>
+        <div class="row2">
+          <div class="field"><label>Client / organization</label><input id="jClient" placeholder="Janaki Hospital"></div>
+          <div class="field"><label>Contact person</label><input id="jContact" placeholder="Ram Thapa"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Phone</label><input id="jPhone" placeholder="98…"></div>
+          <div class="field"><label>Email</label><input id="jEmail" placeholder="name@org.com"></div>
+        </div>
+        <div class="field"><label>Notes for production</label><textarea id="jNotes" placeholder="Lamination on front, deliver by Friday…"></textarea></div>
+        <button class="btn btn-gold" id="btnSubmitJob">Submit job</button>
+        <div class="job-result" id="jobResult"></div>
+      </div>
+    </div>
+
+    <div class="blk glass" data-open="0">
+      <h3 class="blk-h">Track a job <i>▾</i></h3>
+      <div class="blk-b">
+        <div class="field"><label>Job code</label><input id="trackCode" placeholder="AP-2026-0001"></div>
+        <button class="btn btn-ghost btn-sm" id="btnTrack">Check status</button>
+        <div class="track-out mono" id="trackOut"></div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<!-- ══ BATCH ══ -->
+<section class="wrap batch-wrap">
+  <div class="blk glass neon-edge" data-open="0">
+    <h3 class="blk-h">Batch — print a whole staff list <i>▾</i></h3>
+    <div class="blk-b">
+      <p class="hint">Upload or paste a CSV. First row must be the column names. Map each column to a card field, then generate every card at once.</p>
+      <div class="flexrow">
+        <input type="file" id="csvFile" accept=".csv,text/csv">
+        <button class="btn btn-ghost btn-sm" id="btnCsvSample">Download sample CSV</button>
+        <button class="btn btn-ghost btn-sm" id="btnCsvPaste">Paste instead</button>
+      </div>
+      <textarea id="csvPaste" class="csv-paste hide" placeholder="name,role,id,department&#10;Sita Sharma,Staff Nurse,NP-0142,Emergency"></textarea>
+      <div id="csvMapWrap" class="hide">
+        <h4 class="sub-h">Column mapping</h4>
+        <div class="map-grid" id="csvMap"></div>
+        <div class="flexrow mt8">
+          <button class="btn btn-gold btn-sm" id="btnBatchPreview">Preview cards</button>
+          <button class="btn btn-ghost btn-sm" id="btnBatchZip">Download all as ZIP</button>
+          <button class="btn btn-ghost btn-sm" id="btnBatchPdf">All cards → PDF</button>
+          <button class="btn btn-ghost btn-sm" id="btnBatchJob">Send batch to queue</button>
+        </div>
+        <div class="batch-strip" id="batchStrip"></div>
+        <div class="batch-log mono" id="batchLog"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRINTERS ══ -->
+<section class="wrap">
+  <div class="sec-label reveal">Supported hardware</div>
+  <h2 class="reveal" style="margin:0 0 6px">Five printer profiles</h2>
+  <p class="dim reveal" style="max-width:60ch;margin:0 0 18px">The engine exports for five printer families. Each profile sets DPI, ribbon, bleed and duplex so the file matches what the machine actually puts on the card.</p>
+  <div class="printer-grid" id="printerGrid"></div>
+</section>
+
+<!-- ══ WORKFLOW ══ -->
+<section class="wrap" style="margin-top:44px">
+  <div class="sec-label reveal">How a job runs</div>
+  <h2 class="reveal" style="margin:0 0 18px">Design → quote → queue → print → done</h2>
+  <div class="flow" id="flow">
+    <div class="flow-step reveal"><b>01</b><h4>Design</h4><p>Template, data, front and back, QR or barcode.</p></div>
+    <div class="flow-step reveal"><b>02</b><h4>Quote</h4><p>Quantity tiers, lamination, magstripe, RFID, VAT.</p></div>
+    <div class="flow-step reveal"><b>03</b><h4>Queue</h4><p>Job lands in the board with a tracking code.</p></div>
+    <div class="flow-step reveal"><b>04</b><h4>Print</h4><p>Print agent pulls approved jobs to the Evolis.</p></div>
+    <div class="flow-step reveal"><b>05</b><h4>Deliver</h4><p>Marked done, card count and revenue recorded.</p></div>
+  </div>
+</section>
+
+<section class="wrap network-strip">
+  <div class="label">Our Network</div>
+  <div class="network-grid">
+    <a class="network-card" href="https://aaomsnepal.com" target="_blank" rel="noopener">
+      <div class="nf">🇳🇵</div>
+      <h4>aaoms Nepal</h4>
+      <p>Medical wear &amp; scrubs manufacturer</p>
+    </a>
+    <a class="network-card" href="https://aaoms.co.in" target="_blank" rel="noopener">
+      <div class="nf">🇮🇳</div>
+      <h4>aaoms India</h4>
+      <p>Medical wear &amp; scrubs manufacturer</p>
+    </a>
+    <a class="network-card" href="https://aaoms.online" target="_blank" rel="noopener">
+      <div class="nf">◈</div>
+      <h4>aaomsTech</h4>
+      <p>Software &amp; digital services</p>
+    </a>
+  </div>
+</section>
+
+<footer class="aa-footer">
+  <div class="wrap">
+    <span>© 2026 aaomsPrint · an aaomsDigital engine · ∞</span>
+    <span><a href="/">Home</a> · <a href="/print">aaomsPrint</a> · <a href="/aaomsdigital">aaomsDigital</a> · <a href="/nepse">NEPSE</a> · <a href="/aavnepse" style="color:#ef4444;font-weight:600">AVNEPSE</a> · <a href="/classroom">Classroom</a> · <a href="/e-aaoms">e-aaoms</a> · <a href="/gurukul">Gurukul</a> · <a href="/faq">FAQ</a> · <a href="/sayhi">Say Hi</a> · <a href="/admin">Admin</a> · <a href="/jobs">Job board</a></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="/assets/aaoms-core.js"></script>
+<script src="/assets/print-studio.js"></script>
+<div id="pwaBanner">
+  <div class="pwa-text">ðŸ“² Install <strong>kkpramod</strong> on your phone for instant NEPSE updates &amp; aaoms news</div>
+  <div class="pwa-actions">
+    <button id="pwaInstall">Install</button>
+    <button id="pwaNotify">ðŸ”” Notify Me</button>
+    <button id="pwaDismiss">Later</button>
+  </div>
+</div>
+<script src="/assets/pwa.js"></script>
+</body>
+</html>

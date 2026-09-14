@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory Purchases · AAOMS Nepal</title>
+<style>
+  :root {
+    --bg: #f5ead8; --card: #fdfbf7; --line: #dcd6cd; --ink: #2c221e; --muted: #5a4f4c;
+    --accent: #c67139; --accent-dark: #b87333;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Segoe UI', Roboto, Arial, sans-serif; background: var(--bg); color: var(--ink); }
+  header {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 14px 22px; background: var(--card); border-bottom: 1px solid var(--line);
+  }
+  header .brand { display: flex; align-items: center; gap: 10px; }
+  header img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
+  header h1 { font-size: 16px; margin: 0; }
+  header nav a { color: var(--muted); text-decoration: none; font-size: 13px; margin-left: 16px; }
+  header nav a:hover { color: var(--ink); }
+  main { max-width: 980px; margin: 0 auto; padding: 24px 18px 60px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,.05); margin-bottom: 20px;
+  }
+  .card h2 { margin: 0 0 16px; font-size: 17px; }
+  .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .stat { background: var(--bg); border-radius: 8px; padding: 12px 14px; }
+  .stat .n { font-size: 20px; font-weight: 700; color: var(--accent-dark); }
+  .stat .l { font-size: 12px; color: var(--muted); }
+  form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+  form label { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 5px; color: var(--muted); }
+  form input, form select {
+    width: 100%; padding: 9px 10px; border: 1px solid var(--line); border-radius: 6px;
+    background: #fff; font-size: 14px; font-family: inherit;
+  }
+  .form-actions { display: flex; align-items: flex-end; }
+  button {
+    border: none; border-radius: 6px; padding: 9px 16px; font-weight: 600; cursor: pointer;
+    font-family: inherit; font-size: 13.5px;
+  }
+  .btn-primary { background: var(--ink); color: #fff; width: 100%; }
+  .btn-primary:hover { background: #45372f; }
+  .btn-export { background: var(--accent-dark); color: #fff; }
+  .btn-export:hover { background: var(--accent); }
+  .btn-danger { background: transparent; color: #b3261e; padding: 4px 8px; font-size: 12px; }
+  .btn-danger:hover { text-decoration: underline; }
+  .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .toolbar input[type=search] {
+    padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px;
+    min-width: 200px; font-family: inherit;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+  tr:hover td { background: rgba(198,113,57,.05); }
+  .empty { text-align: center; color: var(--muted); padding: 24px; }
+  .toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: #fff; padding: 10px 20px; border-radius: 24px;
+    font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .25s;
+  }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <img src="../assets/aaoms-logo.jpeg" alt="AAOMS Nepal logo">
+    <h1>AAOMS Nepal — Inventory Purchases</h1>
+  </div>
+  <nav>
+    <a href="../index.html">← Menu</a>
+    <a href="../tax-invoice/index.html">Tax Invoice</a>
+    <a href="../erp/Billing.dc.html">Full ERP</a>
+  </nav>
+</header>
+
+<main>
+  <div class="card">
+    <h2>Log a purchase</h2>
+    <form id="purchaseForm">
+      <div>
+        <label for="pName">Item name</label>
+        <input type="text" id="pName" required placeholder="e.g. Surgical cotton fabric">
+      </div>
+      <div>
+        <label for="pQty">Quantity</label>
+        <input type="number" id="pQty" min="0.01" step="0.01" required>
+      </div>
+      <div>
+        <label for="pRate">Rate per unit (NPR)</label>
+        <input type="number" id="pRate" min="0" step="0.01" required>
+      </div>
+      <div>
+        <label for="pDate">Purchase date</label>
+        <input type="date" id="pDate" required>
+      </div>
+      <div>
+        <label for="pVendor">Vendor</label>
+        <input type="text" id="pVendor" required placeholder="e.g. Kathmandu Textiles Pvt. Ltd.">
+      </div>
+      <div>
+        <label for="pCategory">Category (optional)</label>
+        <input type="text" id="pCategory" placeholder="e.g. Raw material, Packaging">
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">Add purchase</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="summary-row" id="summaryRow"></div>
+    <div class="toolbar">
+      <h2 style="margin:0">Purchase log</h2>
+      <div style="display:flex; gap:8px; align-items:center">
+        <input type="search" id="searchBox" placeholder="Search item or vendor…">
+        <button class="btn-export" id="exportBtn">⬇ Download CSV</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th><th>Item</th><th>Category</th><th>Qty</th><th>Rate</th><th>Total</th><th>Vendor</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+  const STORAGE_KEY = 'aaoms_inventory_purchases';
+  const $ = (id) => document.getElementById(id);
+
+  function loadPurchases() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      console.error('Inventory: failed to read localStorage, starting fresh', e);
+      return [];
+    }
+  }
+  function savePurchases(list) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      return true;
+    } catch (e) {
+      console.error('Inventory: failed to save to localStorage', e);
+      return false;
+    }
+  }
+
+  let purchases = loadPurchases();
+
+  function fmtMoney(n) {
+    const v = Number(n) || 0;
+    return 'Rs. ' + v.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function showToast(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  function renderSummary() {
+    const totalSpend = purchases.reduce((sum, p) => sum + p.total, 0);
+    const totalQty = purchases.reduce((sum, p) => sum + p.qty, 0);
+    const vendors = new Set(purchases.map(p => p.vendor)).size;
+    $('summaryRow').innerHTML = [
+      { n: fmtMoney(totalSpend), l: 'Total spend' },
+      { n: purchases.length, l: 'Purchases logged' },
+      { n: totalQty.toLocaleString('en-IN'), l: 'Total units' },
+      { n: vendors, l: 'Vendors' }
+    ].map(s => '<div class="stat"><div class="n">' + s.n + '</div><div class="l">' + s.l + '</div></div>').join('');
+  }
+
+  function renderTable(filter) {
+    const q = (filter || '').trim().toLowerCase();
+    const rows = purchases
+      .filter(p => !q || p.name.toLowerCase().includes(q) || p.vendor.toLowerCase().includes(q))
+      .slice()
+      .sort((a, b) => (b.date || '').localeCompare(a.date || '') || b.createdAt - a.createdAt);
+
+    const body = $('tableBody');
+    if (!rows.length) {
+      body.innerHTML = '<tr><td colspan="8" class="empty">' +
+        (purchases.length ? 'No purchases match your search.' : 'No inventory purchases recorded yet — add one above.') +
+        '</td></tr>';
+      return;
+    }
+    body.innerHTML = rows.map(p => (
+      '<tr data-id="' + p.id + '">' +
+        '<td>' + escapeHtml(p.date) + '</td>' +
+        '<td>' + escapeHtml(p.name) + '</td>' +
+        '<td>' + escapeHtml(p.category || '—') + '</td>' +
+        '<td>' + p.qty.toLocaleString('en-IN') + '</td>' +
+        '<td>' + fmtMoney(p.rate) + '</td>' +
+        '<td style="font-weight:600; color:var(--accent-dark)">' + fmtMoney(p.total) + '</td>' +
+        '<td>' + escapeHtml(p.vendor) + '</td>' +
+        '<td><button class="btn-danger" data-del="' + p.id + '">Delete</button></td>' +
+      '</tr>'
+    )).join('');
+
+    body.querySelectorAll('[data-del]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!confirm('Delete this purchase record?')) return;
+        purchases = purchases.filter(p => p.id !== btn.dataset.del);
+        savePurchases(purchases);
+        renderAll();
+        showToast('Purchase deleted');
+      });
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  function renderAll() {
+    renderSummary();
+    renderTable($('searchBox').value);
+  }
+
+  $('purchaseForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const qty = Number($('pQty').value);
+    const rate = Number($('pRate').value);
+    if (!(qty > 0) || !(rate >= 0)) {
+      showToast('Enter a valid quantity and rate');
+      return;
+    }
+    const entry = {
+      id: 'INV-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7),
+      name: $('pName').value.trim(),
+      qty: qty,
+      rate: rate,
+      total: qty * rate,
+      date: $('pDate').value,
+      vendor: $('pVendor').value.trim(),
+      category: $('pCategory').value.trim(),
+      createdAt: Date.now()
+    };
+    purchases.push(entry);
+    if (!savePurchases(purchases)) {
+      showToast('Could not save — your browser storage may be full or disabled');
+      purchases.pop();
+      return;
+    }
+    this.reset();
+    $('pDate').value = new Date().toISOString().slice(0, 10);
+    renderAll();
+    showToast('Purchase logged');
+  });
+
+  $('searchBox').addEventListener('input', () => renderTable($('searchBox').value));
+
+  $('exportBtn').addEventListener('click', function () {
+    if (!purchases.length) {
+      showToast('No purchases to export yet');
+      return;
+    }
+    const header = ['ID', 'Date', 'Item Name', 'Category', 'Quantity', 'Rate (NPR)', 'Total (NPR)', 'Vendor'];
+    const csvEscape = (v) => {
+      const s = String(v == null ? '' : v);
+      return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    const lines = [header.join(',')];
+    purchases.forEach(p => {
+      lines.push([p.id, p.date, p.name, p.category || '', p.qty, p.rate, p.total, p.vendor].map(csvEscape).join(','));
+    });
+    const csv = lines.join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'AAOMS_Inventory_Purchases_' + new Date().toISOString().slice(0, 10) + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    showToast('CSV downloaded');
+  });
+
+  // Default the date field to today for convenience
+  $('pDate').value = new Date().toISOString().slice(0, 10);
+  renderAll();
+})();
+</script>
+</body>
+</html>

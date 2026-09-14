@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <title>AAOMS Nepal — Billing</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#c67139">
+  <link rel="apple-touch-icon" href="assets/aaoms-logo.jpeg">
+  <link rel="stylesheet" href="_ds/organic-51953f86-896b-434e-a982-d5645d720c91/styles.css">
+  <script src="_ds/organic-51953f86-896b-434e-a982-d5645d720c91/_ds_bundle.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <style>
+    body { margin: 0; background: var(--color-bg); }
+    a { color: var(--color-accent-700); }
+    a:hover { color: var(--color-accent-900); }
+    input, select { font-family: var(--font-body); }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-thumb { background: var(--color-neutral-300); border-radius: 999px; }
+    @page { size: A4; margin: 12mm; }
+    @media print {
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      body, main { background: #fff !important; }
+      main { padding: 0 !important; max-width: none !important; }
+      .card { box-shadow: none !important; }
+      .totals-box { padding: 8px !important; width: 260px !important; border: 1px solid #333 !important; }
+      table.print-only { display: table !important; }
+      h1 { margin-bottom: 10px !important; }
+      .print-flex-page { display: flex !important; flex-direction: column !important; min-height: 235mm; }
+      .print-footer { margin-top: auto !important; padding-top: 16px; }
+      h1.print-only { color: #1a3c6e !important; }
+      .print-watermark { display: flex !important; }
+      .totals-box { border: 1.5px solid #1a3c6e !important; background: #fff !important; }
+      .totals-box strong { color: #cc5500 !important; }
+      .totals-box span { color: #1a3c6e !important; }
+    }
+    @media (max-width: 860px) {
+      .app-shell { flex-direction: column !important; }
+      .app-sidebar { width: 100% !important; flex-direction: row !important; flex-wrap: wrap !important; align-items: center !important; gap: 8px !important; padding: 12px !important; }
+      .app-sidebar > div:first-child { width: auto !important; }
+      .app-sidebar nav { flex-direction: row !important; flex-wrap: wrap !important; gap: 4px !important; width: 100% !important; order: 3; }
+      .app-sidebar nav button { padding: 8px 10px !important; font-size: 13px !important; }
+      .app-sidebar .app-footer-info { display: none !important; }
+      .app-main { padding: 16px !important; max-width: 100% !important; }
+      table.table { display: block !important; overflow-x: auto !important; white-space: nowrap !important; }
+      h1 { font-size: 24px !important; }
+      .doc-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+      div[style*="justify-content:space-between"] { flex-wrap: wrap !important; row-gap: 10px !important; }
+      .btn { min-height: 44px !important; }
+      input.input, select.input { min-height: 44px !important; }
+    }
+  </style>
+</helmet>
+<sc-if value="{{ pinVerified }}" hint-placeholder-val="{{ false }}">
+<div class="app-shell" style="display:flex; min-height:100vh; font-family:var(--font-body); color:var(--color-text)">
+  <aside class="no-print app-sidebar" style="width:250px; flex-shrink:0; background:var(--color-neutral-100); padding:var(--space-5); display:flex; flex-direction:column; gap:var(--space-5); border-right:1px solid var(--color-neutral-200)">
+    <div style="display:flex; align-items:center; gap:10px">
+      <img src="assets/aaoms-logo.jpeg" alt="AAOMS Nepal logo" style="width:44px; height:44px; border-radius:50%; object-fit:cover; flex-shrink:0"/>
+      <div>
+        <div style="font-family:var(--font-heading); font-size:20px; color:{{ brandAccentColor }}; line-height:1.15">{{ company.brand }}</div>
+        <div style="font-size:11px; color:var(--color-neutral-700); margin-top:2px">{{ company.name }}</div>
+      </div>
+    </div>
+    <nav style="display:flex; flex-direction:column; gap:var(--space-1)">
+      <button style="{{ navItemStyles.dashboard }}" onClick="{{ goDashboard }}">Dashboard</button>
+      <sc-if value="{{ navShow.quotations }}" hint-placeholder-val="{{ true }}"><button style="{{ navItemStyles.quotations }}" onClick="{{ goQuotations }}">Quotations</button></sc-if>
+      <sc-if value="{{ navShow.orders }}" hint-placeholder-val="{{ true }}"><button style="{{ navItemStyles.orders }}" onClick="{{ goOrders }}">Sales Orders</button></sc-if>
+      <sc-if value="{{ navShow.challans }}" hint-placeholder-val="{{ true }}"><button style="{{ navItemStyles.challans }}" onClick="{{ goChallans }}">Delivery Challans</button></sc-if>
+      <button style="{{ navItemStyles.invoices }}" onClick="{{ goInvoices }}">Invoices</button>
+      <sc-if value="{{ navShow.customers }}" hint-placeholder-val="{{ true }}"><button style="{{ navItemStyles.customers }}" onClick="{{ goCustomers }}">Customers</button></sc-if>
+      <sc-if value="{{ navShow.items }}" hint-placeholder-val="{{ true }}"><button style="{{ navItemStyles.items }}" onClick="{{ goItems }}">Items</button></sc-if>
+      <sc-if value="{{ navShow.reports }}" hint-placeholder-val="{{ true }}"><button style="{{ navItemStyles.reports }}" onClick="{{ goReports }}">VAT Reports</button></sc-if>
+      <sc-if value="{{ navShow.statement }}" hint-placeholder-val="{{ true }}"><button style="{{ navItemStyles.statement }}" onClick="{{ goStatement }}">Statement</button></sc-if>
+      <button style="{{ navItemStyles.news }}" onClick="{{ goNews }}">News &amp; Alerts</button>
+      <button style="{{ navItemStyles.hospitals }}" onClick="{{ goHospitals }}">Hospitals in Nepal</button>
+    </nav>
+    <button class="btn btn-ghost btn-block" onClick="{{ openHelp }}">Help / How to use</button>
+    <div style="border-top:1px solid var(--color-neutral-200); padding-top:var(--space-4); display:flex; flex-direction:column; gap:var(--space-3)">
+      <div class="field" style="margin:0"><label style="font-size:11px">Role</label>
+        <select class="input" value="{{ role }}" onChange="{{ onRoleChange }}">
+          <option value="admin">Admin</option>
+          <option value="billing">Billing Staff</option>
+          <option value="accountant">Accountant</option>
+        </select>
+      </div>
+      <div class="field" style="margin:0"><label style="font-size:11px">Fiscal Year (BS)</label>
+        <input class="input" value="{{ fiscalYear }}" onChange="{{ onFiscalYearChange }}"/>
+      </div>
+      <div style="font-size:11px; color:var(--color-neutral-600)">{{ syncStatus }}</div>
+    </div>
+    <div class="app-footer-info" style="margin-top:auto; font-size:12px; color:var(--color-neutral-600); line-height:1.5">
+      <div>{{ company.name }}</div>
+      <div>{{ company.address }}</div>
+      <div>Reg No. {{ company.regNo }}</div>
+    </div>
+  </aside>
+
+  <main class="app-main" style="flex:1; padding:var(--space-7); max-width:1200px">
+
+    <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:var(--space-5)">
+        <h1 style="font-family:var(--font-heading); font-size:32px; margin:0">Dashboard</h1>
+        <button class="btn btn-primary" onClick="{{ newInvoiceBtn }}">+ New Invoice</button>
+      </div>
+
+      <sc-if value="{{ news.showDashboardAlert }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; gap:8px; padding:10px 14px; margin-bottom:var(--space-5); border-radius:var(--radius-md); background:var(--color-accent-100); border:1px solid var(--color-accent-500); cursor:pointer; font-size:13px" onClick="{{ goNews }}">
+          <strong style="color:var(--color-accent-700); flex-shrink:0">Notice:</strong>
+          <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ news.alertTitle }}</span>
+          <span style="margin-left:auto; color:var(--color-accent-700); flex-shrink:0">View in News &amp; Alerts →</span>
+        </div>
+      </sc-if>
+
+      <div class="doc-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); margin-bottom:var(--space-4)">
+        <div class="card elev-sm" style="padding:{{ dashCardPadding }}"><div class="card-kicker">Today's sales</div><div class="card-title" style="font-size:{{ dashCardFontSize }}">{{ dash.todaySalesLabel }}</div></div>
+        <div class="card elev-sm" style="padding:{{ dashCardPadding }}"><div class="card-kicker">This month's sales</div><div class="card-title" style="font-size:{{ dashCardFontSize }}">{{ dash.thisMonthSalesLabel }}</div></div>
+        <div class="card elev-sm" style="padding:{{ dashCardPadding }}"><div class="card-kicker">VAT payable this month</div><div class="card-title" style="font-size:{{ dashCardFontSize }}">{{ dash.vatPayableMonthLabel }}</div></div>
+      </div>
+      <div class="doc-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); margin-bottom:var(--space-4)">
+        <div class="card elev-sm"><div class="card-kicker">Outstanding</div><div class="card-title" style="font-size:24px">{{ dash.totalOutstanding }}</div></div>
+        <div class="card elev-sm"><div class="card-kicker">Pending delivery challans</div><div class="card-title" style="font-size:24px">{{ dash.pendingChallans }}</div></div>
+        <div class="card elev-sm"><div class="card-kicker">Unpaid over 30 days</div><div class="card-title" style="font-size:24px">{{ dash.unpaidOver30 }}</div></div>
+      </div>
+      <div class="doc-grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-4); margin-bottom:var(--space-7)">
+        <div class="card elev-sm"><div class="card-kicker">Invoiced (all time)</div><div class="card-title" style="font-size:24px">{{ dash.totalInvoiced }}</div></div>
+        <div class="card elev-sm"><div class="card-kicker">Customers</div><div class="card-title" style="font-size:24px">{{ dash.customerCount }}</div></div>
+      </div>
+      <h2 style="font-family:var(--font-heading); font-size:20px; margin:0 0 var(--space-3)">Recent invoices</h2>
+      <table class="table">
+        <thead><tr><th>No.</th><th>Date</th><th>Customer</th><th>Total</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <sc-for list="{{ dash.recentInvoices }}" as="row" hint-placeholder-count="3">
+            <tr>
+              <td>{{ row.number }}</td>
+              <td>{{ row.dateLabel }}</td>
+              <td>{{ row.customerName }}</td>
+              <td>{{ row.grandTotalLabel }}</td>
+              <td><span class="{{ row.tagClass }}">{{ row.statusLabel }}</span></td>
+              <td><button class="btn btn-ghost" onClick="{{ row.onEdit }}">Open</button></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </sc-if>
+
+    <sc-if value="{{ isQuotations }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:var(--space-5)">
+        <h1 style="font-family:var(--font-heading); font-size:32px; margin:0">Quotations</h1>
+        <button class="btn btn-primary" onClick="{{ newQuotationBtn }}">+ New Quotation</button>
+      </div>
+      <table class="table">
+        <thead><tr><th>No.</th><th>Date</th><th>Customer</th><th>Est. Total</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <sc-for list="{{ quotationRows }}" as="row" hint-placeholder-count="2">
+            <tr>
+              <td>{{ row.number }}</td><td>{{ row.dateLabel }}</td><td>{{ row.customerName }}</td><td>{{ row.totalLabel }}</td>
+              <td><span class="{{ row.tagClass }}">{{ row.statusLabel }}</span></td>
+              <td style="display:flex; gap:6px">
+                <button class="btn btn-ghost" onClick="{{ row.onEdit }}">Edit</button>
+                <sc-if value="{{ row.canAct }}" hint-placeholder-val="{{ false }}"><button class="btn btn-secondary" onClick="{{ row.onAction }}">Convert to Order</button></sc-if>
+                <button class="btn btn-ghost" onClick="{{ row.onDelete }}">Delete</button>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </sc-if>
+
+    <sc-if value="{{ isOrders }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:var(--space-5)">
+        <h1 style="font-family:var(--font-heading); font-size:32px; margin:0">Sales Orders</h1>
+        <button class="btn btn-primary" onClick="{{ newOrderBtn }}">+ New Order</button>
+      </div>
+      <table class="table">
+        <thead><tr><th>No.</th><th>Date</th><th>Customer</th><th>Est. Total</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <sc-for list="{{ orderRows }}" as="row" hint-placeholder-count="2">
+            <tr>
+              <td>{{ row.number }}</td><td>{{ row.dateLabel }}</td><td>{{ row.customerName }}</td><td>{{ row.totalLabel }}</td>
+              <td><span class="{{ row.tagClass }}">{{ row.statusLabel }}</span></td>
+              <td style="display:flex; gap:6px">
+                <button class="btn btn-ghost" onClick="{{ row.onEdit }}">Edit</button>
+                <sc-if value="{{ row.canAct }}" hint-placeholder-val="{{ false }}"><button class="btn btn-secondary" onClick="{{ row.onAction }}">Convert to Challan</button></sc-if>
+                <button class="btn btn-ghost" onClick="{{ row.onDelete }}">Delete</button>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </sc-if>
+
+    <sc-if value="{{ isChallans }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:var(--space-5)">
+        <h1 style="font-family:var(--font-heading); font-size:32px; margin:0">Delivery Challans</h1>
+        <button class="btn btn-primary" onClick="{{ newChallanBtn }}">+ New Challan</button>
+      </div>
+      <table class="table">
+        <thead><tr><th>No.</th><th>Date</th><th>Customer</th><th>Items</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <sc-for list="{{ challanRows }}" as="row" hint-placeholder-count="2">
+            <tr>
+              <td>{{ row.number }}</td><td>{{ row.dateLabel }}</td><td>{{ row.customerName }}</td><td>{{ row.lineCount }}</td>
+              <td><span class="{{ row.tagClass }}">{{ row.statusLabel }}</span></td>
+              <td style="display:flex; gap:6px">
+                <button class="btn btn-ghost" onClick="{{ row.onEdit }}">Edit</button>
+                <sc-if value="{{ row.canAct }}" hint-placeholder-val="{{ false }}"><button class="btn btn-secondary" onClick="{{ row.onAction }}">Convert to Invoice</button></sc-if>
+                <button class="btn btn-ghost" onClick="{{ row.onDelete }}">Delete</button>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </sc-if>
+
+    <sc-if value="{{ isInvoices }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:var(--space-5)">
+        <h1 style="font-family:var(--font-heading); font-size:32px; margin:0">Invoices</h1>
+        <button class="btn btn-primary" onClick="{{ newInvoiceBtn }}">+ New Invoice</button>
+      </div>
+      <div style="display:flex; gap:var(--space-3); margin-bottom:var(--space-5); align-items:center">
+        <input class="input" style="max-width:280px" placeholder="Search customer or invoice no." value="{{ search }}" onChange="{{ onSearchChange }}"/>
+        <div class="seg">
+          <button class="{{ filterAllClass }}" onClick="{{ setFilterAll }}">All</button>
+          <button class="{{ filterUnpaidClass }}" onClick="{{ setFilterUnpaid }}">Unpaid</button>
+          <button class="{{ filterPartialClass }}" onClick="{{ setFilterPartial }}">Partial</button>
+          <button class="{{ filterPaidClass }}" onClick="{{ setFilterPaid }}">Paid</button>
+        </div>
+      </div>
+      <table class="table">
+        <thead><tr><th>No.</th><th>Date</th><th>BS Date</th><th>Customer</th><th>Total</th><th>Paid</th><th>Balance</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <sc-for list="{{ invoiceRows }}" as="row" hint-placeholder-count="4">
+            <tr>
+              <td>{{ row.number }}</td>
+              <td>{{ row.dateLabel }}</td>
+              <td>{{ row.bsDate }}</td>
+              <td>{{ row.customerName }}</td>
+              <td>{{ row.grandTotalLabel }}</td>
+              <td>{{ row.paidLabel }}</td>
+              <td>{{ row.balanceLabel }}</td>
+              <td><span class="{{ row.tagClass }}">{{ row.statusLabel }}</span></td>
+              <td style="display:flex; gap:6px">
+                <button class="btn btn-ghost" onClick="{{ row.onEdit }}">Edit</button>
+                <button class="btn btn-ghost" onClick="{{ row.onPay }}">Pay</button>
+                <button class="btn btn-ghost" onClick="{{ row.onEmail }}">Email</button>
+                <button class="btn btn-ghost" onClick="{{ row.onWhatsapp }}">WhatsApp</button>
+                <button class="btn btn-ghost" onClick="{{ row.onDelete }}">Delete</button>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </sc-if>
+
+    <sc-if value="{{ isDocEdit }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:var(--space-4)">
+        <img src="assets/aaoms-logo.jpeg" alt="AAOMS Nepal logo" style="width:52px; height:52px; border-radius:50%; object-fit:cover; flex-shrink:0"/>
+        <div>
+          <div style="font-family:var(--font-heading); font-size:22px; color:var(--color-text); line-height:1.1">{{ company.name }}</div>
+          <div style="font-size:12px; color:var(--color-accent-700); font-weight:600; margin-top:2px">{{ company.brand }} — {{ company.tagline }}</div>
+          <div style="font-size:12px; color:var(--color-neutral-700); margin-top:2px">{{ company.address }} · Reg No. {{ company.regNo }} · {{ company.panVat }}</div>
+        </div>
+      </div>
+      <h1 class="no-print" style="font-family:var(--font-heading); font-size:32px; margin:0 0 var(--space-5)">{{ draft.headerLabel }}</h1>
+      <sc-if value="{{ showLetterheadBar }}" hint-placeholder-val="{{ true }}">
+        <div class="print-only" style="height:4px; margin-bottom:14px; background:{{ letterheadBarBg }}"></div>
+      </sc-if>
+      <h1 class="print-only" style="display:none; font-family:var(--font-heading); font-size:28px; letter-spacing:0.06em; margin:0 0 var(--space-5)">{{ draft.printTitle }}</h1>
+      <div class="print-flex-page" style="position:relative">
+      <sc-if value="{{ showWatermark }}" hint-placeholder-val="{{ true }}">
+        <div class="print-watermark" style="display:none; position:absolute; inset:0; align-items:center; justify-content:center; pointer-events:none; z-index:0; overflow:hidden">
+          <img src="assets/aaoms-logo.jpeg" alt="" style="width:70%; max-width:420px; opacity:0.06; object-fit:contain"/>
+        </div>
+      </sc-if>
+      <div style="position:relative; z-index:1">
+      <div class="print-only" style="display:none; margin-bottom:14px; font-size:12px; border-bottom:1px solid #333; padding-bottom:8px">
+        <table style="width:100%; border-collapse:collapse"><tr>
+          <td style="vertical-align:top"><strong>Billed To:</strong><br/>{{ draft.customerName }} <span style="color:#666">({{ draft.customerType }})</span><br/>
+            <sc-if value="{{ draft.showVehicleNoPrint }}" hint-placeholder-val="{{ false }}">Vehicle No.: {{ draft.vehicleNo }}<br/></sc-if>
+            Payment Mode: {{ draft.paymentMode }}
+          </td>
+          <td style="vertical-align:top; text-align:right">
+            <strong>{{ draft.numberLabel }}</strong> {{ draft.number }}<br/>
+            Date (AD): {{ draft.date }}<br/>
+            Date (BS): {{ draft.bsDate }}
+          </td>
+        </tr></table>
+        <sc-if value="{{ draft.customerPanDigits.length }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:6px; display:flex; align-items:center; gap:6px">
+            <span>Customer PAN No:</span>
+            <sc-for list="{{ draft.customerPanDigits }}" as="d" hint-placeholder-count="9">
+              <span style="display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; border:1px solid #333; font-size:11px">{{ d.ch }}</span>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+      <sc-if value="{{ !isPrinting }}" hint-placeholder-val="{{ true }}">
+      <div class="card elev-sm no-print" style="margin-bottom:var(--space-5); padding:var(--space-5)">
+        <div class="doc-grid" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:var(--space-4)">
+          <div class="field">
+            <label>Customer</label>
+            <div style="display:flex; gap:8px">
+              <select class="input" value="{{ draft.customerId }}" onChange="{{ draft.onCustomerChange }}">
+                <option value="">Select customer...</option>
+                <sc-for list="{{ customerOptions }}" as="c" hint-placeholder-count="3">
+                  <option value="{{ c.id }}">{{ c.name }}</option>
+                </sc-for>
+              </select>
+              <button class="btn btn-secondary" onClick="{{ openNewCustomerFromInvoice }}">+ New</button>
+              <sc-if value="{{ draft.showCopyLast }}" hint-placeholder-val="{{ false }}">
+                <button class="btn btn-secondary" onClick="{{ draft.onCopyLast }}">Copy Last Invoice</button>
+              </sc-if>
+            </div>
+          </div>
+          <div class="field"><label>{{ draft.numberLabel }}</label><input class="input" value="{{ draft.number }}" disabled="{{ true }}"/></div>
+          <div class="field"><label>Date (AD)</label><input class="input" type="date" value="{{ draft.date }}" onChange="{{ draft.onDateChange }}"/></div>
+          <div class="field"><label>Date (BS)</label><input class="input" placeholder="e.g. 2083-04-26" value="{{ draft.bsDate }}" onChange="{{ draft.onBsDateChange }}"/></div>
+          <sc-if value="{{ draft.isInvoiceType }}" hint-placeholder-val="{{ false }}">
+            <div class="field"><label>Vehicle No. (optional)</label><input class="input" placeholder="e.g. BA 2 KHA 1234" value="{{ draft.vehicleNo }}" onChange="{{ draft.onVehicleNoChange }}"/></div>
+            <div class="field"><label>Customer type</label>
+              <select class="input" value="{{ draft.customerType }}" onChange="{{ draft.onCustomerTypeChange }}">
+                <option value="Business">Business</option>
+                <option value="Individual">Individual</option>
+              </select>
+            </div>
+            <div class="field"><label>Payment mode</label>
+              <select class="input" value="{{ draft.paymentMode }}" onChange="{{ draft.onPaymentModeChange }}">
+                <option value="Cash">Cash</option>
+                <option value="Bank">Bank</option>
+                <option value="eSewa">eSewa</option>
+                <option value="Khalti">Khalti</option>
+                <option value="Credit">Credit</option>
+                <option value="Others">Others</option>
+              </select>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ !isPrinting }}" hint-placeholder-val="{{ true }}">
+      <table class="table no-print" style="margin-bottom:var(--space-4)">
+        <thead><tr><th style="width:26%">Item</th><th>Variant (size/color)</th><th>Unit</th><th>Qty</th><th>Rate</th><th>Amount</th><th></th></tr></thead>
+        <tbody>
+          <sc-for list="{{ draft.lines }}" as="line" hint-placeholder-count="2">
+            <tr>
+              <td>
+                <select class="input" value="{{ line.itemId }}" onChange="{{ line.onItemChange }}">
+                  <option value="">Custom / select item...</option>
+                  <sc-for list="{{ itemOptions }}" as="it" hint-placeholder-count="3">
+                    <option value="{{ it.id }}">{{ it.name }}</option>
+                  </sc-for>
+                </select>
+              </td>
+              <td><input class="input" placeholder="e.g. M / Sky Blue" value="{{ line.variant }}" onChange="{{ line.onVariantChange }}"/></td>
+              <td>{{ line.unit }}</td>
+              <td><input class="input" type="number" min="0" value="{{ line.qty }}" onChange="{{ line.onQtyChange }}"/></td>
+              <td><input class="input" type="number" min="0" value="{{ line.rate }}" onChange="{{ line.onRateChange }}"/></td>
+              <td>{{ line.amountLabel }}</td>
+              <td><button class="btn btn-ghost" onClick="{{ line.onRemove }}">✕</button></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+      <button class="btn btn-secondary no-print" style="margin-bottom:var(--space-6)" onClick="{{ draft.onAddLine }}">+ Add line</button>
+
+      <sc-if value="{{ draft.showVat }}" hint-placeholder-val="{{ false }}">
+        <div class="field no-print" style="max-width:220px; margin-bottom:var(--space-4)">
+          <label>Discount %</label>
+          <input class="input" type="number" min="0" max="100" value="{{ draft.discountPercent }}" onChange="{{ draft.onDiscountChange }}"/>
+        </div>
+      </sc-if>
+      <div class="field no-print" style="margin-bottom:var(--space-6)">
+        <label>Notes</label>
+        <input class="input" placeholder="e.g. Delivered by Ram – 12 Aug" value="{{ draft.notes }}" onChange="{{ draft.onNotesChange }}"/>
+      </div>
+      </sc-if>
+
+      <table class="print-only" style="display:none; width:100%; border-collapse:collapse; font-size:11px; margin-bottom:12px">
+        <thead><tr style="background:#eef3fb; color:#1a3c6e">
+          <th style="text-align:left; padding:5px 4px">S.N</th><th style="text-align:left; padding:5px 4px">Particulars</th><th style="text-align:left; padding:5px 4px">Variant</th><th style="text-align:left; padding:5px 4px">Unit</th><th style="text-align:right; padding:5px 4px">Qty</th><th style="text-align:right; padding:5px 4px">Rate</th><th style="text-align:right; padding:5px 4px">Amount</th>
+        </tr></thead>
+        <tbody>
+          <sc-for list="{{ draft.printLines }}" as="line" hint-placeholder-count="8">
+            <tr style="border-bottom:1px solid #ccc; height:20px">
+              <td style="padding:3px 0">{{ line.idx1 }}</td><td>{{ line.name }}</td><td>{{ line.variant }}</td><td>{{ line.unit }}</td><td style="text-align:right">{{ line.qty }}</td><td style="text-align:right">{{ line.rate }}</td><td style="text-align:right">{{ line.amountLabel }}</td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px">
+        <div class="print-only" style="display:none; font-size:12px; max-width:280px">
+          <sc-if value="{{ draft.notes }}" hint-placeholder-val="{{ false }}">
+            <strong>Remarks:</strong> {{ draft.notes }}
+          </sc-if>
+        </div>
+        <div class="card elev-sm totals-box" style="padding:var(--space-5); width:340px">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px"><span>Subtotal</span><strong>{{ draft.subtotalLabel }}</strong></div>
+          <sc-if value="{{ draft.showDiscount }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px"><span>Discount</span><strong>-{{ draft.discountLabel }}</strong></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px"><span>Taxable Amount</span><strong>{{ draft.taxableLabel }}</strong></div>
+          </sc-if>
+          <sc-if value="{{ draft.showVat }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px"><span>VAT (13%)</span><strong>{{ draft.vatLabel }}</strong></div>
+          </sc-if>
+          <div style="display:flex; justify-content:space-between; font-size:18px; padding-top:8px; border-top:1px solid var(--color-neutral-200)"><span>{{ draft.totalRowLabel }}</span><strong>{{ draft.grandTotalLabel }}</strong></div>
+          <sc-if value="{{ draft.showVat }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px; color:var(--color-neutral-700); margin-top:10px; line-height:1.4">Amount in words: {{ draft.amountWords }}</div>
+            <sc-if value="{{ showNepaliWords }}" hint-placeholder-val="{{ true }}">
+              <div style="font-size:12px; color:var(--color-neutral-700); margin-top:4px; line-height:1.4">रकम अक्षरमा: {{ draft.amountWordsNepali }}</div>
+            </sc-if>
+          </sc-if>
+        </div>
+      </div>
+
+      <div class="print-footer">
+      <sc-if value="{{ draft.showVat }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; justify-content:space-between; margin-top:var(--space-7); gap:var(--space-6)">
+          <div style="flex:1; font-size:13px; color:var(--color-neutral-700); line-height:1.6">
+            - This is a tax invoice issued under the VAT Act of Nepal.<br/>
+            - Certified that the particulars given above are true and correct.<br/>
+            - Goods once sold are exchanged as per store policy, not refunded.<br/>
+            - E. &amp; O.E. (Errors and Omissions Excepted).
+          </div>
+          <div style="text-align:center; width:200px">
+            <div style="font-size:12px; color:var(--color-neutral-700); margin-bottom:4px">For AAOMS NEPAL</div>
+            <div style="height:48px; display:flex; align-items:center; justify-content:center; color:var(--color-neutral-400); font-size:11px; border:1px dashed var(--color-neutral-300); border-radius:var(--radius-md)">Company stamp</div>
+            <div style="border-top:1px solid var(--color-neutral-400); margin-top:6px; padding-top:6px; font-size:13px">Authorised Signatory</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ draft.showBarcode }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center; margin-top:var(--space-6)">
+          <svg width="{{ draft.barcodeWidth }}" height="42" style="background:#fff">
+            <sc-for list="{{ draft.barcodeBars }}" as="bar" hint-placeholder-count="30">
+              <rect x="{{ bar.x }}" y="0" width="{{ bar.w }}" height="36" fill="#171412"></rect>
+            </sc-for>
+          </svg>
+          <div style="font-size:11px; letter-spacing:2px; color:var(--color-neutral-700); margin-top:2px">{{ draft.number }}</div>
+        </div>
+      </sc-if>
+      </div>
+      </div>
+      </div>
+
+      <sc-if value="{{ !isPrinting }}" hint-placeholder-val="{{ true }}">
+      <div class="no-print" style="display:flex; gap:10px; margin-top:var(--space-6)">
+        <button class="btn btn-primary" onClick="{{ draft.onSave }}">{{ draft.saveLabel }}</button>
+        <button class="btn btn-secondary" onClick="{{ printDoc }}">Print</button>
+        <sc-if value="{{ draft.showEmailBtn }}" hint-placeholder-val="{{ false }}">
+          <button class="btn btn-secondary" onClick="{{ draft.onEmail }}">Email to customer</button>
+          <button class="btn btn-secondary" onClick="{{ draft.onWhatsapp }}">Share on WhatsApp</button>
+        </sc-if>
+        <button class="btn btn-ghost" onClick="{{ draft.onCancel }}">Cancel</button>
+      </div>
+      </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ isCustomers }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:var(--space-4)">
+        <h1 style="font-family:var(--font-heading); font-size:32px; margin:0">Customers</h1>
+        <div style="display:flex; gap:8px">
+          <button class="btn btn-secondary" onClick="{{ openImportModal }}">Import CSV</button>
+          <button class="btn btn-primary" onClick="{{ openNewCustomer }}">+ Add customer</button>
+        </div>
+      </div>
+      <div style="margin-bottom:var(--space-4)">
+        <button class="btn btn-secondary" onClick="{{ emailBrochureToSelected }}">Email Brochure to Selected ({{ selectedCustomerCount }})</button>
+      </div>
+      <sc-for list="{{ customerGroups }}" as="group" hint-placeholder-count="1">
+        <h2 style="font-family:var(--font-heading); font-size:18px; margin:var(--space-5) 0 var(--space-2)">{{ group.province }} Province</h2>
+        <table class="table" style="margin-bottom:var(--space-3)">
+          <thead><tr><th></th><th>Name</th><th>PAN/VAT No.</th><th>Phone</th><th>Email</th><th>Invoices</th><th>Total billed</th><th></th></tr></thead>
+          <tbody>
+            <sc-for list="{{ group.rows }}" as="row" hint-placeholder-count="2">
+              <tr>
+                <td><input type="checkbox" checked="{{ row.checked }}" onChange="{{ row.onToggle }}"/></td>
+                <td>{{ row.name }}</td>
+                <td>{{ row.panVat }}</td>
+                <td>{{ row.phone }}</td>
+                <td>{{ row.email }}</td>
+                <td>{{ row.invoiceCount }}</td>
+                <td>{{ row.totalLabel }}</td>
+                <td style="display:flex; gap:6px">
+                  <button class="btn btn-ghost" onClick="{{ row.onEdit }}">Edit</button>
+                  <button class="btn btn-ghost" onClick="{{ row.onDelete }}">Delete</button>
+                </td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </sc-for>
+    </sc-if>
+
+    <sc-if value="{{ isItems }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:var(--space-5)">
+        <h1 style="font-family:var(--font-heading); font-size:32px; margin:0">Items we manufacture</h1>
+        <button class="btn btn-primary" onClick="{{ openNewItem }}">+ Add item</button>
+      </div>
+      <table class="table">
+        <thead><tr><th>Item</th><th>Sizes</th><th>Colors</th><th>Unit</th><th>Default rate</th><th>Stock</th><th></th></tr></thead>
+        <tbody>
+          <sc-for list="{{ itemRows }}" as="row" hint-placeholder-count="6">
+            <tr>
+              <td>{{ row.name }}</td>
+              <td>{{ row.sizes }}</td>
+              <td>{{ row.colors }}</td>
+              <td>{{ row.unit }}</td>
+              <td>{{ row.rateLabel }}</td>
+              <td><span class="{{ row.stockTagClass }}">{{ row.stockLabel }}</span></td>
+              <td style="display:flex; gap:6px">
+                <button class="btn btn-ghost" onClick="{{ row.onEdit }}">Edit</button>
+                <button class="btn btn-ghost" onClick="{{ row.onDelete }}">Delete</button>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </sc-if>
+
+    <sc-if value="{{ isReports }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:var(--font-heading); font-size:32px; margin:0 0 var(--space-5)">VAT Reports</h1>
+      <div style="display:flex; gap:var(--space-4); align-items:flex-end; margin-bottom:var(--space-5)">
+        <div class="seg">
+          <button class="{{ reportsTabSalesClass }}" onClick="{{ setReportsTabSales }}">Sales Register</button>
+          <button class="{{ reportsTabPurchaseClass }}" onClick="{{ setReportsTabPurchase }}">Purchase Register</button>
+          <button class="{{ reportsTabSummaryClass }}" onClick="{{ setReportsTabSummary }}">VAT Summary</button>
+        </div>
+        <div class="field" style="margin:0"><label>From</label><input class="input" type="date" value="{{ reportFrom }}" onChange="{{ onReportFromChange }}"/></div>
+        <div class="field" style="margin:0"><label>To</label><input class="input" type="date" value="{{ reportTo }}" onChange="{{ onReportToChange }}"/></div>
+      </div>
+
+      <sc-if value="{{ isReportsSales }}" hint-placeholder-val="{{ true }}">
+        <table class="table">
+          <thead><tr><th>SN</th><th>Date</th><th>Invoice No.</th><th>Customer</th><th>PAN</th><th>Taxable</th><th>VAT</th><th>Total</th></tr></thead>
+          <tbody>
+            <sc-for list="{{ salesRegisterRows }}" as="row" hint-placeholder-count="3">
+              <tr><td>{{ row.sn }}</td><td>{{ row.dateLabel }}</td><td>{{ row.number }}</td><td>{{ row.customerName }}</td><td>{{ row.panVat }}</td><td>{{ row.taxableLabel }}</td><td>{{ row.vatLabel }}</td><td>{{ row.totalLabel }}</td></tr>
+            </sc-for>
+            <tr style="font-weight:700"><td colspan="4">Total</td><td>{{ salesTotals.taxableLabel }}</td><td>{{ salesTotals.vatLabel }}</td><td>{{ salesTotals.totalLabel }}</td></tr>
+          </tbody>
+        </table>
+      </sc-if>
+
+      <sc-if value="{{ isReportsPurchase }}" hint-placeholder-val="{{ false }}">
+        <div class="card elev-sm" style="padding:var(--space-4); margin-bottom:var(--space-4); display:flex; gap:var(--space-3); align-items:flex-end">
+          <div class="field" style="margin:0; flex:1"><label>Supplier</label><input class="input" value="{{ purchaseDraft.supplierName }}" onChange="{{ purchaseDraft.onSupplierChange }}"/></div>
+          <div class="field" style="margin:0"><label>PAN</label><input class="input" value="{{ purchaseDraft.panVat }}" onChange="{{ purchaseDraft.onPanChange }}"/></div>
+          <div class="field" style="margin:0"><label>Date</label><input class="input" type="date" value="{{ purchaseDraft.date }}" onChange="{{ purchaseDraft.onDateChange }}"/></div>
+          <div class="field" style="margin:0"><label>Taxable amount</label><input class="input" type="number" value="{{ purchaseDraft.taxableAmount }}" onChange="{{ purchaseDraft.onAmountChange }}"/></div>
+          <button class="btn btn-primary" onClick="{{ purchaseDraft.onAdd }}">+ Add</button>
+        </div>
+        <table class="table">
+          <thead><tr><th>SN</th><th>Date</th><th>Supplier</th><th>PAN</th><th>Taxable</th><th>VAT (Input)</th><th>Total</th><th></th></tr></thead>
+          <tbody>
+            <sc-for list="{{ purchaseRegisterRows }}" as="row" hint-placeholder-count="2">
+              <tr><td>{{ row.sn }}</td><td>{{ row.dateLabel }}</td><td>{{ row.supplierName }}</td><td>{{ row.panVat }}</td><td>{{ row.taxableLabel }}</td><td>{{ row.vatLabel }}</td><td>{{ row.totalLabel }}</td><td><button class="btn btn-ghost" onClick="{{ row.onDelete }}">Delete</button></td></tr>
+            </sc-for>
+            <tr style="font-weight:700"><td colspan="3">Total</td><td>{{ purchaseTotals.taxableLabel }}</td><td>{{ purchaseTotals.vatLabel }}</td><td>{{ purchaseTotals.totalLabel }}</td><td></td></tr>
+          </tbody>
+        </table>
+      </sc-if>
+
+      <sc-if value="{{ isReportsSummary }}" hint-placeholder-val="{{ false }}">
+        <div class="card elev-md" style="padding:var(--space-6); max-width:480px">
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px"><span>Output VAT (Sales)</span><strong>{{ salesTotals.vatLabel }}</strong></div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px"><span>Input VAT (Purchases)</span><strong>{{ purchaseTotals.vatLabel }}</strong></div>
+          <div style="display:flex; justify-content:space-between; font-size:18px; padding-top:12px; border-top:1px solid var(--color-neutral-200)"><span>{{ vatSummary.label }}</span><strong>{{ vatSummary.amountLabel }}</strong></div>
+        </div>
+      </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ isStatement }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:var(--font-heading); font-size:32px; margin:0 0 var(--space-5)">Customer statement</h1>
+      <div class="card elev-sm" style="padding:var(--space-5); margin-bottom:var(--space-6); display:flex; gap:var(--space-4); align-items:flex-end">
+        <div class="field" style="flex:1"><label>Customer</label>
+          <select class="input" value="{{ statement.customerId }}" onChange="{{ statement.onCustomerChange }}">
+            <option value="">Select customer...</option>
+            <sc-for list="{{ customerOptions }}" as="c" hint-placeholder-count="3">
+              <option value="{{ c.id }}">{{ c.name }}</option>
+            </sc-for>
+          </select>
+        </div>
+        <div class="field"><label>From</label><input class="input" type="date" value="{{ statement.from }}" onChange="{{ statement.onFromChange }}"/></div>
+        <div class="field"><label>To</label><input class="input" type="date" value="{{ statement.to }}" onChange="{{ statement.onToChange }}"/></div>
+        <button class="btn btn-primary" onClick="{{ statement.onGenerate }}">Generate</button>
+      </div>
+
+      <sc-if value="{{ statement.generated }}" hint-placeholder-val="{{ false }}">
+        <div class="card elev-md" style="padding:var(--space-6)">
+          <div style="display:flex; justify-content:space-between; margin-bottom:var(--space-5)">
+            <div>
+              <div style="font-family:var(--font-heading); font-size:20px">{{ statement.customerName }}</div>
+              <div style="color:var(--color-neutral-700); font-size:13px">Statement period: {{ statement.periodLabel }}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:var(--font-heading); font-size:18px; color:var(--color-text)">{{ company.name }}</div>
+              <div style="font-size:11px; color:var(--color-accent-700); font-weight:600; margin-top:2px">{{ company.brand }}</div>
+              <div style="font-size:12px; color:var(--color-neutral-700); margin-top:2px">{{ company.address }}</div>
+              <div style="font-size:12px; color:var(--color-neutral-700)">{{ company.panVat }}</div>
+            </div>
+          </div>
+          <table class="table">
+            <thead><tr><th>Date</th><th>Particulars</th><th>Debit</th><th>Credit</th><th>Balance</th></tr></thead>
+            <tbody>
+              <sc-for list="{{ statement.rows }}" as="row" hint-placeholder-count="3">
+                <tr>
+                  <td>{{ row.dateLabel }}</td>
+                  <td>{{ row.particulars }}</td>
+                  <td>{{ row.debitLabel }}</td>
+                  <td>{{ row.creditLabel }}</td>
+                  <td>{{ row.balanceLabel }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+          <div style="display:flex; justify-content:flex-end; margin-top:var(--space-4)">
+            <div style="font-size:16px"><strong>Closing balance: {{ statement.closingLabel }}</strong></div>
+          </div>
+        </div>
+      </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ isNews }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:var(--font-heading); font-size:32px; margin:0 0 var(--space-5)">News &amp; Alerts</h1>
+      <div class="seg" style="margin-bottom:var(--space-5); flex-wrap:wrap">
+        <sc-for list="{{ news.tabButtons }}" as="tab" hint-placeholder-count="5">
+          <button class="{{ tab.cls }}" onClick="{{ tab.onClick }}">{{ tab.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:var(--space-4)">
+        <sc-for list="{{ news.rows }}" as="item" hint-placeholder-count="3">
+          <div class="card elev-sm" style="padding:var(--space-5); border-left:4px solid {{ item.borderColor }}">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap">
+              <span class="card-kicker" style="margin:0">{{ item.category }}</span>
+            </div>
+            <div style="font-weight:600; font-size:15px; margin-top:6px">{{ item.title }}</div>
+            <div style="font-size:14px; line-height:1.6; margin-top:4px">{{ item.body }}</div>
+            <sc-if value="{{ item.link }}" hint-placeholder-val="{{ false }}">
+              <a href="{{ item.link }}" target="_blank" rel="noopener" style="font-size:13px; margin-top:6px; display:inline-block">{{ item.linkLabel }}</a>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <h2 style="font-family:var(--font-heading); font-size:20px; margin:var(--space-7) 0 var(--space-3)">Live market &amp; news sources</h2>
+      <div class="card elev-sm" style="padding:var(--space-5); display:flex; flex-direction:column; gap:10px; font-size:14px; margin-bottom:var(--space-6)">
+        <a href="https://www.nepalstock.com.np" target="_blank" rel="noopener">NEPSE — live index, gainers/losers (nepalstock.com.np)</a>
+        <a href="https://merolagani.com/MarketSummary.aspx" target="_blank" rel="noopener">Merolagani — market summary</a>
+        <a href="https://ird.gov.np" target="_blank" rel="noopener">Inland Revenue Department — official tax notices (ird.gov.np)</a>
+      </div>
+
+      <h2 style="font-family:var(--font-heading); font-size:20px; margin:0 0 var(--space-3)">Where government tenders get published</h2>
+      <div class="card elev-sm" style="padding:var(--space-5); display:flex; flex-direction:column; gap:10px; font-size:14px">
+        <a href="https://www.bolpatra.gov.np/egp/" target="_blank" rel="noopener">Bolpatra (bolpatra.gov.np) — official e-GP portal</a>
+        <a href="https://www.mohp.gov.np" target="_blank" rel="noopener">Ministry of Health and Population (mohp.gov.np)</a>
+        <a href="https://bolpatranepal.com" target="_blank" rel="noopener">Bolpatra Nepal</a>
+        <a href="https://www.nepaltender.com/products-services/uniform-tenders/" target="_blank" rel="noopener">NepalTender</a>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isHospitals }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:var(--font-heading); font-size:32px; margin:0 0 var(--space-2)">Hospitals in Nepal</h1>
+      <div style="font-size:13px; color:var(--color-neutral-600); margin-bottom:var(--space-4)">{{ hospitals.total }} verified hospitals/medical colleges, mostly Bagmati province (Kathmandu Valley). Showing {{ hospitals.shownCount }}. Sourced from named public directories with real emails/websites where available — synthetic/templated entries were found and removed from earlier versions. Still verify before contacting.</div>
+      <div style="display:flex; gap:var(--space-3); margin-bottom:var(--space-4); align-items:center; flex-wrap:wrap">
+        <input class="input" style="max-width:280px" placeholder="Search name or city" value="{{ hospitalsSearch }}" onChange="{{ onHospitalsSearchChange }}"/>
+        <div class="seg" style="flex-wrap:wrap">
+          <sc-for list="{{ hospitals.tabButtons }}" as="tab" hint-placeholder-count="7">
+            <button class="{{ tab.cls }}" onClick="{{ tab.onClick }}">{{ tab.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <table class="table">
+        <thead><tr><th>Name</th><th>Address</th><th>Phone</th><th>Email</th><th>Province</th><th></th></tr></thead>
+        <tbody>
+          <sc-for list="{{ hospitals.rows }}" as="row" hint-placeholder-count="8">
+            <tr>
+              <td>{{ row.name }}</td>
+              <td>{{ row.address }}</td>
+              <td>{{ row.phone }}</td>
+              <td>{{ row.email }}</td>
+              <td>{{ row.province }}</td>
+              <td><button class="btn btn-ghost" onClick="{{ row.onAdd }}">+ Add to Customers</button></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+      <sc-if value="{{ hospitals.truncated }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:13px; color:var(--color-neutral-600); margin-top:var(--space-3)">Showing first 300 matches — narrow your search or province filter to see more precisely.</div>
+      </sc-if>
+    </sc-if>
+
+  </main>
+
+  <sc-if value="{{ showCustomerModal }}" hint-placeholder-val="{{ false }}">
+    <div class="dialog-backdrop">
+      <div class="dialog">
+        <div class="dialog-title">{{ customerModal.headerLabel }}</div>
+        <div class="dialog-body" style="display:flex; flex-direction:column; gap:var(--space-3)">
+          <div class="field"><label>Name</label><input class="input" value="{{ customerModal.name }}" onChange="{{ customerModal.onNameChange }}"/></div>
+          <div class="field"><label>Address</label><input class="input" value="{{ customerModal.address }}" onChange="{{ customerModal.onAddressChange }}"/></div>
+          <div class="field"><label>PAN/VAT No.</label><input class="input" value="{{ customerModal.panVat }}" onChange="{{ customerModal.onPanChange }}"/></div>
+          <div class="field"><label>Phone (for WhatsApp)</label><input class="input" value="{{ customerModal.phone }}" onChange="{{ customerModal.onPhoneChange }}"/></div>
+          <div class="field"><label>Email</label><input class="input" value="{{ customerModal.email }}" onChange="{{ customerModal.onEmailChange }}"/></div>
+        </div>
+        <div class="dialog-actions">
+          <button class="btn btn-ghost" onClick="{{ customerModal.onClose }}">Cancel</button>
+          <button class="btn btn-primary" onClick="{{ customerModal.onSave }}">Save</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showItemModal }}" hint-placeholder-val="{{ false }}">
+    <div class="dialog-backdrop">
+      <div class="dialog">
+        <div class="dialog-title">{{ itemModal.headerLabel }}</div>
+        <div class="dialog-body" style="display:flex; flex-direction:column; gap:var(--space-3)">
+          <div class="field"><label>Item name</label><input class="input" value="{{ itemModal.name }}" onChange="{{ itemModal.onNameChange }}"/></div>
+          <div class="field"><label>Unit</label><input class="input" value="{{ itemModal.unit }}" onChange="{{ itemModal.onUnitChange }}"/></div>
+          <div class="field"><label>Sizes (comma separated)</label><input class="input" value="{{ itemModal.sizes }}" onChange="{{ itemModal.onSizesChange }}"/></div>
+          <div class="field"><label>Colors (comma separated)</label><input class="input" value="{{ itemModal.colors }}" onChange="{{ itemModal.onColorsChange }}"/></div>
+          <div class="field"><label>Default rate (Rs.)</label><input class="input" type="number" value="{{ itemModal.rate }}" onChange="{{ itemModal.onRateChange }}"/></div>
+          <div class="field"><label>Stock on hand</label><input class="input" type="number" value="{{ itemModal.stock }}" onChange="{{ itemModal.onStockChange }}"/></div>
+        </div>
+        <div class="dialog-actions">
+          <button class="btn btn-ghost" onClick="{{ itemModal.onClose }}">Cancel</button>
+          <button class="btn btn-primary" onClick="{{ itemModal.onSave }}">Save</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showImportModal }}" hint-placeholder-val="{{ false }}">
+    <div class="dialog-backdrop">
+      <div class="dialog">
+        <div class="dialog-title">Import customers (CSV)</div>
+        <div class="dialog-body" style="display:flex; flex-direction:column; gap:var(--space-3)">
+          <div style="font-size:13px; color:var(--color-neutral-700)">One customer per line: Name, Address, PAN/VAT, Phone, Email</div>
+          <button class="btn btn-secondary" style="align-self:flex-start" onClick="{{ loadFullHospitalDirectory }}">Load verified Nepal hospital directory (90 entries)</button>
+          <div style="font-size:12px; color:var(--color-neutral-600)">Real, named hospitals/colleges with sourced phone/email where available — skewed toward Bagmati province since that's where most verifiable public contact lists exist. PAN/VAT left blank. Verify before contacting.</div>
+          <textarea class="input" rows="8" placeholder="Sunrise Hospital, Kathmandu, 600123456, 9801112222, info@sunrise.com" value="{{ importCsvText }}" onChange="{{ onImportTextChange }}"></textarea>
+        </div>
+        <div class="dialog-actions">
+          <button class="btn btn-ghost" onClick="{{ closeImportModal }}">Cancel</button>
+          <button class="btn btn-primary" onClick="{{ runImportCsv }}">Import</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showHelpModal }}" hint-placeholder-val="{{ false }}">
+    <div class="dialog-backdrop">
+      <div class="dialog">
+        <div class="dialog-title">Help / How to use — प्रयोग विधि</div>
+        <div class="dialog-body" style="display:flex; flex-direction:column; gap:var(--space-4); font-size:14px; line-height:1.6">
+          <div>
+            <strong>English:</strong>
+            <ol style="margin:6px 0 0; padding-left:20px">
+              <li>Click "+ New Invoice", choose a customer (or add one).</li>
+              <li>Pick items and enter Quantity and Rate — totals, VAT and amount in words calculate automatically.</li>
+              <li>Use "Copy Last Invoice" to repeat a customer's usual order.</li>
+              <li>Click Save, then Print — or Email / Share on WhatsApp directly to the customer.</li>
+              <li>Record payments from the Invoices list using the Pay button.</li>
+            </ol>
+          </div>
+          <div>
+            <strong>नेपाली:</strong>
+            <ol style="margin:6px 0 0; padding-left:20px">
+              <li>"+ New Invoice" थिच्नुहोस्, ग्राहक छान्नुहोस् (वा नयाँ थप्नुहोस्)।</li>
+              <li>सामान छान्नुहोस् र परिमाण र दर मात्र भर्नुहोस् — बाँकी सबै आफैं गणना हुन्छ।</li>
+              <li>"Copy Last Invoice" ले पुरानो बिल दोहोर्याउन मद्दत गर्छ।</li>
+              <li>Save गर्नुहोस्, त्यसपछि Print, Email वा WhatsApp मार्फत पठाउनुहोस्।</li>
+              <li>भुक्तानी प्राप्त भएपछि Invoices सूचीबाट Pay थिच्नुहोस्।</li>
+            </ol>
+          </div>
+        </div>
+        <div class="dialog-actions">
+          <button class="btn btn-primary" onClick="{{ closeHelp }}">Close</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showPaymentModal }}" hint-placeholder-val="{{ false }}">
+    <div class="dialog-backdrop">
+      <div class="dialog">
+        <div class="dialog-title">Record payment — {{ paymentModal.invoiceNumber }}</div>
+        <div class="dialog-body" style="display:flex; flex-direction:column; gap:var(--space-3)">
+          <div style="font-size:13px; color:var(--color-neutral-700)">Balance due: {{ paymentModal.balanceLabel }}</div>
+          <div class="field"><label>Amount (Rs.)</label><input class="input" type="number" value="{{ paymentModal.amount }}" onChange="{{ paymentModal.onAmountChange }}"/></div>
+          <div class="field"><label>Date</label><input class="input" type="date" value="{{ paymentModal.date }}" onChange="{{ paymentModal.onDateChange }}"/></div>
+          <div class="field"><label>Payment mode</label>
+            <select class="input" value="{{ paymentModal.mode }}" onChange="{{ paymentModal.onModeChange }}">
+              <option value="Cash">Cash</option>
+              <option value="Bank">Bank Transfer</option>
+              <option value="eSewa">eSewa</option>
+              <option value="Khalti">Khalti</option>
+            </select>
+          </div>
+        </div>
+        <div class="dialog-actions">
+          <button class="btn btn-ghost" onClick="{{ paymentModal.onClose }}">Cancel</button>
+          <button class="btn btn-primary" onClick="{{ paymentModal.onSave }}">Save</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ !pinVerified }}" hint-placeholder-val="{{ true }}">
+  <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--color-bg); font-family:var(--font-body)">
+    <div class="card elev-md" style="padding:var(--space-7); width:340px; text-align:center">
+      <img src="assets/aaoms-logo.jpeg" alt="AAOMS Nepal logo" style="width:56px; height:56px; border-radius:50%; object-fit:cover; margin-bottom:var(--space-4)"/>
+      <div style="font-family:var(--font-heading); font-size:22px; color:var(--color-accent-700); margin-bottom:var(--space-2)">AAOMS NEPAL</div>
+      <div style="font-size:13px; color:var(--color-neutral-700); margin-bottom:var(--space-5)">Enter the team PIN to open Billing</div>
+      <input class="input" type="password" inputMode="numeric" placeholder="PIN" value="{{ pinInput }}" onChange="{{ onPinInputChange }}" onKeyDown="{{ onPinKeyDown }}" style="text-align:center; font-size:18px; letter-spacing:4px; margin-bottom:var(--space-3)"/>
+      <sc-if value="{{ pinError }}" hint-placeholder-val="{{ false }}">
+        <div style="color:var(--color-accent-700); font-size:12px; margin-bottom:var(--space-3)">Incorrect PIN. Try again.</div>
+      </sc-if>
+      <button class="btn btn-primary btn-block" onClick="{{ onPinSubmit }}">Unlock</button>
+    </div>
+  </div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;invoiceFinish&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;classic&quot;, &quot;options&quot;: [&quot;classic&quot;, &quot;streamlined&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Invoice&quot;},
+  &quot;accentMood&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;terracotta&quot;, &quot;options&quot;: [&quot;terracotta&quot;, &quot;sage&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Invoice&quot;},
+  &quot;dashboardDensity&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;comfortable&quot;, &quot;options&quot;: [&quot;comfortable&quot;, &quot;compact&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Dashboard&quot;}
+}">
+class Component extends DCLogic {
+  state = {
+    view: 'dashboard',
+    role: 'admin',
+    fiscalYear: '2083/84',
+    search: '',
+    invoiceFilter: 'all',
+    customers: [
+      { id: 'c1', name: 'Janakpur Provincial Hospital', address: 'Janakpur, Dhanusha', panVat: '600112233', phone: '9801234567', email: 'accounts@janakpurhospital.gov.np' },
+      { id: 'c2', name: 'Sunrise Nursing Home', address: 'Mahendra Nagar, Dhanusha', panVat: '600445566', phone: '9812345678', email: 'sunrise.nursing@example.com' },
+      { id: 'c3', name: 'Dhanusha Medical College', address: 'Bhagawatipur, Dhanusha', panVat: '600778899', phone: '9823456789', email: 'finance@dhanushamedical.edu.np' },
+      { id: 'c4', name: 'City Care Diagnostics', address: 'Janakpur-5, Dhanusha', panVat: '600991122', phone: '9834567890', email: 'citycare.diag@example.com' }
+    ],
+    items: [
+      { id: 'i1', name: 'Medical Scrub Set', unit: 'Pcs', rate: 1750, stock: 40, sizes: 'S,M,L,XL,XXL', colors: 'Sky Blue,Ceil Blue,Maroon' },
+      { id: 'i2', name: 'Doctor Apron / Lab Coat', unit: 'Pcs', rate: 1350, stock: 25, sizes: 'M,L,XL', colors: 'White' },
+      { id: 'i3', name: 'Nurse Uniform', unit: 'Pcs', rate: 1500, stock: 30, sizes: 'S,M,L,XL', colors: 'White,Sky Blue' },
+      { id: 'i4', name: 'Green Bed Sheet', unit: 'Pcs', rate: 350, stock: 60, sizes: '', colors: 'Green' },
+      { id: 'i5', name: 'OT Bed Sheet', unit: 'Pcs', rate: 450, stock: 8, sizes: '', colors: 'Green' },
+      { id: 'i6', name: 'Pillow Cover', unit: 'Pcs', rate: 130, stock: 100, sizes: '', colors: 'White' },
+      { id: 'i7', name: 'Curtain (Ward / OT)', unit: 'Pcs', rate: 850, stock: 15, sizes: '', colors: 'Green,Blue' },
+      { id: 'i8', name: 'Face Mask (Cloth)', unit: 'Pcs', rate: 40, stock: 500, sizes: '', colors: 'White,Blue' },
+      { id: 'i9', name: 'Staff ID Lanyard', unit: 'Pcs', rate: 200, stock: 200, sizes: '', colors: 'Blue,Red' },
+      { id: 'i10', name: 'Hand Towel', unit: 'Pcs', rate: 90, stock: 150, sizes: '', colors: 'White' },
+      { id: 'i11', name: 'Blanket Cover', unit: 'Pcs', rate: 600, stock: 20, sizes: '', colors: 'Green' }
+    ],
+    invoices: [
+      { id: 'inv1', number: 'INV-A00101', customerId: 'c1', date: '2026-07-05', bsDate: '2083-03-21', lines: [
+        { itemId: 'i1', name: 'Medical Scrub Set', unit: 'Pcs', qty: 10, rate: 1750, variant: '' },
+        { itemId: 'i6', name: 'Pillow Cover', unit: 'Pcs', qty: 20, rate: 130, variant: '' }
+      ]},
+      { id: 'inv2', number: 'INV-A00102', customerId: 'c2', date: '2026-07-18', bsDate: '2083-04-04', lines: [
+        { itemId: 'i3', name: 'Nurse Uniform', unit: 'Pcs', qty: 15, rate: 1500, variant: '' }
+      ]},
+      { id: 'inv3', number: 'INV-A00103', customerId: 'c3', date: '2026-08-02', bsDate: '2083-04-19', lines: [
+        { itemId: 'i2', name: 'Doctor Apron / Lab Coat', unit: 'Pcs', qty: 8, rate: 1350, variant: '' },
+        { itemId: 'i7', name: 'Curtain (Ward / OT)', unit: 'Pcs', qty: 6, rate: 850, variant: '' }
+      ]},
+      { id: 'inv4', number: 'INV-A00104', customerId: 'c1', date: '2026-08-09', bsDate: '2083-04-26', lines: [
+        { itemId: 'i5', name: 'OT Bed Sheet', unit: 'Pcs', qty: 12, rate: 450, variant: '' },
+        { itemId: 'i8', name: 'Face Mask (Cloth)', unit: 'Pcs', qty: 100, rate: 40, variant: '' }
+      ]}
+    ],
+    payments: [
+      { id: 'p1', invoiceId: 'inv1', date: '2026-07-20', amount: 10000 },
+      { id: 'p2', invoiceId: 'inv2', date: '2026-07-25', amount: 25425 }
+    ],
+    quotations: [
+      { id: 'q1', number: 'QTN-2083/84-00001', customerId: 'c4', date: '2026-07-28', lines: [{ itemId: 'i3', name: 'Nurse Uniform', unit: 'Pcs', qty: 10, rate: 1500, variant: '' }], status: 'converted' },
+      { id: 'q2', number: 'QTN-2083/84-00002', customerId: 'c2', date: '2026-08-05', lines: [{ itemId: 'i8', name: 'Face Mask (Cloth)', unit: 'Pcs', qty: 200, rate: 40, variant: '' }], status: 'open' }
+    ],
+    orders: [
+      { id: 'o1', number: 'SO-2083/84-00001', customerId: 'c4', date: '2026-07-29', lines: [{ itemId: 'i3', name: 'Nurse Uniform', unit: 'Pcs', qty: 10, rate: 1500, variant: '' }], status: 'converted', fromQuotationId: 'q1' }
+    ],
+    challans: [
+      { id: 'ch1', number: 'DC-2083/84-00001', customerId: 'c4', date: '2026-07-30', lines: [{ itemId: 'i3', name: 'Nurse Uniform', unit: 'Pcs', qty: 10, rate: 1500, variant: '' }], status: 'open', fromOrderId: 'o1' }
+    ],
+    purchases: [
+      { id: 'pu1', supplierName: 'Himal Textile Traders', panVat: '500223344', date: '2026-07-10', taxableAmount: 85000 },
+      { id: 'pu2', supplierName: 'Kathmandu Fabric House', panVat: '500556677', date: '2026-08-01', taxableAmount: 42000 }
+    ],
+    nextInvoiceSeq: 1,
+    nextQuoteSeq: 3,
+    nextOrderSeq: 2,
+    nextChallanSeq: 2,
+    nextCustomerId: 5,
+    nextItemId: 12,
+    nextInvoiceId: 5,
+    nextPaymentId: 3,
+    nextQuoteId: 3,
+    nextOrderId: 2,
+    nextChallanId: 2,
+    nextPurchaseId: 3,
+    draft: null,
+    pendingCustomerForInvoice: false,
+    showCustomerModal: false,
+    customerModalDraft: null,
+    editingCustomerId: null,
+    showItemModal: false,
+    itemModalDraft: null,
+    editingItemId: null,
+    showPaymentModal: false,
+    payModalInvoiceId: null,
+    payModalDraft: null,
+    statementCustomerId: '',
+    statementFrom: '',
+    statementTo: '',
+    statementGenerated: false,
+    reportsTab: 'sales',
+    reportFrom: '',
+    reportTo: '',
+    purchaseModalDraft: { supplierName: '', panVat: '', date: new Date().toISOString().slice(0, 10), taxableAmount: '' },
+    showHelpModal: false,
+    isPrinting: false,
+    pinVerified: typeof localStorage !== 'undefined' && localStorage.getItem('aaoms_pin_ok') === 'true',
+    pinInput: '', pinError: false,
+    syncStatus: 'Starting…',
+    hospitalsDirectory: [],
+    hospitalsProvinceFilter: 'all',
+    hospitalsSearch: '',
+    showImportModal: false,
+    importCsvText: '',
+    selectedCustomerIds: [],
+    newsTab: 'all',
+    newsItems: [
+      { id: 'n1', category: 'Deadlines', important: true, title: 'Annual income tax return due Ashoj end 2083', body: 'Annual income tax return for FY 2082/83 is due by Ashoj end 2083 (mid-October 2026), extendable to Poush end 2083 on request. VAT returns are filed monthly (25th of the following month) — separate from the income tax return.', link: 'https://ird.gov.np', linkLabel: 'Verify on ird.gov.np' },
+      { id: 'n2', category: 'Tax Rules & Circulars', important: true, title: 'New income tax slabs from FY 2083/84', body: 'Top income tax rate cut to 29% under Finance Act 2083, effective FY 2083/84 onward. FY 2082/83 income is still assessed under the old table.', link: 'https://ird.gov.np', linkLabel: 'Verify on ird.gov.np' },
+      { id: 'n3', category: 'AAOMS Internal Notes', important: false, title: 'Fabric restock reminder', body: 'OT Bed Sheet and Curtain (Ward/OT) stock is running low — check the Items page and plan the next purchase order.', link: '', linkLabel: '' }
+    ],
+    marketSummary: { nepseIndex: '2,481.36', nepseChange: '+18.42 (0.75%)', nepseUp: true, status: 'Closed', asOf: 'as of last close, 12 Aug 2026',
+      gainers: [{ symbol: 'NABIL', change: '+6.2%' }, { symbol: 'HIDCL', change: '+5.8%' }, { symbol: 'NLIC', change: '+4.9%' }, { symbol: 'CHCL', change: '+4.3%' }, { symbol: 'SHIVM', change: '+3.9%' }],
+      losers: [{ symbol: 'UPPER', change: '-4.1%' }, { symbol: 'NTC', change: '-3.6%' }, { symbol: 'API', change: '-3.2%' }, { symbol: 'SBI', change: '-2.8%' }, { symbol: 'CBBL', change: '-2.5%' }]
+    }
+  };
+
+  company = { name: 'Aadya Atharva Design & Creations', brand: 'AAOMS NEPAL', tagline: 'Wear Your Style', address: 'Mahendra Nagar, Dhanusha, Nepal', regNo: '619165747', panVat: 'PAN/VAT No.: 619165747', email: 'aaomsnepal@gmail.com' };
+  VAT_RATE = 0.13;
+  APP_PIN = '6143';
+  checkPin() {
+    if (this.state.pinInput === this.APP_PIN) {
+      try { localStorage.setItem('aaoms_pin_ok', 'true'); } catch (e) {}
+      this.setState({ pinVerified: true, pinError: false });
+    } else { this.setState({ pinError: true }); }
+  }
+  DOC_PREFIX = { quotation: 'QTN', order: 'SO', challan: 'DC', invoice: 'INV' };
+  CODE39 = { '0':'000110100','1':'100100001','2':'001100001','3':'101100000','4':'000110001','5':'100110000','6':'001110000','7':'000100101','8':'100100100','9':'001100100','A':'100001001','B':'001001001','C':'101001000','D':'000011001','E':'100011000','F':'001011000','G':'000001101','H':'100001100','I':'001001100','J':'000011100','K':'100000011','L':'001000011','M':'101000010','N':'000010011','O':'100010010','P':'001010010','Q':'000000111','R':'100000110','S':'001000110','T':'000010110','U':'110000001','V':'011000001','W':'111000000','X':'010010001','Y':'110010000','Z':'011010000','-':'010000101','.':'110000100',' ':'011000100','$':'010101000','/':'010100010','+':'010001010','%':'000101010','*':'010010100' };
+  computeBarcode(text) {
+    const clean = '*' + String(text).toUpperCase().replace(/[^0-9A-Z\-.$/+% ]/g, '') + '*';
+    const narrow = 2, wide = 5, gap = 2;
+    let x = 0; const bars = [];
+    for (let ci = 0; ci < clean.length; ci++) {
+      const pattern = this.CODE39[clean[ci]] || this.CODE39['*'];
+      for (let i = 0; i < 9; i++) {
+        const w = pattern[i] === '1' ? wide : narrow;
+        if (i % 2 === 0) bars.push({ x, w });
+        x += w;
+      }
+      x += gap;
+    }
+    return { bars, totalWidth: x };
+  }
+  ROLE_NAV = {
+    admin: ['quotations', 'orders', 'challans', 'customers', 'items', 'reports', 'statement'],
+    billing: ['quotations', 'orders', 'challans', 'customers', 'items'],
+    accountant: ['reports', 'statement', 'customers']
+  };
+
+  fmt(n) { return 'Rs. ' + Math.round(n || 0).toLocaleString('en-IN'); }
+  fmtDate(d) { if (!d) return ''; const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
+  getCustomer(id) { return this.state.customers.find(c => c.id === id); }
+  getItem(id) { return this.state.items.find(i => i.id === id); }
+  buildNumber(type, seq, fy) { return this.DOC_PREFIX[type] + '-' + fy + '-' + String(seq).padStart(5, '0'); }
+
+  lineAmount(l) { return (Number(l.qty) || 0) * (Number(l.rate) || 0); }
+  docSubtotal(lines) { return lines.reduce((s, l) => s + this.lineAmount(l), 0); }
+  invoiceTotals(inv) {
+    const subtotal = this.docSubtotal(inv.lines);
+    const discountPercent = Number(inv.discountPercent) || 0;
+    const discount = subtotal * (discountPercent / 100);
+    const taxable = subtotal - discount;
+    const vat = taxable * this.VAT_RATE;
+    return { subtotal, discountPercent, discount, taxable, vat, grandTotal: taxable + vat };
+  }
+  isOverdue(inv, paid, grandTotal) { return (grandTotal - paid) > 0.5 && (Date.now() - new Date(inv.date + 'T00:00:00').getTime()) / 86400000 > 30; }
+  emailInvoice(inv) { this.emailDoc(inv, 'Invoice'); }
+  emailDoc(doc, typeLabel) {
+    const customer = this.getCustomer(doc.customerId);
+    const totals = this.invoiceTotals(doc);
+    const isInv = typeLabel === 'Invoice';
+    const subject = encodeURIComponent(typeLabel + ' ' + doc.number + ' - ' + this.company.name);
+    const lines = doc.lines.map(l => '- ' + l.name + (l.variant ? ' (' + l.variant + ')' : '') + ' x' + l.qty + ' @ Rs.' + l.rate).join('\n');
+    const totalsText = isInv
+      ? '\n\nSubtotal: ' + this.fmt(totals.subtotal) + '\nVAT (13%): ' + this.fmt(totals.vat) + '\nGrand Total: ' + this.fmt(totals.grandTotal)
+      : '\n\nEstimated Total: ' + this.fmt(totals.subtotal);
+    const body = encodeURIComponent(
+      'Dear ' + (customer ? customer.name : 'Customer') + ',\n\nPlease find your ' + typeLabel.toLowerCase() + ' details below.\n\n' +
+      typeLabel + ' No: ' + doc.number + '\nDate: ' + this.fmtDate(doc.date) + '\n\n' + lines + totalsText +
+      '\n\nThank you for your business.\n\n' + this.company.name + ' (' + this.company.brand + ')\n' + this.company.address +
+      '\n' + this.company.panVat + '\n' + this.company.email
+    );
+    const to = customer && customer.email ? customer.email : '';
+    window.open('mailto:' + to + '?subject=' + subject + '&body=' + body, '_blank');
+  }
+  whatsappInvoice(inv) { this.whatsappDoc(inv, 'Invoice'); }
+  whatsappDoc(doc, typeLabel) {
+    const customer = this.getCustomer(doc.customerId);
+    const totals = this.invoiceTotals(doc);
+    const isInv = typeLabel === 'Invoice';
+    let phone = customer && customer.phone ? customer.phone.replace(/\D/g, '') : '';
+    if (phone && phone.length <= 10) phone = '977' + phone.replace(/^0+/, '');
+    const lines = doc.lines.map(l => '- ' + l.name + (l.variant ? ' (' + l.variant + ')' : '') + ' x' + l.qty + ' @ Rs.' + l.rate).join('\n');
+    const totalsText = isInv
+      ? '\n\nSubtotal: ' + this.fmt(totals.subtotal) + '\nVAT (13%): ' + this.fmt(totals.vat) + '\nGrand Total: ' + this.fmt(totals.grandTotal)
+      : '\n\nEstimated Total: ' + this.fmt(totals.subtotal);
+    const text = typeLabel + ' ' + doc.number + ' - ' + this.company.name + '\nDate: ' + this.fmtDate(doc.date) + '\n\n' + lines + totalsText +
+      '\n\nThank you for your business!\n' + this.company.brand;
+    if (!phone) { alert('This customer has no mobile number saved.'); return; }
+    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(text), '_blank');
+  }
+  invoicePaid(invId) { return this.state.payments.filter(p => p.invoiceId === invId).reduce((s, p) => s + p.amount, 0); }
+  invoiceStatus(paid, total) {
+    if (paid <= 0) return { label: 'Unpaid', cls: 'tag tag-outline' };
+    if (paid >= total - 0.5) return { label: 'Paid', cls: 'tag tag-accent-2' };
+    return { label: 'Partial', cls: 'tag tag-accent' };
+  }
+
+  numToWords(num) {
+    num = Math.round(num);
+    if (num === 0) return 'Zero Rupees Only';
+    const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+    const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+    const two = n => n < 20 ? ones[n] : tens[Math.floor(n / 10)] + (n % 10 ? ' ' + ones[n % 10] : '');
+    const three = n => n < 100 ? two(n) : ones[Math.floor(n / 100)] + ' Hundred' + (n % 100 ? ' ' + two(n % 100) : '');
+    let n = num, parts = [];
+    const crore = Math.floor(n / 10000000); n %= 10000000;
+    const lakh = Math.floor(n / 100000); n %= 100000;
+    const thousand = Math.floor(n / 1000); n %= 1000;
+    if (crore) parts.push(two(crore) + ' Crore');
+    if (lakh) parts.push(two(lakh) + ' Lakh');
+    if (thousand) parts.push(two(thousand) + ' Thousand');
+    if (n) parts.push(three(n));
+    return (parts.join(' ') || 'Zero') + ' Rupees Only';
+  }
+
+  numToWordsNepali(num) {
+    num = Math.round(num);
+    if (num === 0) return 'शून्य रुपैयाँ मात्र';
+    const ones = ['', 'एक', 'दुई', 'तीन', 'चार', 'पाँच', 'छ', 'सात', 'आठ', 'नौ', 'दश', 'एघार', 'बाह्र', 'तेह्र', 'चौध', 'पन्ध्र', 'सोह्र', 'सत्र', 'अठार', 'उन्नाइस'];
+    const tens = ['', '', 'बीस', 'तीस', 'चालीस', 'पचास', 'साठी', 'सत्तरी', 'असी', 'नब्बे'];
+    const two = n => n < 20 ? ones[n] : tens[Math.floor(n / 10)] + (n % 10 ? ' ' + ones[n % 10] : '');
+    const three = n => n < 100 ? two(n) : ones[Math.floor(n / 100)] + ' सय' + (n % 100 ? ' ' + two(n % 100) : '');
+    let n = num, parts = [];
+    const crore = Math.floor(n / 10000000); n %= 10000000;
+    const lakh = Math.floor(n / 100000); n %= 100000;
+    const thousand = Math.floor(n / 1000); n %= 1000;
+    if (crore) parts.push(two(crore) + ' करोड');
+    if (lakh) parts.push(two(lakh) + ' लाख');
+    if (thousand) parts.push(two(thousand) + ' हजार');
+    if (n) parts.push(three(n));
+    return (parts.join(' ') || 'शून्य') + ' रुपैयाँ मात्र';
+  }
+
+  goTo(view) { this.setState({ view }); }
+  setRole(role) {
+    const allowed = ['dashboard', 'invoices', ...this.ROLE_NAV[role]];
+    this.setState(s => ({ role, view: allowed.includes(s.view) ? s.view : 'dashboard' }));
+  }
+
+  emptyLine() { return { itemId: '', name: '', unit: '', qty: 1, rate: 0, variant: '' }; }
+
+  newDoc(type, prefill) {
+    const seqKey = { quotation: 'nextQuoteSeq', order: 'nextOrderSeq', challan: 'nextChallanSeq', invoice: 'nextInvoiceSeq' }[type];
+    const s = this.state;
+    const number = this.buildNumber(type, s[seqKey], s.fiscalYear);
+    const draft = {
+      id: null, docType: type, number,
+      customerId: prefill ? prefill.customerId : '',
+      date: new Date().toISOString().slice(0, 10),
+      bsDate: '',
+      lines: prefill ? prefill.lines.map(l => ({ ...l })) : [this.emptyLine()],
+      discountPercent: 0, notes: '', vehicleNo: '', customerType: 'Business', paymentMode: 'Cash',
+      fromQuotationId: null, fromOrderId: null, fromChallanId: prefill ? prefill.fromChallanId : null
+    };
+    this.setState({ draft, view: 'doc-edit' });
+  }
+  editDoc(type, doc) {
+    this.setState({ draft: { id: doc.id, docType: type, number: doc.number, customerId: doc.customerId, date: doc.date, bsDate: doc.bsDate || '', lines: doc.lines.map(l => ({ ...l })), discountPercent: doc.discountPercent || 0, notes: doc.notes || '', vehicleNo: doc.vehicleNo || '', customerType: doc.customerType || 'Business', paymentMode: doc.paymentMode || 'Cash', fromQuotationId: doc.fromQuotationId || null, fromOrderId: doc.fromOrderId || null, fromChallanId: doc.fromChallanId || null }, view: 'doc-edit' });
+  }
+  copyLastInvoiceForCustomer(customerId) {
+    const prior = this.state.invoices.filter(i => i.customerId === customerId).sort((a, b) => b.date.localeCompare(a.date))[0];
+    if (!prior) { alert('No previous invoice found for this customer.'); return; }
+    this.updateDraft({ lines: prior.lines.map(l => ({ ...l })), discountPercent: prior.discountPercent || 0 });
+  }
+  updateDraft(patch) { this.setState(s => ({ draft: { ...s.draft, ...patch } })); }
+  updateDraftLine(idx, patch) { this.setState(s => ({ draft: { ...s.draft, lines: s.draft.lines.map((l, i) => i === idx ? { ...l, ...patch } : l) } })); }
+  selectDraftLineItem(idx, itemId) {
+    const item = this.getItem(itemId);
+    this.updateDraftLine(idx, { itemId, name: item ? item.name : '', unit: item ? item.unit : '', rate: item ? item.rate : 0 });
+  }
+  addDraftLine() { this.setState(s => ({ draft: { ...s.draft, lines: [...s.draft.lines, this.emptyLine()] } })); }
+  removeDraftLine(idx) { this.setState(s => ({ draft: { ...s.draft, lines: s.draft.lines.filter((_, i) => i !== idx) } })); }
+
+  saveDraft() {
+    const d = this.state.draft;
+    if (!d.customerId) { alert('Select a customer first.'); return; }
+    const lines = d.lines.filter(l => Number(l.qty) > 0);
+    if (!lines.length) { alert('Add at least one line item with a quantity.'); return; }
+    const type = d.docType;
+    if (type === 'invoice') {
+      const discountPercent = Number(d.discountPercent) || 0;
+      const notes = d.notes || '';
+      const vehicleNo = d.vehicleNo || '';
+      const customerType = d.customerType || 'Business';
+      const paymentMode = d.paymentMode || 'Cash';
+      if (d.id) {
+        this.setState(s => ({ invoices: s.invoices.map(inv => inv.id === d.id ? { ...inv, customerId: d.customerId, date: d.date, bsDate: d.bsDate, lines, discountPercent, notes, vehicleNo, customerType, paymentMode } : inv), view: 'invoices', draft: null }));
+      } else {
+        const id = 'inv' + this.state.nextInvoiceId;
+        this.setState(s => {
+          const patch = {
+            invoices: [...s.invoices, { id, number: d.number, customerId: d.customerId, date: d.date, bsDate: d.bsDate, lines, discountPercent, notes, vehicleNo, customerType, paymentMode, fromChallanId: d.fromChallanId }],
+            nextInvoiceId: s.nextInvoiceId + 1, nextInvoiceSeq: s.nextInvoiceSeq + 1,
+            items: s.items.map(it => { const line = lines.find(l => l.itemId === it.id); return line ? { ...it, stock: Math.max(0, (it.stock || 0) - Number(line.qty)) } : it; }),
+            view: 'invoices', draft: null
+          };
+          if (d.fromChallanId) patch.challans = s.challans.map(c => c.id === d.fromChallanId ? { ...c, status: 'invoiced' } : c);
+          return patch;
+        });
+      }
+    } else if (type === 'quotation') {
+      if (d.id) this.setState(s => ({ quotations: s.quotations.map(q => q.id === d.id ? { ...q, customerId: d.customerId, date: d.date, lines } : q), view: 'quotations', draft: null }));
+      else { const id = 'q' + this.state.nextQuoteId; this.setState(s => ({ quotations: [...s.quotations, { id, number: d.number, customerId: d.customerId, date: d.date, lines, status: 'open' }], nextQuoteId: s.nextQuoteId + 1, nextQuoteSeq: s.nextQuoteSeq + 1, view: 'quotations', draft: null })); }
+    } else if (type === 'order') {
+      if (d.id) this.setState(s => ({ orders: s.orders.map(o => o.id === d.id ? { ...o, customerId: d.customerId, date: d.date, lines } : o), view: 'orders', draft: null }));
+      else { const id = 'o' + this.state.nextOrderId; this.setState(s => ({ orders: [...s.orders, { id, number: d.number, customerId: d.customerId, date: d.date, lines, status: 'open', fromQuotationId: d.fromQuotationId }], nextOrderId: s.nextOrderId + 1, nextOrderSeq: s.nextOrderSeq + 1, view: 'orders', draft: null })); }
+    } else if (type === 'challan') {
+      if (d.id) this.setState(s => ({ challans: s.challans.map(c => c.id === d.id ? { ...c, customerId: d.customerId, date: d.date, lines } : c), view: 'challans', draft: null }));
+      else { const id = 'ch' + this.state.nextChallanId; this.setState(s => ({ challans: [...s.challans, { id, number: d.number, customerId: d.customerId, date: d.date, lines, status: 'open', fromOrderId: d.fromOrderId }], nextChallanId: s.nextChallanId + 1, nextChallanSeq: s.nextChallanSeq + 1, view: 'challans', draft: null })); }
+    }
+  }
+  cancelDraft() { const back = { quotation: 'quotations', order: 'orders', challan: 'challans', invoice: 'invoices' }[this.state.draft.docType]; this.setState({ draft: null, view: back }); }
+  deleteInvoice(id) { if (!confirm('Delete this invoice?')) return; this.setState(s => ({ invoices: s.invoices.filter(i => i.id !== id), payments: s.payments.filter(p => p.invoiceId !== id) })); }
+  deleteDoc(type, id) { if (!confirm('Delete this?')) return; this.setState(s => ({ [type + 's']: s[type + 's'].filter(x => x.id !== id) })); }
+
+  convertQuotationToOrder(q) { this.newDoc('order', { customerId: q.customerId, lines: q.lines }); this.setState(s => ({ quotations: s.quotations.map(x => x.id === q.id ? { ...x, status: 'converted' } : x), draft: { ...s.draft, fromQuotationId: q.id } })); }
+  convertOrderToChallan(o) { this.newDoc('challan', { customerId: o.customerId, lines: o.lines }); this.setState(s => ({ orders: s.orders.map(x => x.id === o.id ? { ...x, status: 'converted' } : x), draft: { ...s.draft, fromOrderId: o.id } })); }
+  convertChallanToInvoice(c) { this.newDoc('invoice', { customerId: c.customerId, lines: c.lines, fromChallanId: c.id }); }
+
+  openCustomerModal(customer) { this.setState({ showCustomerModal: true, editingCustomerId: customer ? customer.id : null, customerModalDraft: customer ? { ...customer } : { name: '', address: '', panVat: '', phone: '', email: '' } }); }
+  openNewCustomerFromInvoice() { this.setState({ pendingCustomerForInvoice: true }); this.openCustomerModal(null); }
+  updateCustomerModal(patch) { this.setState(s => ({ customerModalDraft: { ...s.customerModalDraft, ...patch } })); }
+  saveCustomerModal() {
+    const d = this.state.customerModalDraft;
+    if (!d.name.trim()) { alert('Customer name is required.'); return; }
+    if (this.state.editingCustomerId) this.setState(s => ({ customers: s.customers.map(c => c.id === s.editingCustomerId ? { ...c, ...d } : c), showCustomerModal: false }));
+    else {
+      const id = 'c' + this.state.nextCustomerId;
+      this.setState(s => {
+        const patch = { customers: [...s.customers, { id, ...d }], nextCustomerId: s.nextCustomerId + 1, showCustomerModal: false };
+        if (s.pendingCustomerForInvoice && s.draft) { patch.draft = { ...s.draft, customerId: id }; patch.pendingCustomerForInvoice = false; }
+        return patch;
+      });
+    }
+  }
+  closeCustomerModal() { this.setState({ showCustomerModal: false, pendingCustomerForInvoice: false }); }
+  deleteCustomer(id) { if (!confirm('Delete this customer?')) return; this.setState(s => ({ customers: s.customers.filter(c => c.id !== id) })); }
+  toggleCustomerSelected(id) { this.setState(s => ({ selectedCustomerIds: s.selectedCustomerIds.includes(id) ? s.selectedCustomerIds.filter(x => x !== id) : [...s.selectedCustomerIds, id] })); }
+  openImportModal() { this.setState({ showImportModal: true, importCsvText: '' }); }
+  SAMPLE_HOSPITALS = [
+    ['Dhulikhel Hospital', 'Kavre', '', '011-490497', 'dhos@mail.com.np', 'Bagmati'],
+    ['Kanti Children\'s Hospital', 'Maharajgunj, Kathmandu', '', '01-4411140', 'info@kantichildrenhospital.gov.np', 'Bagmati'],
+    ['Kathmandu Medical College Teaching Hospital', 'Sinamangal, Kathmandu', '', '01-4476152', 'info@kmc.edu.np', 'Bagmati'],
+    ['KIST Medical College Teaching Hospital', 'Imadol, Lalitpur', '', '01-5201682', 'info@kistmcth.edu.np', 'Bagmati'],
+    ['B & B Hospital', 'Gwarko, Kathmandu', '', '01-5531933', 'bbhospital@wlink.com.np', 'Bagmati'],
+    ['Bhaktapur Cancer Hospital', 'Bhaktapur', '', '01-6614430', 'bccc@wlink.com.np', 'Bagmati'],
+    ['B.P. Eye Foundation (CHEERS)', 'Manohara, Bhaktapur', '', '01-6631705', 'cheers_bpef@yahoo.com', 'Bagmati'],
+    ['Norvic International Hospital', 'Thapathali, Kathmandu', '', '01-4252922', 'heart@norvic.wlink.com.np', 'Bagmati'],
+    ['Grande International Hospital', 'Dhapasi, Kathmandu', '', '01-4381047', 'info@grandehospital.com', 'Bagmati'],
+    ['Kantipur Dental College', 'Basundhara, Kathmandu', '', '01-4385910', 'kdchktm@gmail.com', 'Bagmati'],
+    ['Kathmandu Hospital Pvt. Ltd', 'Tripureshwor, Kathmandu', '', '01-4229656', 'ktmhospi@ccsl.com', 'Bagmati'],
+    ['Chitwan Medical College Teaching Hospital', 'Bharatpur-10, Chitwan', '', '056-532933', 'info@cmc.edu.np', 'Bagmati'],
+    ['Bharatpur Hospital', 'Bharatpur, Chitwan', '', '056-597003', 'info@bharatpurhospital.gov.np', 'Bagmati'],
+    ['Chitwan Hospital Pvt. Ltd', 'Chaubiskothi, Bharatpur', '', '056-493101', 'info@chitwanhospital.com.np', 'Bagmati'],
+    ['Neuro Hospital', 'Jahada Road, Biratnagar', '', '021-522757', 'info@neurohospital.com.np', 'Koshi'],
+    ['Siddhababa International Hospital', 'Om Marg, Butwal', '', '071-549201', 'siddhababa.hospital@gmail.com', 'Lumbini']
+  ].map(r => r.join(', ')).join('\n');
+  loadSampleHospitals() { this.setState({ importCsvText: this.SAMPLE_HOSPITALS }); }
+  HOSPITALS_DATA_VERSION = 3;
+  FIREBASE_CONFIG = {
+    apiKey: "AIzaSyBrvvkYiqmqfIZobLa-8iiGo14cyg7HeUM",
+    authDomain: "aaoms-nepal.firebaseapp.com",
+    projectId: "aaoms-nepal",
+    storageBucket: "aaoms-nepal.firebasestorage.app",
+    messagingSenderId: "444559972919",
+    appId: "1:444559972919:web:b4c6b501585e78c0ea3db2",
+    databaseURL: "https://aaoms-nepal-default-rtdb.asia-southeast1.firebasedatabase.app"
+  };
+  PERSIST_KEYS = ['customers', 'items', 'invoices', 'payments', 'quotations', 'orders', 'challans', 'purchases',
+    'nextInvoiceSeq', 'nextQuoteSeq', 'nextOrderSeq', 'nextChallanSeq', 'nextCustomerId', 'nextItemId',
+    'nextInvoiceId', 'nextPaymentId', 'nextQuoteId', 'nextOrderId', 'nextChallanId', 'nextPurchaseId', 'fiscalYear'];
+  getPersistedSlice() {
+    const out = {};
+    this.PERSIST_KEYS.forEach(k => { out[k] = this.state[k]; });
+    return out;
+  }
+  initCloudSync() {
+    try {
+      if (!window.firebase) { this.setState({ syncStatus: 'Offline (no connection)' }); return; }
+      if (!firebase.apps.length) firebase.initializeApp(this.FIREBASE_CONFIG);
+      this.setState({ syncStatus: 'Connecting…' });
+      this.dbRef = firebase.database().ref('billing/shared');
+      this.dbRef.on('value', snap => {
+        const data = snap.val();
+        if (data) {
+          this._loadingRemote = true;
+          this.setState({ ...data, syncStatus: 'Synced with team ✓' });
+        } else {
+          this.scheduleSave(true);
+          this.setState({ syncStatus: 'Synced with team ✓' });
+        }
+      }, err => { this.setState({ syncStatus: 'Sync error: ' + err.message }); });
+    } catch (e) { this.setState({ syncStatus: 'Offline (sync failed)' }); }
+  }
+  scheduleSave(immediate) {
+    if (!this.dbRef) return;
+    clearTimeout(this._saveTimer);
+    const run = () => { this.dbRef.update(this.getPersistedSlice()).catch(() => {}); };
+    if (immediate) run(); else this._saveTimer = setTimeout(run, 800);
+  }
+  async loadFullHospitalDirectory() {
+    const mod = await import('./hospitals-data.js?v=' + this.HOSPITALS_DATA_VERSION);
+    const rows = mod.default;
+    const text = rows.map(r => [r[0], r[1], '', r[2], r[4] || '', r[3]].join(', ')).join('\n');
+    this.setState({ importCsvText: text });
+  }
+  async componentDidMount() {
+    window.addEventListener('afterprint', () => this.setState({ isPrinting: false }));
+    const mod = await import('./hospitals-data.js?v=' + this.HOSPITALS_DATA_VERSION);
+    this.setState({ hospitalsDirectory: mod.default });
+    this.initCloudSync();
+  }
+  componentDidUpdate() {
+    if (this._loadingRemote) { this._loadingRemote = false; return; }
+    this.scheduleSave(false);
+  }
+  addHospitalAsCustomer(h) {
+    const exists = this.state.customers.some(c => c.name === h[0]);
+    if (exists) { alert('Already in Customers.'); return; }
+    const id = 'c' + this.state.nextCustomerId;
+    this.setState(s => ({ customers: [...s.customers, { id, name: h[0], address: h[1], panVat: '', phone: h[2], email: h[4] || '', province: h[3] }], nextCustomerId: s.nextCustomerId + 1 }));
+    alert(h[0] + ' added to Customers.');
+  }
+  closeImportModal() { this.setState({ showImportModal: false }); }
+  runImportCsv() {
+    const text = this.state.importCsvText.trim();
+    if (!text) { alert('Paste CSV rows first: Name, Address, PAN/VAT, Phone, Email'); return; }
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+    let nextId = this.state.nextCustomerId;
+    const added = [];
+    lines.forEach(line => {
+      const cols = line.split(',').map(c => c.trim());
+      if (!cols[0] || cols[0].toLowerCase() === 'name' || cols[0].startsWith('#')) return;
+      added.push({ id: 'c' + nextId, name: cols[0] || '', address: cols[1] || '', panVat: cols[2] || '', phone: cols[3] || '', email: cols[4] || '', province: cols[5] || 'Unspecified' });
+      nextId++;
+    });
+    if (!added.length) { alert('No valid rows found.'); return; }
+    this.setState(s => ({ customers: [...s.customers, ...added], nextCustomerId: nextId, showImportModal: false }));
+  }
+  emailBrochureToSelected() {
+    const s = this.state;
+    const recipients = s.customers.filter(c => s.selectedCustomerIds.includes(c.id) && c.email).map(c => c.email);
+    if (!recipients.length) { alert('Select at least one customer with an email address.'); return; }
+    const subject = encodeURIComponent('Product Brochure - ' + this.company.name + ' (' + this.company.brand + ')');
+    const body = encodeURIComponent(
+      'Dear Sir/Madam,\n\nWe are ' + this.company.name + ' (' + this.company.brand + '), a Nepal-based manufacturer of medical wear and hospital garments — scrubs, aprons, uniforms, OT/hospital linens and more.\n\n' +
+      'We would be glad to share our catalogue and pricing for your hospital/clinic. Please reply to this email or call us to discuss your requirements.\n\n' +
+      this.company.name + '\n' + this.company.address + '\n' + this.company.panVat + '\n' + this.company.email
+    );
+    window.open('mailto:?bcc=' + recipients.join(',') + '&subject=' + subject + '&body=' + body, '_blank');
+  }
+
+  openItemModal(item) { this.setState({ showItemModal: true, editingItemId: item ? item.id : null, itemModalDraft: item ? { ...item } : { name: '', unit: 'Pcs', rate: 0, stock: 0, sizes: '', colors: '' } }); }
+  updateItemModal(patch) { this.setState(s => ({ itemModalDraft: { ...s.itemModalDraft, ...patch } })); }
+  saveItemModal() {
+    const d = this.state.itemModalDraft;
+    if (!d.name.trim()) { alert('Item name is required.'); return; }
+    const clean = { ...d, rate: Number(d.rate) || 0, stock: Number(d.stock) || 0 };
+    if (this.state.editingItemId) this.setState(s => ({ items: s.items.map(i => i.id === s.editingItemId ? { ...i, ...clean } : i), showItemModal: false }));
+    else { const id = 'i' + this.state.nextItemId; this.setState(s => ({ items: [...s.items, { id, ...clean }], nextItemId: s.nextItemId + 1, showItemModal: false })); }
+  }
+  closeItemModal() { this.setState({ showItemModal: false }); }
+  deleteItem(id) { if (!confirm('Delete this item from the catalog?')) return; this.setState(s => ({ items: s.items.filter(i => i.id !== id) })); }
+
+  openPaymentModal(invoiceId) { this.setState({ showPaymentModal: true, payModalInvoiceId: invoiceId, payModalDraft: { amount: '', date: new Date().toISOString().slice(0, 10), mode: 'Cash' } }); }
+  updatePaymentModal(patch) { this.setState(s => ({ payModalDraft: { ...s.payModalDraft, ...patch } })); }
+  savePaymentModal() {
+    const amt = Number(this.state.payModalDraft.amount);
+    if (!amt || amt <= 0) { alert('Enter a valid amount.'); return; }
+    const id = 'p' + this.state.nextPaymentId;
+    this.setState(s => ({ payments: [...s.payments, { id, invoiceId: s.payModalInvoiceId, date: s.payModalDraft.date, amount: amt, mode: s.payModalDraft.mode || 'Cash' }], nextPaymentId: s.nextPaymentId + 1, showPaymentModal: false }));
+  }
+  closePaymentModal() { this.setState({ showPaymentModal: false }); }
+  openHelp() { this.setState({ showHelpModal: true }); }
+  closeHelp() { this.setState({ showHelpModal: false }); }
+  hoursAgo(iso) { return (Date.now() - new Date(iso).getTime()) / 3600000; }
+  timeAgoLabel(iso) {
+    const h = this.hoursAgo(iso);
+    if (h < 1) return 'Just now';
+    if (h < 24) return Math.floor(h) + ' hour' + (Math.floor(h) === 1 ? '' : 's') + ' ago';
+    const d = Math.floor(h / 24);
+    return d + ' day' + (d === 1 ? '' : 's') + ' ago';
+  }
+
+  updateStatement(patch) { this.setState({ ...patch, statementGenerated: false }); }
+  generateStatement() { this.setState({ statementGenerated: true }); }
+
+  addPurchase() {
+    const d = this.state.purchaseModalDraft;
+    const amt = Number(d.taxableAmount);
+    if (!d.supplierName.trim() || !amt) { alert('Supplier name and taxable amount are required.'); return; }
+    const id = 'pu' + this.state.nextPurchaseId;
+    this.setState(s => ({ purchases: [...s.purchases, { id, supplierName: d.supplierName, panVat: d.panVat, date: d.date, taxableAmount: amt }], nextPurchaseId: s.nextPurchaseId + 1, purchaseModalDraft: { supplierName: '', panVat: '', date: d.date, taxableAmount: '' } }));
+  }
+  updatePurchaseModal(patch) { this.setState(s => ({ purchaseModalDraft: { ...s.purchaseModalDraft, ...patch } })); }
+  deletePurchase(id) { this.setState(s => ({ purchases: s.purchases.filter(p => p.id !== id) })); }
+
+  renderVals() {
+    const s = this.state;
+    const invoiceFinish = this.props.invoiceFinish ?? 'classic';
+    const accentMood = this.props.accentMood ?? 'terracotta';
+    const dashboardDensity = this.props.dashboardDensity ?? 'comfortable';
+    const barColor = accentMood === 'sage' ? '#7a8a5e' : '#cc5500';
+    const showLetterheadBar = invoiceFinish === 'classic';
+    const showWatermark = invoiceFinish === 'classic';
+    const showNepaliWords = invoiceFinish === 'classic';
+    const letterheadBarBg = 'linear-gradient(to right, ' + barColor + ' 0%, ' + barColor + ' 50%, #1a3c6e 50%, #1a3c6e 100%)';
+    const brandAccentColor = accentMood === 'sage' ? 'var(--color-accent-2-700)' : 'var(--color-accent-700)';
+    const isCompactDash = dashboardDensity === 'compact';
+    const dashCardPadding = isCompactDash ? 'var(--space-3)' : 'var(--space-5)';
+    const dashCardFontSize = isCompactDash ? '18px' : '24px';
+    const activeStyle = { textAlign: 'left', padding: '9px 12px', borderRadius: 'var(--radius-md)', border: 'none', background: 'var(--color-accent-100)', color: 'var(--color-accent-700)', fontWeight: 600, cursor: 'pointer', fontSize: '13.5px' };
+    const idleStyle = { textAlign: 'left', padding: '9px 12px', borderRadius: 'var(--radius-md)', border: 'none', background: 'transparent', color: 'var(--color-text)', cursor: 'pointer', fontSize: '13.5px' };
+    const navKey = s.view === 'doc-edit' ? (s.draft ? { quotation: 'quotations', order: 'orders', challan: 'challans', invoice: 'invoices' }[s.draft.docType] : 'invoices') : s.view;
+    const navItemStyles = {
+      dashboard: navKey === 'dashboard' ? activeStyle : idleStyle,
+      quotations: navKey === 'quotations' ? activeStyle : idleStyle,
+      orders: navKey === 'orders' ? activeStyle : idleStyle,
+      challans: navKey === 'challans' ? activeStyle : idleStyle,
+      invoices: navKey === 'invoices' ? activeStyle : idleStyle,
+      customers: navKey === 'customers' ? activeStyle : idleStyle,
+      items: navKey === 'items' ? activeStyle : idleStyle,
+      reports: navKey === 'reports' ? activeStyle : idleStyle,
+      statement: navKey === 'statement' ? activeStyle : idleStyle,
+      news: navKey === 'news' ? activeStyle : idleStyle,
+      hospitals: navKey === 'hospitals' ? activeStyle : idleStyle
+    };
+    const allowedForRole = this.ROLE_NAV[s.role];
+    const navShow = { quotations: allowedForRole.includes('quotations'), orders: allowedForRole.includes('orders'), challans: allowedForRole.includes('challans'), customers: allowedForRole.includes('customers'), items: allowedForRole.includes('items'), reports: allowedForRole.includes('reports'), statement: allowedForRole.includes('statement') };
+
+    const customerOptions = s.customers.map(c => ({ id: c.id, name: c.name }));
+    const itemOptions = s.items.map(i => ({ id: i.id, name: i.name }));
+
+    const todayIso = new Date().toISOString().slice(0, 10);
+    const todayMonth = todayIso.slice(0, 7);
+    const enrichedInvoices = s.invoices.map(inv => {
+      const totals = this.invoiceTotals(inv);
+      const paid = this.invoicePaid(inv.id);
+      let status = this.invoiceStatus(paid, totals.grandTotal);
+      if (this.isOverdue(inv, paid, totals.grandTotal)) status = { label: 'Overdue', cls: 'tag tag-accent' };
+      const customer = this.getCustomer(inv.customerId);
+      return { ...inv, ...totals, paid, status, customerName: customer ? customer.name : 'Unassigned', customerPan: customer ? customer.panVat : '' };
+    });
+
+    const totalInvoiced = enrichedInvoices.reduce((sum, i) => sum + i.grandTotal, 0);
+    const totalOutstanding = enrichedInvoices.reduce((sum, i) => sum + (i.grandTotal - i.paid), 0);
+    const recentInvoices = [...enrichedInvoices].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5).map(inv => ({
+      number: inv.number, dateLabel: this.fmtDate(inv.date), customerName: inv.customerName, grandTotalLabel: this.fmt(inv.grandTotal),
+      statusLabel: inv.status.label, tagClass: inv.status.cls, onEdit: () => this.editDoc('invoice', inv)
+    }));
+
+    const filterMap = { unpaid: 'Unpaid', partial: 'Partial', paid: 'Paid' };
+    let filtered = enrichedInvoices;
+    if (s.invoiceFilter !== 'all') filtered = filtered.filter(i => i.status.label === filterMap[s.invoiceFilter]);
+    if (s.search.trim()) { const q = s.search.trim().toLowerCase(); filtered = filtered.filter(i => i.customerName.toLowerCase().includes(q) || i.number.toLowerCase().includes(q)); }
+    const invoiceRows = [...filtered].sort((a, b) => b.date.localeCompare(a.date)).map(inv => ({
+      number: inv.number, dateLabel: this.fmtDate(inv.date), bsDate: inv.bsDate || '—', customerName: inv.customerName,
+      grandTotalLabel: this.fmt(inv.grandTotal), paidLabel: this.fmt(inv.paid), balanceLabel: this.fmt(inv.grandTotal - inv.paid),
+      statusLabel: inv.status.label, tagClass: inv.status.cls,
+      onEdit: () => this.editDoc('invoice', inv), onDelete: () => this.deleteInvoice(inv.id), onPay: () => this.openPaymentModal(inv.id), onEmail: () => this.emailInvoice(inv), onWhatsapp: () => this.whatsappInvoice(inv)
+    }));
+
+    const segActive = 'seg-opt active', segBase = 'seg-opt';
+
+    const docTagClass = (status, doneLabel) => ({ label: status === 'open' ? 'Open' : doneLabel, cls: status === 'open' ? 'tag tag-outline' : 'tag tag-accent-2' });
+    const quotationRows = s.quotations.map(q => { const c = this.getCustomer(q.customerId); const t = docTagClass(q.status, 'Converted'); return { number: q.number, dateLabel: this.fmtDate(q.date), customerName: c ? c.name : 'Unassigned', totalLabel: this.fmt(this.docSubtotal(q.lines)), statusLabel: t.label, tagClass: t.cls, canAct: q.status === 'open', onAction: () => this.convertQuotationToOrder(q), onEdit: () => this.editDoc('quotation', q), onDelete: () => this.deleteDoc('quotation', q.id) }; });
+    const orderRows = s.orders.map(o => { const c = this.getCustomer(o.customerId); const t = docTagClass(o.status, 'Converted'); return { number: o.number, dateLabel: this.fmtDate(o.date), customerName: c ? c.name : 'Unassigned', totalLabel: this.fmt(this.docSubtotal(o.lines)), statusLabel: t.label, tagClass: t.cls, canAct: o.status === 'open', onAction: () => this.convertOrderToChallan(o), onEdit: () => this.editDoc('order', o), onDelete: () => this.deleteDoc('order', o.id) }; });
+    const challanRows = s.challans.map(c => { const cu = this.getCustomer(c.customerId); const t = docTagClass(c.status === 'open' ? 'open' : 'done', 'Invoiced'); return { number: c.number, dateLabel: this.fmtDate(c.date), customerName: cu ? cu.name : 'Unassigned', lineCount: c.lines.length + ' item(s)', statusLabel: t.label, tagClass: t.cls, canAct: c.status === 'open', onAction: () => this.convertChallanToInvoice(c), onEdit: () => this.editDoc('challan', c), onDelete: () => this.deleteDoc('challan', c.id) }; });
+
+    let draft = null;
+    if (s.draft) {
+      const d = s.draft;
+      const isInvoice = d.docType === 'invoice';
+      const lines = d.lines.map((l, idx) => ({
+        idx, idx1: idx + 1, itemId: l.itemId, name: l.name || (this.getItem(l.itemId) ? this.getItem(l.itemId).name : '—'), unit: l.unit, qty: l.qty, rate: l.rate, variant: l.variant || '', amountLabel: this.fmt(this.lineAmount(l)),
+        onItemChange: e => this.selectDraftLineItem(idx, e.target.value),
+        onVariantChange: e => this.updateDraftLine(idx, { variant: e.target.value }),
+        onQtyChange: e => this.updateDraftLine(idx, { qty: e.target.value }),
+        onRateChange: e => this.updateDraftLine(idx, { rate: e.target.value }),
+        onRemove: () => this.removeDraftLine(idx)
+      }));
+      const subtotal = this.docSubtotal(d.lines);
+      const discountPercent = isInvoice ? (Number(d.discountPercent) || 0) : 0;
+      const discount = subtotal * (discountPercent / 100);
+      const taxable = subtotal - discount;
+      const vat = isInvoice ? taxable * this.VAT_RATE : 0;
+      const grandTotal = isInvoice ? taxable + vat : subtotal;
+      const typeLabels = { quotation: 'Quotation', order: 'Sales Order', challan: 'Delivery Challan', invoice: 'Invoice' };
+      const showBarcode = d.docType === 'invoice' || d.docType === 'challan';
+      const barcode = showBarcode ? this.computeBarcode(d.number) : { bars: [], totalWidth: 0 };
+      const priorInvoiceExists = isInvoice && d.customerId && this.state.invoices.some(i => i.customerId === d.customerId);
+      draft = {
+        headerLabel: (d.id ? 'Edit ' : 'New ') + typeLabels[d.docType] + (d.id ? ' — ' + d.number : ''),
+        printTitle: d.docType === 'invoice' ? 'INVOICE' : typeLabels[d.docType].toUpperCase(),
+        numberLabel: typeLabels[d.docType] + ' No.',
+        customerName: (this.getCustomer(d.customerId) || {}).name || '—',
+        customerPanDigits: ((this.getCustomer(d.customerId) || {}).panVat || '').replace(/\D/g, '').split('').map((ch, i) => ({ key: i, ch })),
+        showBarcode, barcodeBars: barcode.bars, barcodeWidth: barcode.totalWidth,
+        number: d.number, customerId: d.customerId, date: d.date, bsDate: d.bsDate, lines,
+        showCopyLast: isInvoice && !d.id && priorInvoiceExists,
+        onCopyLast: () => this.copyLastInvoiceForCustomer(d.customerId),
+        discountPercent: d.discountPercent, onDiscountChange: e => this.updateDraft({ discountPercent: e.target.value }),
+        showDiscount: isInvoice && discount > 0.5,
+        notes: d.notes || '', onNotesChange: e => this.updateDraft({ notes: e.target.value }),
+        vehicleNo: d.vehicleNo || '', onVehicleNoChange: e => this.updateDraft({ vehicleNo: e.target.value }),
+        showVehicleNoPrint: isInvoice && !!(d.vehicleNo || '').trim(), isInvoiceType: isInvoice,
+        customerType: d.customerType || 'Business', onCustomerTypeChange: e => this.updateDraft({ customerType: e.target.value }),
+        paymentMode: d.paymentMode || 'Cash', onPaymentModeChange: e => this.updateDraft({ paymentMode: e.target.value }),
+        subtotalLabel: this.fmt(subtotal), discountLabel: this.fmt(discount), taxableLabel: this.fmt(taxable), vatLabel: this.fmt(vat), grandTotalLabel: this.fmt(grandTotal),
+        showVat: isInvoice, totalRowLabel: isInvoice ? 'Grand Total' : 'Estimated Total',
+        amountWords: this.numToWords(grandTotal), amountWordsNepali: this.numToWordsNepali(grandTotal), saveLabel: 'Save ' + typeLabels[d.docType],
+        printLines: (() => {
+          const minRows = 8;
+          const blanks = Array.from({ length: Math.max(0, minRows - lines.length) }, (_, i) => ({ idx1: lines.length + i + 1, name: '', variant: '', unit: '', qty: '', rate: '', amountLabel: '' }));
+          return [...lines, ...blanks];
+        })(),
+        showEmailBtn: true,
+        onEmail: () => this.emailDoc({ number: d.number, customerId: d.customerId, date: d.date, lines: d.lines, discountPercent: d.discountPercent }, typeLabels[d.docType]),
+        onWhatsapp: () => this.whatsappDoc({ number: d.number, customerId: d.customerId, date: d.date, lines: d.lines, discountPercent: d.discountPercent }, typeLabels[d.docType]),
+        onCustomerChange: e => this.updateDraft({ customerId: e.target.value }),
+        onDateChange: e => this.updateDraft({ date: e.target.value }),
+        onBsDateChange: e => this.updateDraft({ bsDate: e.target.value }),
+        onAddLine: () => this.addDraftLine(), onSave: () => this.saveDraft(), onCancel: () => this.cancelDraft()
+      };
+    }
+
+    const customerRows = s.customers.map(c => {
+      const own = enrichedInvoices.filter(i => i.customerId === c.id);
+      return { id: c.id, name: c.name, panVat: c.panVat, phone: c.phone, email: c.email || '—', province: c.province || 'Unspecified', invoiceCount: own.length, totalLabel: this.fmt(own.reduce((sum, i) => sum + i.grandTotal, 0)), checked: s.selectedCustomerIds.includes(c.id), onToggle: () => this.toggleCustomerSelected(c.id), onEdit: () => this.openCustomerModal(c), onDelete: () => this.deleteCustomer(c.id) };
+    });
+    const provinceOrder = ['Koshi', 'Madhesh', 'Bagmati', 'Gandaki', 'Lumbini', 'Karnali', 'Sudurpashchim', 'Unspecified'];
+    const customerGroups = provinceOrder.map(p => ({ province: p, rows: customerRows.filter(r => r.province === p) })).filter(g => g.rows.length);
+    customerRows.forEach(r => { if (!provinceOrder.includes(r.province)) customerGroups.push({ province: r.province, rows: [r] }); });
+
+    const itemRows = s.items.map(i => {
+      const low = (i.stock || 0) < 10;
+      return { name: i.name, sizes: i.sizes || '—', colors: i.colors || '—', unit: i.unit, rateLabel: this.fmt(i.rate), stockLabel: (i.stock || 0) + (low ? ' (low)' : ''), stockTagClass: low ? 'tag tag-accent' : 'tag tag-neutral', onEdit: () => this.openItemModal(i), onDelete: () => this.deleteItem(i.id) };
+    });
+
+    let statement = {
+      customerId: s.statementCustomerId, from: s.statementFrom, to: s.statementTo, generated: false,
+      onCustomerChange: e => this.updateStatement({ statementCustomerId: e.target.value }),
+      onFromChange: e => this.updateStatement({ statementFrom: e.target.value }),
+      onToChange: e => this.updateStatement({ statementTo: e.target.value }),
+      onGenerate: () => this.generateStatement()
+    };
+    if (s.statementGenerated && s.statementCustomerId) {
+      const cust = this.getCustomer(s.statementCustomerId);
+      let entries = [];
+      enrichedInvoices.filter(i => i.customerId === s.statementCustomerId).forEach(i => entries.push({ date: i.date, particulars: 'Invoice ' + i.number, debit: i.grandTotal, credit: 0 }));
+      s.payments.filter(p => { const inv = s.invoices.find(iv => iv.id === p.invoiceId); return inv && inv.customerId === s.statementCustomerId; })
+        .forEach(p => { const inv = s.invoices.find(iv => iv.id === p.invoiceId); entries.push({ date: p.date, particulars: 'Payment received (' + inv.number + ')', debit: 0, credit: p.amount }); });
+      if (s.statementFrom) entries = entries.filter(e => e.date >= s.statementFrom);
+      if (s.statementTo) entries = entries.filter(e => e.date <= s.statementTo);
+      entries.sort((a, b) => a.date.localeCompare(b.date));
+      let bal = 0;
+      const rows = entries.map(e => { bal += e.debit - e.credit; return { dateLabel: this.fmtDate(e.date), particulars: e.particulars, debitLabel: e.debit ? this.fmt(e.debit) : '—', creditLabel: e.credit ? this.fmt(e.credit) : '—', balanceLabel: this.fmt(bal) }; });
+      statement = { ...statement, generated: true, customerName: cust ? cust.name : '', rows, closingLabel: this.fmt(bal), periodLabel: (s.statementFrom ? this.fmtDate(s.statementFrom) : 'Start') + ' – ' + (s.statementTo ? this.fmtDate(s.statementTo) : 'Today') };
+    }
+
+    // Reports
+    let salesInPeriod = enrichedInvoices;
+    if (s.reportFrom) salesInPeriod = salesInPeriod.filter(i => i.date >= s.reportFrom);
+    if (s.reportTo) salesInPeriod = salesInPeriod.filter(i => i.date <= s.reportTo);
+    const salesRegisterRows = [...salesInPeriod].sort((a, b) => a.date.localeCompare(b.date)).map((i, idx) => ({ sn: idx + 1, dateLabel: this.fmtDate(i.date), number: i.number, customerName: i.customerName, panVat: i.customerPan || '—', taxableLabel: this.fmt(i.taxable), vatLabel: this.fmt(i.vat), totalLabel: this.fmt(i.grandTotal) }));
+    const salesTotals = { taxableLabel: this.fmt(salesInPeriod.reduce((sum, i) => sum + i.taxable, 0)), vatLabel: this.fmt(salesInPeriod.reduce((sum, i) => sum + i.vat, 0)), totalLabel: this.fmt(salesInPeriod.reduce((sum, i) => sum + i.grandTotal, 0)) };
+
+    let purchasesInPeriod = s.purchases;
+    if (s.reportFrom) purchasesInPeriod = purchasesInPeriod.filter(p => p.date >= s.reportFrom);
+    if (s.reportTo) purchasesInPeriod = purchasesInPeriod.filter(p => p.date <= s.reportTo);
+    const purchaseRegisterRows = [...purchasesInPeriod].sort((a, b) => a.date.localeCompare(b.date)).map((p, idx) => { const vat = p.taxableAmount * this.VAT_RATE; return { sn: idx + 1, dateLabel: this.fmtDate(p.date), supplierName: p.supplierName, panVat: p.panVat || '—', taxableLabel: this.fmt(p.taxableAmount), vatLabel: this.fmt(vat), totalLabel: this.fmt(p.taxableAmount + vat), onDelete: () => this.deletePurchase(p.id) }; });
+    const purchaseVatTotal = purchasesInPeriod.reduce((sum, p) => sum + p.taxableAmount * this.VAT_RATE, 0);
+    const purchaseTotals = { taxableLabel: this.fmt(purchasesInPeriod.reduce((sum, p) => sum + p.taxableAmount, 0)), vatLabel: this.fmt(purchaseVatTotal), totalLabel: this.fmt(purchasesInPeriod.reduce((sum, p) => sum + p.taxableAmount, 0) + purchaseVatTotal) };
+
+    const outputVat = salesInPeriod.reduce((sum, i) => sum + i.vat, 0);
+    const netVat = outputVat - purchaseVatTotal;
+    const vatSummary = { label: netVat >= 0 ? 'Net VAT Payable' : 'Net VAT Refundable', amountLabel: this.fmt(Math.abs(netVat)) };
+
+    const pd = s.purchaseModalDraft;
+    const purchaseDraft = {
+      supplierName: pd.supplierName, panVat: pd.panVat, date: pd.date, taxableAmount: pd.taxableAmount,
+      onSupplierChange: e => this.updatePurchaseModal({ supplierName: e.target.value }),
+      onPanChange: e => this.updatePurchaseModal({ panVat: e.target.value }),
+      onDateChange: e => this.updatePurchaseModal({ date: e.target.value }),
+      onAmountChange: e => this.updatePurchaseModal({ taxableAmount: e.target.value }),
+      onAdd: () => this.addPurchase()
+    };
+
+    return {
+      showLetterheadBar, letterheadBarBg, showWatermark, showNepaliWords, brandAccentColor, dashCardPadding, dashCardFontSize,
+      isDashboard: s.view === 'dashboard', isQuotations: s.view === 'quotations', isOrders: s.view === 'orders', isChallans: s.view === 'challans',
+      isInvoices: s.view === 'invoices', isDocEdit: s.view === 'doc-edit', isCustomers: s.view === 'customers', isItems: s.view === 'items',
+      isReports: s.view === 'reports', isStatement: s.view === 'statement', isNews: s.view === 'news', isHospitals: s.view === 'hospitals',
+      navItemStyles, navShow, company: this.company, role: s.role, fiscalYear: s.fiscalYear,
+      onRoleChange: e => this.setRole(e.target.value), onFiscalYearChange: e => this.setState({ fiscalYear: e.target.value }),
+      goDashboard: () => this.goTo('dashboard'), goQuotations: () => this.goTo('quotations'), goOrders: () => this.goTo('orders'), goChallans: () => this.goTo('challans'),
+      goInvoices: () => this.goTo('invoices'), goCustomers: () => this.goTo('customers'), goItems: () => this.goTo('items'), goReports: () => this.goTo('reports'), goStatement: () => this.goTo('statement'), goNews: () => this.goTo('news'), goHospitals: () => this.goTo('hospitals'),
+      printDoc: () => { this.setState({ isPrinting: true }); setTimeout(() => window.print(), 60); },
+      isPrinting: s.isPrinting,
+      newInvoiceBtn: () => this.newDoc('invoice'), newQuotationBtn: () => this.newDoc('quotation'), newOrderBtn: () => this.newDoc('order'), newChallanBtn: () => this.newDoc('challan'),
+      dash: (() => {
+        const todaySales = enrichedInvoices.filter(i => i.date === todayIso).reduce((sum, i) => sum + i.grandTotal, 0);
+        const thisMonthSales = enrichedInvoices.filter(i => i.date.slice(0, 7) === todayMonth).reduce((sum, i) => sum + i.grandTotal, 0);
+        const outputVatMonth = enrichedInvoices.filter(i => i.date.slice(0, 7) === todayMonth).reduce((sum, i) => sum + i.vat, 0);
+        const inputVatMonth = s.purchases.filter(p => p.date.slice(0, 7) === todayMonth).reduce((sum, p) => sum + p.taxableAmount * this.VAT_RATE, 0);
+        return {
+          totalInvoiced: this.fmt(totalInvoiced), totalOutstanding: this.fmt(totalOutstanding), customerCount: s.customers.length, openQuotes: s.quotations.filter(q => q.status === 'open').length,
+          todaySalesLabel: this.fmt(todaySales), thisMonthSalesLabel: this.fmt(thisMonthSales),
+          pendingChallans: s.challans.filter(c => c.status === 'open').length,
+          unpaidOver30: enrichedInvoices.filter(i => this.isOverdue(i, i.paid, i.grandTotal)).length,
+          vatPayableMonthLabel: this.fmt(Math.max(0, outputVatMonth - inputVatMonth)),
+          recentInvoices
+        };
+      })(),
+      search: s.search, onSearchChange: e => this.setState({ search: e.target.value }),
+      filterAllClass: s.invoiceFilter === 'all' ? segActive : segBase, filterUnpaidClass: s.invoiceFilter === 'unpaid' ? segActive : segBase,
+      filterPartialClass: s.invoiceFilter === 'partial' ? segActive : segBase, filterPaidClass: s.invoiceFilter === 'paid' ? segActive : segBase,
+      setFilterAll: () => this.setState({ invoiceFilter: 'all' }), setFilterUnpaid: () => this.setState({ invoiceFilter: 'unpaid' }),
+      setFilterPartial: () => this.setState({ invoiceFilter: 'partial' }), setFilterPaid: () => this.setState({ invoiceFilter: 'paid' }),
+      invoiceRows, quotationRows, orderRows, challanRows, customerOptions, itemOptions, draft,
+      openNewCustomerFromInvoice: () => this.openNewCustomerFromInvoice(),
+      customerRows, customerGroups, openNewCustomer: () => this.openCustomerModal(null),
+      selectedCustomerCount: s.selectedCustomerIds.length,
+      openImportModal: () => this.openImportModal(), emailBrochureToSelected: () => this.emailBrochureToSelected(),
+      showImportModal: s.showImportModal, importCsvText: s.importCsvText,
+      onImportTextChange: e => this.setState({ importCsvText: e.target.value }),
+      runImportCsv: () => this.runImportCsv(), closeImportModal: () => this.closeImportModal(), loadSampleHospitals: () => this.loadSampleHospitals(),
+      loadFullHospitalDirectory: () => this.loadFullHospitalDirectory(),
+      itemRows, openNewItem: () => this.openItemModal(null),
+      statement,
+      reportFrom: s.reportFrom, reportTo: s.reportTo,
+      onReportFromChange: e => this.setState({ reportFrom: e.target.value }), onReportToChange: e => this.setState({ reportTo: e.target.value }),
+      isReportsSales: s.reportsTab === 'sales', isReportsPurchase: s.reportsTab === 'purchase', isReportsSummary: s.reportsTab === 'summary',
+      reportsTabSalesClass: s.reportsTab === 'sales' ? segActive : segBase, reportsTabPurchaseClass: s.reportsTab === 'purchase' ? segActive : segBase, reportsTabSummaryClass: s.reportsTab === 'summary' ? segActive : segBase,
+      setReportsTabSales: () => this.setState({ reportsTab: 'sales' }), setReportsTabPurchase: () => this.setState({ reportsTab: 'purchase' }), setReportsTabSummary: () => this.setState({ reportsTab: 'summary' }),
+      salesRegisterRows, salesTotals, purchaseRegisterRows, purchaseTotals, purchaseDraft, vatSummary,
+      showCustomerModal: s.showCustomerModal,
+      customerModal: s.customerModalDraft ? {
+        headerLabel: s.editingCustomerId ? 'Edit customer' : 'Add customer',
+        name: s.customerModalDraft.name, address: s.customerModalDraft.address, panVat: s.customerModalDraft.panVat, phone: s.customerModalDraft.phone, email: s.customerModalDraft.email,
+        onNameChange: e => this.updateCustomerModal({ name: e.target.value }), onAddressChange: e => this.updateCustomerModal({ address: e.target.value }),
+        onPanChange: e => this.updateCustomerModal({ panVat: e.target.value }), onPhoneChange: e => this.updateCustomerModal({ phone: e.target.value }),
+        onEmailChange: e => this.updateCustomerModal({ email: e.target.value }),
+        onSave: () => this.saveCustomerModal(), onClose: () => this.closeCustomerModal()
+      } : null,
+      showItemModal: s.showItemModal,
+      itemModal: s.itemModalDraft ? {
+        headerLabel: s.editingItemId ? 'Edit item' : 'Add item',
+        name: s.itemModalDraft.name, unit: s.itemModalDraft.unit, sizes: s.itemModalDraft.sizes, colors: s.itemModalDraft.colors, rate: s.itemModalDraft.rate, stock: s.itemModalDraft.stock,
+        onNameChange: e => this.updateItemModal({ name: e.target.value }), onUnitChange: e => this.updateItemModal({ unit: e.target.value }),
+        onSizesChange: e => this.updateItemModal({ sizes: e.target.value }), onColorsChange: e => this.updateItemModal({ colors: e.target.value }),
+        onRateChange: e => this.updateItemModal({ rate: e.target.value }), onStockChange: e => this.updateItemModal({ stock: e.target.value }),
+        onSave: () => this.saveItemModal(), onClose: () => this.closeItemModal()
+      } : null,
+      showPaymentModal: s.showPaymentModal,
+      paymentModal: s.payModalDraft ? (() => {
+        const inv = enrichedInvoices.find(i => i.id === s.payModalInvoiceId);
+        return { invoiceNumber: inv ? inv.number : '', balanceLabel: inv ? this.fmt(inv.grandTotal - inv.paid) : '', amount: s.payModalDraft.amount, date: s.payModalDraft.date,
+          onAmountChange: e => this.updatePaymentModal({ amount: e.target.value }), onDateChange: e => this.updatePaymentModal({ date: e.target.value }),
+          onSave: () => this.savePaymentModal(), onClose: () => this.closePaymentModal(), mode: s.payModalDraft.mode || 'Cash',
+          onModeChange: e => this.updatePaymentModal({ mode: e.target.value }) };
+      })() : null,
+      showHelpModal: s.showHelpModal, openHelp: () => this.openHelp(), closeHelp: () => this.closeHelp(),
+      pinVerified: s.pinVerified, pinInput: s.pinInput, pinError: s.pinError,
+      onPinInputChange: e => this.setState({ pinInput: e.target.value, pinError: false }),
+      onPinKeyDown: e => { if (e.key === 'Enter') this.checkPin(); },
+      onPinSubmit: () => this.checkPin(),
+      syncStatus: s.syncStatus,
+      hospitals: (() => {
+        const provinces = ['all', 'Koshi', 'Madhesh', 'Bagmati', 'Gandaki', 'Lumbini', 'Karnali', 'Sudurpashchim'];
+        const tabButtons = provinces.map(p => ({ key: p, label: p === 'all' ? 'All' : p, cls: s.hospitalsProvinceFilter === p ? segActive : segBase, onClick: () => this.setState({ hospitalsProvinceFilter: p }) }));
+        let list = s.hospitalsDirectory;
+        if (s.hospitalsProvinceFilter !== 'all') list = list.filter(h => h[3] === s.hospitalsProvinceFilter);
+        if (s.hospitalsSearch.trim()) { const q = s.hospitalsSearch.trim().toLowerCase(); list = list.filter(h => h[0].toLowerCase().includes(q) || h[1].toLowerCase().includes(q)); }
+        const rows = list.slice(0, 300).map(h => ({ name: h[0], address: h[1], phone: h[2], province: h[3], email: h[4] || '—', onAdd: () => this.addHospitalAsCustomer(h) }));
+        return { tabButtons, rows, total: s.hospitalsDirectory.length, shownCount: list.length, truncated: list.length > 300 };
+      })(),
+      hospitalsSearch: s.hospitalsSearch, onHospitalsSearchChange: e => this.setState({ hospitalsSearch: e.target.value }),
+      news: (() => {
+        const tabs = ['all', 'Tax Rules & Circulars', 'Deadlines', 'AAOMS Internal Notes'];
+        const tabLabel = { all: 'All', 'Tax Rules & Circulars': 'Tax Rules & Circulars', Deadlines: 'Deadlines', 'AAOMS Internal Notes': 'AAOMS Internal Notes' };
+        const tabButtons = tabs.map(t => ({ key: t, label: tabLabel[t], cls: s.newsTab === t ? segActive : segBase, onClick: () => this.setState({ newsTab: t }) }));
+        const filtered = s.newsItems.filter(n => s.newsTab === 'all' || n.category === s.newsTab);
+        const rows = filtered.map(n => ({
+          id: n.id, title: n.title, body: n.body, category: n.category, link: n.link, linkLabel: n.linkLabel,
+          borderColor: n.important ? 'var(--color-accent-500)' : 'var(--color-accent-2-500)'
+        }));
+        const latestImportant = s.newsItems.find(n => n.important);
+        return { tabButtons, rows, showDashboardAlert: !!latestImportant, alertTitle: latestImportant ? latestImportant.title : '' };
+      })()
+    };
+  }
+}
+</script>
+</body>
+</html>

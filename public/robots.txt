@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /e-aaoms
+Disallow: /e-aaoms-app
+Disallow: /aaoms-billing
+Disallow: /api/
+Disallow: /ws/
+
+Sitemap: https://kkpramod.com.np/sitemap.xml

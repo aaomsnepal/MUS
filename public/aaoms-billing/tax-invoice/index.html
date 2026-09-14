@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AAOMS Nepal - Management & Billing System</title>
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    (function(){ if (window.emailjs) emailjs.init("fH-oMjPNR0nZ34Jaw"); else console.warn('EmailJS failed to load — email sending will be unavailable this session, everything else still works.'); })();
+  </script>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- HEADER WITH BRANDING -->
+    <header class="app-header">
+      <div class="logo-brand">
+        <svg class="brand-logo" width="45" height="45" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="48" fill="#0b2545"/>
+          <path d="M25 65L50 25L75 65H60L50 48L40 65H25Z" fill="#00a896"/>
+          <circle cx="50" cy="35" r="5" fill="#ffffff"/>
+        </svg>
+        <div>
+          <h1>AAOMS NEPAL</h1>
+          <p>Medical, Surgical & Dental Equipment Manufacturer</p>
+        </div>
+      </div>
+      <div class="header-status">
+        <span class="badge-status">IRD Tax Compliant (PAN: 600000000)</span>
+      </div>
+    </header>
+
+    <!-- DOCUMENT MODE SWITCH -->
+    <div class="mode-toggle-container">
+      <label class="mode-title">Document Mode:</label>
+      <input type="radio" id="mode-tax" name="docMode" value="tax" checked onchange="switchDocumentMode('tax')">
+      <label for="mode-tax" class="mode-label">Tax Invoice (13% VAT)</label>
+      
+      <input type="radio" id="mode-tender" name="docMode" value="tender" onchange="switchDocumentMode('tender')">
+      <label for="mode-tender" class="mode-label mode-tender-text">Government Tender Proposal (e-GP)</label>
+    </div>
+
+    <div class="main-layout">
+      
+      <!-- LEFT SECTION: FORM & INVOICE -->
+      <section class="billing-section">
+        <h2 id="section-title">Tax Invoice & Quotation Generator</h2>
+        
+        <!-- HOSPITAL SELECTOR -->
+        <div class="form-group">
+          <label>Select Institution / Buyer:</label>
+          <select id="hospital-select" onchange="onHospitalSelect(this.value)">
+            <option value="">-- Select Hospital --</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <input type="text" id="hospital-email-display" placeholder="Hospital Email" readonly>
+          <input type="text" id="hospital-phone-display" placeholder="Hospital Phone (+977)" readonly>
+        </div>
+
+        <!-- EXTRA FIELDS FOR TENDER MODE -->
+        <div id="tender-fields-group" class="tender-box" style="display: none;">
+          <h4>PPMO Tender Details</h4>
+          <div class="form-row">
+            <input type="text" id="tender-id" placeholder="Tender / IFB Notice ID">
+            <input type="text" id="bid-validity" placeholder="Bid Validity (e.g., 90 Days)" value="90 Days">
+          </div>
+          <div class="form-row" style="margin-top: 10px;">
+            <input type="text" id="earnest-money" placeholder="Bid Security (Auto Calculated 2.5%)" readonly>
+            <input type="text" id="delivery-location" placeholder="Delivery Destination (e.g., Kathmandu Store)">
+          </div>
+        </div>
+
+        <!-- QUICK CATALOG SELECTOR -->
+        <div class="form-group" style="margin-top: 15px;">
+          <label>Quick Select Product / Material:</label>
+          <select id="catalog-select" onchange="autoFillCatalogItem(this.value)">
+            <option value="">-- Choose Item --</option>
+            <optgroup label="Medical Wear & Fabrics">
+              <option value="MW-01">Surgical Scrub Set (Autoclavable Fabric)</option>
+              <option value="MW-02">Doctor Lab Coat (Anti-Microbial Fabric)</option>
+              <option value="MW-03">Hospital Bed Sheet & Pillowcase Set</option>
+            </optgroup>
+            <optgroup label="Surgical & Accessories">
+              <option value="SI-01">Maxillofacial Surgical Tool Kit</option>
+              <option value="SI-02">Sterile OT Surgical Drapes Set</option>
+              <option value="HA-01">Stainless Steel Instrument Trolley</option>
+              <option value="HA-02">Adjustable IV Stand (Heavy Duty)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- BILLING TABLE -->
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Qty</th>
+              <th>Price (NPR)</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="invoice-items-body">
+            <tr>
+              <td><input type="text" id="item-desc-input" value="Medical Equipment / Service" class="item-desc"></td>
+              <td><input type="number" id="item-qty-input" value="0" min="0" oninput="calculateNepalVAT()" class="item-qty"></td>
+              <td><input type="number" id="item-price-input" value="0" min="0" oninput="calculateNepalVAT()" class="item-price"></td>
+              <td id="item-total-display" class="item-total-text">NPR 0.00</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- TOTALS BREAKDOWN -->
+        <div class="invoice-totals">
+          <p>Taxable Subtotal: <span id="subtotal-val">NPR 0.00</span></p>
+          <p>VAT (13%): <span id="vat-val">NPR 0.00</span></p>
+          <hr>
+          <h3>Grand Total: <span id="grandtotal-val">NPR 0.00</span></h3>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-buttons no-print">
+          <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Save PDF</button>
+          <button class="btn btn-email" onclick="sendDocumentEmail()">✉️ Send Email</button>
+          <button class="btn btn-whatsapp" onclick="sendWhatsAppMessage()">💬 Share WhatsApp</button>
+        </div>
+      </section>
+
+      <!-- RIGHT SECTION: LIVE NEPAL NEWS -->
+      <aside class="news-sidebar">
+        <div class="news-header">
+          <h3>📰 Nepal Tax & Medical News</h3>
+          <span class="pulse-icon">● Live</span>
+        </div>
+        <p class="news-sub">Real-time business updates from Nepal:</p>
+        <div id="tax-news-feed" class="news-feed-list">
+          <div class="news-loader">Loading updates...</div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Price Action Classroom | aaomsDigital</title>
+<meta name="description" content="Recreated educational candle classroom — real charts, no social handles.">
+<meta name="theme-color" content="#07090e">
+<meta name="keywords" content="price action classroom, NEPSE trading education, candlestick patterns, technical analysis Nepal, trading charts, aaomsDigital, learn trading Nepal, price action strategy, candlestick analysis, Nepal stock market education">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kkpramod.com.np/classroom">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="aaomsDigital">
+<meta property="og:title" content="Price Action Classroom — Live NEPSE Candlestick Education | aaomsDigital">
+<meta property="og:description" content="Interactive price action classroom with real NEPSE charts. Learn candlestick patterns, structure, risk management and technical analysis — free, no tips, pure education.">
+<meta property="og:url" content="https://kkpramod.com.np/classroom">
+<meta property="og:image" content="https://kkpramod.com.np/assets/logo-infinity.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@aaomsdigital">
+<meta name="twitter:title" content="Price Action Classroom — Live NEPSE Candlestick Education">
+<meta name="twitter:description" content="Interactive price action classroom with real NEPSE charts. Learn candlestick patterns, structure and risk management — free education, no tips.">
+<meta name="twitter:image" content="https://kkpramod.com.np/assets/logo-infinity.png">
+<meta name="ai-content-declaration" content="human-authored">
+<meta name="robots" content="max-snippet:-1, max-image-preview:large">
+<link rel="icon" type="image/png" href="/assets/favicon-infinity.png">
+<link rel="manifest" href="/manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/aaoms-core.css">
+<style>
+:root{--bg:#07090e;--gold:#e8d5a3;--cyan:#7ef3ff;--magenta:#ff6bd6;--line:rgba(255,255,255,.1);--panel:rgba(12,16,24,.92)}
+*{box-sizing:border-box}
+html{overflow-x:hidden;max-width:100%}
+body.page{margin:0;background:var(--bg);color:#eef2f7;font-family:Inter,system-ui,sans-serif;min-height:100vh;overflow-x:hidden;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%,rgba(126,243,255,.07),transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 50%,rgba(255,107,214,.04),transparent 50%),
+    linear-gradient(180deg,#07090e 0%,#0a0e14 100%)}
+.topbar{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(126,243,255,.12);background:rgba(7,9,14,.88);backdrop-filter:blur(14px);box-shadow:0 8px 32px rgba(0,0,0,.35)}
+.brand{font-family:Fraunces,serif;color:var(--gold);font-size:1.05rem;display:flex;align-items:center;gap:8px}
+.brand .pulse-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:livePulse 1.6s ease-in-out infinite}
+@keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.85)}}
+.brand small{opacity:.65;font-family:Inter,sans-serif;font-size:12px}
+.topbar nav{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.topbar a{color:rgba(255,255,255,.55);text-decoration:none;font-size:12.5px;padding:6px 12px;border-radius:999px;border:1px solid transparent;transition:color .15s,border-color .15s,background .15s}
+.topbar a:hover{color:#fff;border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.04)}
+.topbar a.home-btn{color:var(--gold);border-color:rgba(232,213,163,.35);background:rgba(232,213,163,.1);font-weight:600}
+.topbar a.home-btn:hover{background:rgba(232,213,163,.2);border-color:rgba(232,213,163,.55);color:#fff}
+.topbar a.nepse-btn{color:var(--cyan);border-color:rgba(126,243,255,.25)}
+.topbar a.nepse-btn:hover{background:rgba(126,243,255,.1);border-color:rgba(126,243,255,.45)}
+.wrap{max-width:1000px;margin:0 auto;padding:14px 12px 110px}
+.hero{text-align:center;margin-bottom:14px;position:relative}
+.hero h1{font-family:Fraunces,serif;font-size:clamp(1.4rem,3.4vw,1.95rem);margin:0 0 6px;background:linear-gradient(135deg,#fff 20%,var(--gold) 50%,var(--cyan) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:rgba(255,255,255,.5);font-size:13.5px}
+.hero .badge-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px}
+.hero .badge{font-family:JetBrains Mono,monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;border:1px solid rgba(126,243,255,.25);color:rgba(126,243,255,.85);background:rgba(126,243,255,.06)}
+.hero .badge.gold{border-color:rgba(232,213,163,.3);color:rgba(232,213,163,.9);background:rgba(232,213,163,.06)}
+
+/* Live market HUD */
+.mkt-hud{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+@media(max-width:720px){.mkt-hud{grid-template-columns:1fr 1fr}}
+.mkt-chip{border-radius:12px;border:1px solid rgba(126,243,255,.18);background:linear-gradient(145deg,rgba(14,20,28,.95),rgba(8,12,18,.98));padding:10px 12px;position:relative;overflow:hidden}
+.mkt-chip::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--cyan),transparent)}
+.mkt-chip .k{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(126,243,255,.55);font-family:JetBrains Mono,monospace;margin-bottom:4px}
+.mkt-chip .v{font-family:JetBrains Mono,monospace;font-size:15px;font-weight:600;color:#eef2f7}
+.mkt-chip .v.up{color:#4ade80}.mkt-chip .v.down{color:#f87171}
+.mkt-chip .sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px;font-family:JetBrains Mono,monospace}
+.mkt-chip.offline .v{color:rgba(255,255,255,.35);font-size:12px}
+
+.stage{border-radius:16px;overflow:hidden;border:1px solid rgba(126,243,255,.2);background:#0c0f15;box-shadow:0 20px 50px rgba(0,0,0,.45),0 0 40px rgba(126,243,255,.06);position:relative}
+.stage::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:16px;box-shadow:inset 0 0 0 1px rgba(126,243,255,.08);z-index:2}
+.img-wrap{display:flex;align-items:center;justify-content:center;background:#0a0c10;min-height:74vh;padding:8px;position:relative;cursor:zoom-in}
+.img-wrap img{width:100%;max-width:980px;height:auto;max-height:86vh;object-fit:contain;display:block;background:#f7f5f0;border-radius:4px;image-rendering:-webkit-optimize-contrast}
+.zoom-hint{position:absolute;right:14px;bottom:14px;display:flex;align-items:center;gap:6px;font-size:11.5px;color:rgba(255,255,255,.65);background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.14);padding:5px 10px;border-radius:999px;pointer-events:none;backdrop-filter:blur(4px)}
+.slide-hud{position:absolute;left:12px;top:12px;z-index:3;display:flex;flex-wrap:wrap;gap:6px;pointer-events:none}
+.slide-hud span{font-family:JetBrains Mono,monospace;font-size:10.5px;padding:4px 8px;border-radius:6px;background:rgba(4,8,12,.72);border:1px solid rgba(126,243,255,.25);color:rgba(126,243,255,.85);backdrop-filter:blur(6px)}
+.slide-hud span.gold{border-color:rgba(232,213,163,.35);color:rgba(232,213,163,.9)}
+
+/* fullscreen zoom lightbox */
+.lightbox{position:fixed;inset:0;z-index:100;background:rgba(4,5,8,.94);display:none;flex-direction:column;backdrop-filter:blur(6px)}
+.lightbox.open{display:flex}
+.lightbox-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;gap:10px;flex:0 0 auto}
+.lightbox-bar .meta{font-family:JetBrains Mono,monospace;font-size:12px;color:rgba(255,255,255,.55)}
+.lightbox-tools{display:flex;gap:8px}
+.lb-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#fff;font-size:16px;line-height:1;width:34px;height:34px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.lb-btn:hover{background:rgba(232,213,163,.18);border-color:rgba(232,213,163,.4)}
+.lightbox-view{flex:1;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;touch-action:none}
+.lightbox-view img{position:absolute;top:50%;left:50%;max-width:none;max-height:90vh;width:auto;user-select:none;-webkit-user-drag:none;transition:transform .06s linear;will-change:transform}
+.lightbox-view.grabbing img{transition:none;cursor:grabbing}
+.lightbox-view img{cursor:grab}
+.lightbox-foot{display:flex;align-items:center;justify-content:center;gap:16px;padding:14px;flex:0 0 auto}
+@media(max-width:640px){.lightbox-bar .meta{display:none}}
+.typebar{border-top:1px solid var(--line);background:#12151c;padding:14px 16px;min-height:70px}
+.typebar .lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.typebar .txt{font-family:JetBrains Mono,monospace;font-size:13.5px;line-height:1.55;white-space:pre-wrap;min-height:2.4em}
+.cursor{display:inline-block;width:7px;height:1em;background:var(--gold);margin-left:2px;vertical-align:text-bottom;animation:blink .85s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:14px}
+.btn{background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;font-size:13px;font-weight:600;padding:10px 16px;border-radius:999px;cursor:pointer}
+.btn.gold{background:rgba(232,213,163,.14);border-color:rgba(232,213,163,.4);color:var(--gold)}
+.meta{font-family:JetBrains Mono,monospace;font-size:12px;color:rgba(255,255,255,.5)}
+.opts{display:flex;gap:12px;font-size:12px;color:rgba(255,255,255,.5)}
+.opts label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.progress{margin-top:12px;height:3px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#c9a227,#e8d5a3);transition:width .25s}
+.note{margin-top:16px;text-align:center;font-size:12px;color:rgba(255,255,255,.45)}
+.note a{color:var(--gold)}
+img{-webkit-user-drag:none;user-select:none}
+
+.news-block{
+  margin-top:28px;padding:18px 16px;border-radius:14px;
+  border:1px solid rgba(255,255,255,.1);background:rgba(18,21,28,.9);
+  text-align:left;
+}
+.news-block h2{
+  margin:0 0 6px;font-family:Fraunces,serif;font-size:1.25rem;color:#e8d5a3;font-weight:600;
+}
+.news-block .sub{
+  margin:0 0 12px;font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.45;
+}
+.news-block ul{margin:0;padding-left:18px}
+.news-block li{margin:8px 0;font-size:13.5px;line-height:1.5;color:rgba(255,255,255,.78)}
+.news-block a{color:#e8d5a3;text-decoration:none}
+.news-block a:hover{text-decoration:underline}
+
+.learn-stack{margin-top:32px;display:flex;flex-direction:column;gap:16px}
+.learn-card{
+  padding:18px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.1);
+  background:rgba(18,21,28,.92);text-align:left;
+}
+.learn-card h2{
+  margin:0 0 8px;font-family:Fraunces,serif;font-size:1.15rem;color:#e8d5a3;font-weight:600;
+}
+.learn-card h3{
+  margin:14px 0 6px;font-size:14px;color:#c4d4f0;font-weight:600;
+}
+.learn-card p,.learn-card li{
+  font-size:13.5px;line-height:1.55;color:rgba(255,255,255,.75);margin:0 0 8px;
+}
+.learn-card ul{margin:0 0 8px;padding-left:18px}
+.learn-card .tag{
+  display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(232,213,163,.85);margin-bottom:8px;
+}
+.learn-card a{color:#e8d5a3}
+.learn-card .warn{
+  font-size:12px;color:rgba(248,180,120,.9);border-left:3px solid rgba(248,180,120,.5);
+  padding-left:10px;margin-top:10px;
+}
+.learn-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.learn-grid{grid-template-columns:1fr}}
+
+.news-block .src{
+  margin-top:12px;font-size:11px;color:rgba(255,255,255,.4);
+  font-family:JetBrains Mono,monospace;
+}
+
+/* ── HOLO DECK · futuristic 3D holographic display, same slide deck ── */
+.holo-section{ margin-top:36px;padding:0 0 28px; }
+.holo-title{ margin:0 0 4px;text-align:center; }
+.holo-glitch{
+  font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;letter-spacing:.14em;
+  color:#7ef3ff;text-shadow:0 0 6px rgba(126,243,255,.8),0 0 22px rgba(126,243,255,.4);
+  position:relative;display:inline-block;
+}
+.holo-glitch::before,.holo-glitch::after{
+  content:attr(data-text);position:absolute;left:0;top:0;width:100%;overflow:hidden;
+}
+.holo-glitch::before{color:#ff6bd6;clip-path:inset(0 0 55% 0);animation:holoGlitch1 3.4s infinite linear;}
+.holo-glitch::after{color:#7ef3ff;clip-path:inset(55% 0 0 0);animation:holoGlitch2 3.9s infinite linear;}
+@keyframes holoGlitch1{0%,88%,100%{transform:translate(0,0)}90%{transform:translate(-2px,-1px)}92%{transform:translate(2px,1px)}94%{transform:translate(-1px,1px)}}
+@keyframes holoGlitch2{0%,90%,100%{transform:translate(0,0)}91%{transform:translate(2px,-1px)}93%{transform:translate(-2px,1px)}95%{transform:translate(1px,1px)}}
+.holo-section .sub{ margin:0 0 16px;font-size:12.5px;color:rgba(126,243,255,.55);text-align:center;line-height:1.45; }
+
+.holo-viewport{
+  position:relative;height:min(56vh,460px);overflow:hidden;
+  border-radius:18px;border:1px solid rgba(126,243,255,.25);
+  background:radial-gradient(ellipse at 50% 100%,#0d1a22 0%,#050709 70%);
+  box-shadow:inset 0 0 60px rgba(126,243,255,.06),0 0 40px rgba(126,243,255,.06);
+  perspective:1100px;perspective-origin:50% 60%;
+}
+.holo-scanlines{
+  position:absolute;inset:0;pointer-events:none;z-index:6;mix-blend-mode:screen;opacity:.35;
+  background:repeating-linear-gradient(0deg,rgba(126,243,255,.08) 0px,rgba(126,243,255,.08) 1px,transparent 2px,transparent 4px);
+  animation:holoScan 6s linear infinite;
+}
+@keyframes holoScan{0%{background-position:0 0}100%{background-position:0 40px}}
+.holo-floor{
+  position:absolute;left:50%;bottom:0%;width:180%;height:60%;
+  transform:translateX(-50%) rotateX(72deg);transform-style:preserve-3d;
+  background:
+    linear-gradient(90deg,rgba(126,243,255,.14) 1px,transparent 1px),
+    linear-gradient(rgba(126,243,255,.14) 1px,transparent 1px);
+  background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 20%,#000 40%,transparent 75%);
+  mask-image:radial-gradient(ellipse at 50% 20%,#000 40%,transparent 75%);
+  animation:holoFloorScroll 10s linear infinite;
+}
+@keyframes holoFloorScroll{0%{background-position:0 0}100%{background-position:0 440px}}
+.holo-ring{ position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none; }
+.holo-panel{
+  position:absolute;left:50%;top:38%;width:96px;height:68px;
+  border-radius:6px;overflow:hidden;border:1px solid rgba(126,243,255,.45);
+  background:#081014;cursor:pointer;pointer-events:auto;
+  box-shadow:0 0 0 1px rgba(126,243,255,.15),0 10px 26px rgba(0,0,0,.6);
+  transition:box-shadow .25s,border-color .25s,filter .25s;
+  filter:saturate(1.15) brightness(.92) hue-rotate(0deg);
+}
+.holo-panel::after{
+  content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(126,243,255,.18),transparent 60%);pointer-events:none;
+}
+.holo-panel img{ width:100%;height:100%;object-fit:cover;display:block;opacity:.92; }
+.holo-panel .num{
+  position:absolute;left:5px;top:4px;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;
+  color:#7ef3ff;background:rgba(4,10,14,.65);padding:1px 5px;border-radius:4px;letter-spacing:.03em;
+}
+.holo-panel:hover,.holo-panel.active{
+  border-color:rgba(126,243,255,.95);filter:saturate(1.3) brightness(1.05);
+  box-shadow:0 0 24px rgba(126,243,255,.55),0 0 0 1px rgba(126,243,255,.6);
+}
+.holo-core{
+  position:absolute;left:50%;top:34%;width:min(56vw,300px);height:min(38vh,220px);
+  transform:translate(-50%,-50%);border-radius:12px;overflow:hidden;z-index:5;
+  cursor:zoom-in;background:#050a0d;
+  box-shadow:0 0 0 1px rgba(126,243,255,.35),0 0 50px rgba(126,243,255,.35),0 25px 60px rgba(0,0,0,.7);
+  animation:holoFloat 5.5s ease-in-out infinite;
+}
+@keyframes holoFloat{0%,100%{transform:translate(-50%,-50%) translateY(0)}50%{transform:translate(-50%,-50%) translateY(-8px)}}
+.holo-core img{ width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.15) contrast(1.05); }
+.holo-core-frame{
+  position:absolute;inset:0;pointer-events:none;
+  border:1px solid rgba(126,243,255,.5);border-radius:12px;
+  box-shadow:inset 0 0 30px rgba(126,243,255,.25);
+}
+.holo-controls{ display:flex;gap:10px;justify-content:center;align-items:center;margin-top:14px;flex-wrap:wrap; }
+.holo-controls .btn{ min-width:44px;border-color:rgba(126,243,255,.3); }
+.holo-controls .btn.gold{ background:rgba(126,243,255,.14);border-color:rgba(126,243,255,.5);color:#7ef3ff; }
+.holo-meta{ font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(126,243,255,.7);min-width:80px;text-align:center; }
+.ptunnel-hint{ text-align:center;font-size:11.5px;color:rgba(255,255,255,.4);margin-top:8px; }
+@media(max-width:640px){
+  .holo-viewport{height:min(48vh,360px)}
+  .holo-panel{width:76px;height:54px}
+  .holo-core{width:min(78vw,280px);height:min(32vh,190px)}
+}
+
+/* ── Classroom Articles / posting section ── */
+.cl-articles{
+  margin-top:40px;padding:0 0 36px;
+}
+.cl-articles-head{
+  display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;
+  margin-bottom:16px;
+}
+.cl-articles-head h2{
+  margin:0;font-family:Fraunces,serif;font-size:1.25rem;color:#e8d5a3;
+}
+.cl-articles-head .sub{
+  margin:4px 0 0;font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.45;max-width:52ch;
+}
+.cl-articles-head .admin-hint{
+  font-size:11.5px;color:rgba(255,255,255,.4);text-align:right;
+}
+.cl-articles-head .admin-hint a{color:#e8d5a3}
+.cl-articles-grid{
+  display:grid;grid-template-columns:1fr;gap:14px;
+}
+@media(min-width:720px){
+  .cl-articles-grid{grid-template-columns:1fr 1fr}
+}
+.cl-article-card{
+  border-radius:14px;border:1px solid rgba(255,255,255,.1);
+  background:rgba(18,21,28,.92);overflow:hidden;
+  transition:border-color .2s,box-shadow .2s;
+}
+.cl-article-card:hover{
+  border-color:rgba(232,213,163,.35);
+  box-shadow:0 12px 36px rgba(0,0,0,.35);
+}
+.cl-article-card a{color:inherit;text-decoration:none;display:block}
+.cl-article-card .thumb{
+  width:100%;height:160px;object-fit:cover;display:block;background:#0a0c10;
+}
+.cl-article-card .body{padding:14px 16px 16px}
+.cl-article-card .meta{
+  font-family:JetBrains Mono,monospace;font-size:11px;color:rgba(255,255,255,.42);
+  margin-bottom:6px;
+}
+.cl-article-card h3{
+  margin:0 0 6px;font-family:Fraunces,serif;font-size:1.05rem;color:#eef2f7;font-weight:600;
+  line-height:1.3;
+}
+.cl-article-card .summary{
+  margin:0;font-size:13px;line-height:1.5;color:rgba(255,255,255,.65);
+}
+.cl-article-card .tags{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
+.cl-article-card .pill{
+  font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  padding:3px 8px;border-radius:999px;
+  background:rgba(232,213,163,.1);color:rgba(232,213,163,.85);
+  border:1px solid rgba(232,213,163,.22);
+}
+.cl-articles-empty{
+  padding:28px 18px;text-align:center;border-radius:14px;
+  border:1px dashed rgba(255,255,255,.14);background:rgba(18,21,28,.5);
+  color:rgba(255,255,255,.5);font-size:13.5px;line-height:1.55;
+}
+.cl-articles-empty a{color:#e8d5a3}
+.cl-articles-empty b{color:rgba(255,255,255,.75)}
+
+/* Floating Home + quick nav */
+.fab-home{
+  position:fixed;right:16px;bottom:20px;z-index:50;
+  display:flex;flex-direction:column;gap:8px;align-items:flex-end;
+}
+.fab-home a{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 16px;border-radius:999px;text-decoration:none;font-weight:600;font-size:13px;
+  border:1px solid rgba(232,213,163,.4);background:rgba(10,12,18,.92);color:var(--gold);
+  box-shadow:0 8px 28px rgba(0,0,0,.45),0 0 20px rgba(232,213,163,.12);
+  backdrop-filter:blur(10px);transition:transform .15s,box-shadow .15s,background .15s;
+}
+.fab-home a:hover{transform:translateY(-2px);background:rgba(232,213,163,.18);box-shadow:0 12px 32px rgba(0,0,0,.5),0 0 28px rgba(232,213,163,.2);color:#fff}
+.fab-home a.cyan{border-color:rgba(126,243,255,.4);color:var(--cyan);box-shadow:0 8px 28px rgba(0,0,0,.45),0 0 16px rgba(126,243,255,.12)}
+.fab-home a.cyan:hover{background:rgba(126,243,255,.12);color:#fff}
+.kbd-hint{margin-top:10px;text-align:center;font-size:11px;color:rgba(255,255,255,.35);font-family:JetBrains Mono,monospace}
+.kbd-hint kbd{display:inline-block;padding:2px 6px;border-radius:4px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);font-size:10px;margin:0 2px}
+
+/* Session status strip under controls */
+.session-strip{
+  display:flex;flex-wrap:wrap;gap:10px 16px;justify-content:center;align-items:center;
+  margin-top:14px;padding:10px 14px;border-radius:12px;
+  border:1px solid rgba(126,243,255,.15);background:rgba(8,12,18,.7);
+  font-family:JetBrains Mono,monospace;font-size:11.5px;color:rgba(255,255,255,.5);
+}
+.session-strip .live{color:var(--cyan)}
+.session-strip .sep{opacity:.3}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "Price Action Classroom — NEPSE Trading Education",
+  "description": "Interactive price action classroom with real NEPSE charts. Learn candlestick patterns, structure, risk management and technical analysis.",
+  "url": "https://kkpramod.com.np/classroom",
+  "provider": {
+    "@type": "Organization",
+    "name": "aaomsDigital",
+    "url": "https://kkpramod.com.np"
+  },
+  "educationalLevel": "Beginner to Advanced",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "about": {
+    "@type": "Thing",
+    "name": "NEPSE Price Action Trading",
+    "description": "Candlestick patterns, chart structure, risk management for Nepal Stock Exchange"
+  },
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": "online",
+    "courseWorkload": "PT4H"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Price Action Classroom | aaomsDigital",
+  "description": "Interactive price action classroom with real NEPSE charts. Learn candlestick patterns, structure, risk management and technical analysis.",
+  "url": "https://kkpramod.com.np/classroom",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "aaomsDigital — NEPSE Trading Analyzer",
+    "url": "https://kkpramod.com.np"
+  },
+  "about": {
+    "@type": "Thing",
+    "name": "NEPSE Price Action Education"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://kkpramod.com.np"},
+      {"@type": "ListItem", "position": 2, "name": "Classroom", "item": "https://kkpramod.com.np/classroom"}
+    ]
+  }
+}
+</script>
+</head>
+<body class="page">
+  <div class="topbar">
+    <div class="brand"><span class="pulse-dot" title="Live classroom"></span> aaomsDigital <small>Price Action Classroom</small></div>
+    <nav>
+      <a class="home-btn" href="/" title="Back to home">⌂ Home</a>
+      <a class="nepse-btn" href="/nepse">NEPSE Live</a>
+      <a href="/gurukul">Gurukul</a>
+      <a href="/print">Print</a>
+    </nav>
+  </div>
+  <div class="cls-ticker-wrap" id="clsTickerWrap" style="display:none">
+    <div class="cls-ticker-track" id="clsTickerTrack"></div>
+  </div>
+  <style>
+    .cls-ticker-wrap { overflow: hidden; white-space: nowrap; background: rgba(255,255,255,.02);
+      border-bottom: 1px solid rgba(255,255,255,.08); }
+    .cls-ticker-track { display: inline-flex; gap: 26px; padding: 7px 0; animation: clsScroll 34s linear infinite; }
+    .cls-ticker-wrap:hover .cls-ticker-track { animation-play-state: paused; }
+    .cls-ticker-item { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(255,255,255,.65); }
+    .cls-ticker-item b { color: #e8d5a3; margin-right: 4px; }
+    .cls-ticker-item .up { color: #4ade80; } .cls-ticker-item .down { color: #f87171; }
+    @keyframes clsScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  </style>
+  <script>
+  (function () {
+    // Live NEPSE feed → ticker strip + market HUD chips
+    function fmtPct(p) { const n = Number(p); return (isNaN(n) ? '—' : (n >= 0 ? '+' : '') + n.toFixed(2) + '%'); }
+    function fmtNum(n) {
+      n = Number(n);
+      if (isNaN(n)) return '—';
+      if (Math.abs(n) >= 1e9) return (n / 1e9).toFixed(2) + 'B';
+      if (Math.abs(n) >= 1e6) return (n / 1e6).toFixed(2) + 'M';
+      if (Math.abs(n) >= 1e3) return (n / 1e3).toFixed(1) + 'K';
+      return n.toLocaleString();
+    }
+    function setChip(id, online) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('offline', !online);
+    }
+    function renderHud(d) {
+      const idx = d.index || d.nepse || d.market || {};
+      const val = idx.value != null ? idx.value : (idx.close != null ? idx.close : idx.ltp);
+      const chg = idx.change != null ? idx.change : idx.pts;
+      const pct = idx.pct != null ? idx.pct : idx.percent;
+      const turn = d.turnover != null ? d.turnover : (idx.turnover != null ? idx.turnover : d.totalTurnover);
+      const status = d.status || idx.status || (d.open === false ? 'Closed' : 'Live');
+
+      const vEl = document.getElementById('hudIndexVal');
+      const sEl = document.getElementById('hudIndexSub');
+      if (vEl && val != null) {
+        vEl.textContent = Number(val).toLocaleString(undefined, { maximumFractionDigits: 2 });
+        setChip('hudIndex', true);
+        if (sEl) sEl.textContent = (d.source || 'NEPSE') + ' · feed';
+      }
+      const cEl = document.getElementById('hudChangeVal');
+      const csEl = document.getElementById('hudChangeSub');
+      if (cEl && (chg != null || pct != null)) {
+        const n = Number(pct != null ? pct : chg);
+        cEl.textContent = pct != null ? fmtPct(pct) : ((chg >= 0 ? '+' : '') + Number(chg).toFixed(2));
+        cEl.className = 'v ' + (n > 0 ? 'up' : (n < 0 ? 'down' : ''));
+        setChip('hudChange', true);
+        if (csEl && chg != null && pct != null) csEl.textContent = (chg >= 0 ? '+' : '') + Number(chg).toFixed(2) + ' pts';
+      }
+      const tEl = document.getElementById('hudTurnoverVal');
+      if (tEl && turn != null) {
+        tEl.textContent = fmtNum(turn);
+        setChip('hudTurnover', true);
+      }
+      const stEl = document.getElementById('hudStatusVal');
+      if (stEl) {
+        stEl.textContent = String(status);
+        stEl.className = 'v ' + (/open|live|trading/i.test(String(status)) ? 'up' : '');
+        setChip('hudStatus', true);
+      }
+    }
+    function renderTicker(d) {
+      const wrap = document.getElementById('clsTickerWrap'), track = document.getElementById('clsTickerTrack');
+      if (!wrap || !track) return;
+      const pool = [].concat((d.gainers || []).slice(0, 6)).concat((d.losers || []).slice(0, 6));
+      if (!pool.length) { wrap.style.display = 'none'; return; }
+      const html = pool.map(function (s) {
+        const cls = Number(s.pct) > 0 ? 'up' : (Number(s.pct) < 0 ? 'down' : '');
+        return '<span class="cls-ticker-item"><b>' + s.sym + '</b>' + s.ltp + ' <span class="' + cls + '">' + fmtPct(s.pct) + '</span></span>';
+      }).join('');
+      track.innerHTML = html + html;
+      wrap.style.display = '';
+    }
+    function render(d) {
+      if (!d) return;
+      renderTicker(d);
+      renderHud(d);
+    }
+    function tickClock() {
+      const el = document.getElementById('hudClock');
+      const sess = document.getElementById('sessTime');
+      const now = new Date();
+      const s = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      if (el) el.textContent = s + ' NPT';
+      if (sess) sess.textContent = s;
+    }
+    tickClock();
+    setInterval(tickClock, 1000);
+    function poll() {
+      fetch('/api/nepse/live?t=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { return r.json(); })
+        .then(render)
+        .catch(function () {});
+    }
+    try {
+      const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const ws = new WebSocket(proto + '//' + location.host + '/ws/nepse');
+      ws.addEventListener('message', function (ev) {
+        try { const msg = JSON.parse(ev.data); if (msg && msg.type === 'nepse' && msg.data) render(msg.data); } catch (e) {}
+      });
+      ws.addEventListener('error', poll);
+      ws.addEventListener('open', poll);
+    } catch (e) { poll(); }
+    setInterval(poll, 20000);
+  })();
+  </script>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Price Action Classroom</h1>
+      <p>DARVAX study deck · holographic dual display · live NEPSE pulse · educational only</p>
+      <div class="badge-row">
+        <span class="badge">Live feed</span>
+        <span class="badge gold">Holo Deck</span>
+        <span class="badge">Typewriter</span>
+        <span class="badge">Zoom reader</span>
+      </div>
+    </div>
+
+    <!-- Live NEPSE HUD -->
+    <div class="mkt-hud" id="mktHud" aria-label="Live NEPSE snapshot">
+      <div class="mkt-chip offline" id="hudIndex">
+        <div class="k">NEPSE Index</div>
+        <div class="v" id="hudIndexVal">—</div>
+        <div class="sub" id="hudIndexSub">connecting…</div>
+      </div>
+      <div class="mkt-chip offline" id="hudChange">
+        <div class="k">Change</div>
+        <div class="v" id="hudChangeVal">—</div>
+        <div class="sub" id="hudChangeSub">pts / %</div>
+      </div>
+      <div class="mkt-chip offline" id="hudTurnover">
+        <div class="k">Turnover</div>
+        <div class="v" id="hudTurnoverVal">—</div>
+        <div class="sub">Rs · session</div>
+      </div>
+      <div class="mkt-chip offline" id="hudStatus">
+        <div class="k">Market</div>
+        <div class="v" id="hudStatusVal">—</div>
+        <div class="sub" id="hudClock">local time</div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="img-wrap" id="imgWrap">
+        <div class="slide-hud">
+          <span class="gold" id="hudSlideTag">SLIDE</span>
+          <span id="hudSlideNum">— / —</span>
+          <span id="hudMode">READER</span>
+        </div>
+        <img id="slideImg" alt="Classroom slide" draggable="false">
+        <span class="zoom-hint">🔍 Click to zoom · ← → keys</span>
+      </div>
+      <div class="typebar"><div class="lbl">Transmission · typewriter</div><div class="txt" id="typeText"></div></div>
+    </div>
+    <div class="progress"><i id="progFill"></i></div>
+    <div class="controls">
+      <div>
+        <button type="button" class="btn" id="prevBtn">← Prev</button>
+        <button type="button" class="btn gold" id="nextBtn">Next →</button>
+        <button type="button" class="btn" id="replayBtn">Replay type</button>
+      </div>
+      <div class="opts">
+        <label><input type="checkbox" id="autoPlay"> Auto</label>
+        <label><input type="checkbox" id="typeOn" checked> Typewriter</label>
+      </div>
+      <div class="meta" id="prog">1 / —</div>
+    </div>
+    <div class="session-strip" id="sessionStrip">
+      <span class="live" id="sessLive">● SESSION LIVE</span>
+      <span class="sep">|</span>
+      <span id="sessSlides">0 slides loaded</span>
+      <span class="sep">|</span>
+      <span id="sessTime">—</span>
+      <span class="sep">|</span>
+      <span>Educational · not advice</span>
+    </div>
+    <p class="kbd-hint">Keyboard: <kbd>←</kbd> <kbd>→</kbd> navigate · <kbd>Space</kbd> next · click image to zoom</p>
+    <p class="note">Charts from study material · rebuilt without social UI · <a href="/nepse">NEPSE screener</a> · <a href="/">Home</a></p>
+
+    <!-- HOLO DECK · same slide deck as above, second futuristic 3D display.
+         It reads the exact same `slides` array (same API, same admin data),
+         so replacing/hiding an image anywhere updates BOTH displays. -->
+    <section class="holo-section" id="holoSection" aria-label="Holo Deck">
+      <h2 class="holo-title"><span class="holo-glitch" data-text="HOLO DECK">HOLO DECK</span></h2>
+      <p class="sub">Same slide deck · holographic 3D ring · drag to rotate · click a panel to jump · core panel opens full zoom · synced with reader above</p>
+      <div class="holo-viewport" id="holoViewport">
+        <div class="holo-scanlines"></div>
+        <div class="holo-floor"></div>
+        <div class="holo-ring" id="holoRing"></div>
+        <div class="holo-core" id="holoCore">
+          <img id="holoCoreImg" alt="Holo Deck — current slide" draggable="false">
+          <div class="holo-core-frame"></div>
+        </div>
+      </div>
+      <div class="holo-controls">
+        <button type="button" class="btn" id="holoPrev">← Prev</button>
+        <span class="holo-meta" id="holoMeta">1 / —</span>
+        <button type="button" class="btn gold" id="holoNext">Next →</button>
+        <button type="button" class="btn" id="holoZoomBtn">🔍 Zoom / Read</button>
+      </div>
+      <p class="ptunnel-hint">Drag the ring · arrow keys move both displays together · click the glowing center panel to zoom</p>
+    </section>
+
+    <!-- Classroom Articles — post from Admin → Gurukul posts with tag "classroom" -->
+    <section class="cl-articles" id="clArticles" aria-label="Classroom articles">
+      <div class="cl-articles-head">
+        <div>
+          <h2>Classroom articles</h2>
+          <p class="sub">Price-action notes, DARVAX study write-ups and market observations. Create them in <b style="color:rgba(232,213,163,.9)">Admin → Classroom posts</b>.</p>
+        </div>
+        <div class="admin-hint">
+          Write &amp; publish in<br>
+          <a href="/admin" target="_blank" rel="noopener">Admin → Classroom posts</a>
+        </div>
+      </div>
+      <div class="cl-articles-grid" id="clArticlesGrid">
+        <div class="cl-articles-empty" id="clArticlesEmpty">Loading articles…</div>
+      </div>
+    </section>
+
+    <div class="learn-stack" id="nepseLearn">
+      <div class="learn-card">
+        <div class="tag">NEPSE classroom · real market knowledge</div>
+        <h2>Nepal Stock Exchange — clear map for common people</h2>
+        <p>NEPSE is Nepal’s only stock exchange. Companies list shares; the public can buy/sell through licensed brokers using the TMS system. This page is <b>educational</b> — not buy/sell advice.</p>
+        <p class="warn">Rules (hours, circuit limits, settlement) can change. Always confirm with NEPSE, SEBON, CDSC or your broker before trading.</p>
+      </div>
+
+      <div class="learn-grid">
+        <div class="learn-card">
+          <h2>1. Accounts you need</h2>
+          <ul>
+            <li><b>Broker account</b> — licensed stock broker</li>
+            <li><b>Demat account</b> — holds shares electronically (via depository participant)</li>
+            <li><b>MeroShare</b> — CDSC portal for IPO apply, holdings view, some corporate actions</li>
+            <li><b>TMS login</b> — broker’s Trading Management System to place secondary-market orders</li>
+            <li><b>Bank link</b> — for funds in/out with the broker</li>
+          </ul>
+          <p>MeroShare is not the same as TMS: IPO/holdings vs live secondary trading.</p>
+        </div>
+        <div class="learn-card">
+          <h2>2. Primary vs secondary</h2>
+          <ul>
+            <li><b>Primary (IPO / FPO / rights)</b> — company issues new shares; apply via MeroShare when open</li>
+            <li><b>Secondary (NEPSE board)</b> — buy/sell already listed shares with other investors during market hours</li>
+            <li><b>Bonus / right / dividend</b> — corporate actions; credit timing follows CDSC schedules, not same-day trading logic</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="learn-card">
+        <h2>3. Trading day structure (typical)</h2>
+        <ul>
+          <li><b>Pre-open</b> — orders can be entered for price discovery before continuous trading</li>
+          <li><b>Regular session</b> — about <b>11:00–15:00 NPT</b> continuous matching (check current NEPSE circular for exact minutes)</li>
+          <li><b>Order-driven market</b> — price–time priority; you trade against other orders, not a market-maker quote board like some foreign systems</li>
+        </ul>
+        <p class="warn">Weekend pattern shifted with national calendar changes in 2026 (toward Mon–Fri open in recent SEBON/NEPSE updates). Confirm the current holiday calendar on nepalstock.com.np.</p>
+      </div>
+
+      <div class="learn-grid">
+        <div class="learn-card">
+          <h2>4. Settlement (T+2 idea)</h2>
+          <p>Equity trades generally settle on a <b>T+2</b> cycle: trade day T, shares/funds complete about two business days later via CDSC clearing.</p>
+          <ul>
+            <li>You usually <b>cannot sell</b> what has not settled yet</li>
+            <li>Same-day buy→sell “intraday style” is not how classic NEPSE cash equity is designed</li>
+            <li>Broker charges, SEBON fee and DP charges still apply — small trades feel expensive</li>
+          </ul>
+        </div>
+        <div class="learn-card">
+          <h2>5. Circuit breakers &amp; bands</h2>
+          <p>Two different ideas:</p>
+          <ul>
+            <li><b>Stock price band</b> — a single scrip can only move within a daily % limit from the reference price (historically often discussed around ±10%; verify current SEBON/NEPSE rule)</li>
+            <li><b>Index circuit</b> — if the NEPSE index moves sharply, the whole market can pause or stop for the day</li>
+          </ul>
+          <p class="warn">April 2026 updates discussed a 5% pause / 8% day-stop style index rule. Always read the latest circular — do not trade on memory of old 3/4/5% tiers.</p>
+        </div>
+      </div>
+
+      <div class="learn-card">
+        <h2>6. Indices people watch</h2>
+        <ul>
+          <li><b>NEPSE Index</b> — broad market, market-cap weighted (base history from the 1990s)</li>
+          <li><b>Sensitive / Float / sector indices</b> — narrower views (banks, hydro, insurance, etc.)</li>
+          <li>Index up does not mean every stock is up — check your scrip and sector</li>
+        </ul>
+      </div>
+
+      <div class="learn-grid">
+        <div class="learn-card">
+          <h2>7. Sectors on NEPSE</h2>
+          <p>Common groups investors sort by:</p>
+          <ul>
+            <li>Commercial banks · Development banks · Finance · Microfinance</li>
+            <li>Life / non-life insurance · Hydropower · Manufacturing &amp; processing</li>
+            <li>Hotels &amp; tourism · Trading · Others · Mutual funds / promotions as listed</li>
+          </ul>
+          <p>Sector heat can differ a lot from the main index on the same day.</p>
+        </div>
+        <div class="learn-card">
+          <h2>8. Words on the board</h2>
+          <ul>
+            <li><b>LTP</b> — last traded price</li>
+            <li><b>Open / High / Low / Close</b> — session range</li>
+            <li><b>Volume / turnover</b> — how much traded (qty vs rupees)</li>
+            <li><b>% change</b> — vs previous close reference</li>
+            <li><b>Floorsheet</b> — record of matched trades</li>
+            <li><b>Market depth</b> — visible buy/sell order levels in TMS</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="learn-card">
+        <h2>9. How this site helps (and what it is not)</h2>
+        <ul>
+          <li><b>Screener</b> — real session list from public market publishers (refresh, not broker ticks)</li>
+          <li><b>Classroom slides</b> — memory tools for price-action ideas</li>
+          <li><b>NEPSE &amp; economy news</b> — auto headlines linked to the publisher</li>
+          <li><b>Not</b> a broker, not TMS, not personalized advice, not a guaranteed signal service</li>
+        </ul>
+        <p>Practice reading structure on the <a href="/nepse">NEPSE screener</a>. Keep a notebook of your own rules.</p>
+      </div>
+
+      <div class="learn-card">
+        <h2>10. Safety habits</h2>
+        <ul>
+          <li>Never average a falling story without a written plan</li>
+          <li>Size positions so one mistake cannot ruin the account (risk % rule)</li>
+          <li>IPO allotment ≠ instant tradable liquidity in every case — know lock/credit timing</li>
+          <li>Ignore “sure tips” on social media; verify filings and your own risk</li>
+          <li>Tax, broker fees and opportunity cost matter as much as chart patterns</li>
+        </ul>
+        <p class="warn">Educational content only. Capital is at risk in equity markets.</p>
+      </div>
+    </div>
+
+    <section class="news-block" id="classroomNews" aria-label="NEPSE and economy news">
+      <h2>NEPSE &amp; economy</h2>
+      <p class="sub">Auto-updated headlines — no manual posting. Click to read the full story on the source site.</p>
+      <ul id="classroomNewsList"><li style="opacity:.6">Loading…</li></ul>
+      <p class="src">Auto-refresh · source linked · educational only</p>
+    </section>
+  </div>
+
+  <!-- ZOOM LIGHTBOX -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-bar">
+      <span class="meta" id="lbMeta">1 / —</span>
+      <div class="lightbox-tools">
+        <button type="button" class="lb-btn" id="lbOut" title="Zoom out">−</button>
+        <button type="button" class="lb-btn" id="lbReset" title="Reset">⤢</button>
+        <button type="button" class="lb-btn" id="lbIn" title="Zoom in">+</button>
+        <button type="button" class="lb-btn" id="lbClose" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="lightbox-view" id="lbView">
+      <img id="lbImg" alt="Classroom slide — zoomed">
+    </div>
+    <div class="lightbox-foot">
+      <button type="button" class="btn" id="lbPrev">← Prev</button>
+      <span class="meta">scroll or pinch to zoom · drag to pan · Esc to close</span>
+      <button type="button" class="btn gold" id="lbNext">Next →</button>
+    </div>
+  </div>
+
+<script>
+(function(){
+  let slides = [];
+  const img=document.getElementById('slideImg');
+  const typeEl=document.getElementById('typeText');
+  const prog=document.getElementById('prog');
+  const fill=document.getElementById('progFill');
+  const autoPlay=document.getElementById('autoPlay');
+  const typeOn=document.getElementById('typeOn');
+  let i=0, typeTimer=null, autoTimer=null;
+
+  function stopType(){if(typeTimer)clearInterval(typeTimer);typeTimer=null}
+  function typeCaption(text){
+    stopType(); typeEl.innerHTML='';
+    text=(text||'').replace(/\\n/g,'\n');
+    if(!typeOn.checked){typeEl.textContent=text;return}
+    let pos=0; const cur=document.createElement('span'); cur.className='cursor'; typeEl.appendChild(cur);
+    typeTimer=setInterval(()=>{ if(pos>=text.length){stopType();return;} cur.before(document.createTextNode(text.charAt(pos))); pos++; },15);
+  }
+  function show(idx){
+    if(!slides.length) return;
+    i=((idx % slides.length)+slides.length)%slides.length;
+    img.src=slides[i].src;
+    const num = slides[i].n || (i+1);
+    prog.textContent=num+' / '+slides.length;
+    fill.style.width=((i+1)/slides.length*100).toFixed(1)+'%';
+    typeCaption(slides[i].text);
+    if(autoPlay.checked){ if(autoTimer)clearInterval(autoTimer); autoTimer=setInterval(()=>show(i+1),14000); }
+    const sn = document.getElementById('hudSlideNum');
+    if(sn) sn.textContent = num + ' / ' + slides.length;
+    const mode = document.getElementById('hudMode');
+    if(mode) mode.textContent = autoPlay.checked ? 'AUTO' : 'READER';
+    updateHolo();
+  }
+  document.getElementById('nextBtn').onclick=()=>show(i+1);
+  document.getElementById('prevBtn').onclick=()=>show(i-1);
+  document.getElementById('replayBtn').onclick=()=>show(i);
+  autoPlay.onchange=()=>show(i);
+  typeOn.onchange=()=>show(i);
+  document.addEventListener('keydown',e=>{
+    if(lb.classList.contains('open')) return;
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();show(i+1)}
+    if(e.key==='ArrowLeft'){e.preventDefault();show(i-1)}
+  });
+  img.addEventListener('contextmenu',e=>e.preventDefault());
+
+  /* ── zoom lightbox ── */
+  const lb=document.getElementById('lightbox'), lbView=document.getElementById('lbView'),
+        lbImg=document.getElementById('lbImg'), lbMeta=document.getElementById('lbMeta');
+  let zoom=1, panX=0, panY=0, dragging=false, dsx=0, dsy=0, dpx=0, dpy=0;
+  function applyZoom(){ lbImg.style.transform='translate(-50%,-50%) translate('+panX+'px,'+panY+'px) scale('+zoom+')'; }
+  function clampPan(){
+    const maxX=(lbView.clientWidth*(zoom-1))/2+40, maxY=(lbView.clientHeight*(zoom-1))/2+40;
+    panX=Math.max(-maxX,Math.min(maxX,panX)); panY=Math.max(-maxY,Math.min(maxY,panY));
+  }
+  function setZoom(z,cx,cy){
+    z=Math.max(1,Math.min(6,z));
+    if(cx!=null){ const k=z/zoom; panX=cx-(cx-panX)*k; panY=cy-(cy-panY)*k; }
+    zoom=z; if(zoom===1){panX=0;panY=0;} clampPan(); applyZoom();
+  }
+  function openLightbox(){
+    if(!slides.length) return;
+    lbImg.src=slides[i].src; zoom=1; panX=0; panY=0; applyZoom();
+    lbMeta.textContent=(slides[i].n||(i+1))+' / '+slides.length;
+    lb.classList.add('open'); lb.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+  function closeLightbox(){
+    lb.classList.remove('open'); lb.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  }
+  function lbShow(idx){ show(idx); lbImg.src=slides[i].src; zoom=1;panX=0;panY=0;applyZoom(); lbMeta.textContent=(slides[i].n||(i+1))+' / '+slides.length; }
+
+  document.getElementById('imgWrap').addEventListener('click',openLightbox);
+  document.getElementById('lbClose').onclick=closeLightbox;
+  document.getElementById('lbIn').onclick=()=>setZoom(zoom+0.6);
+  document.getElementById('lbOut').onclick=()=>setZoom(zoom-0.6);
+  document.getElementById('lbReset').onclick=()=>setZoom(1);
+  document.getElementById('lbPrev').onclick=()=>lbShow(i-1);
+  document.getElementById('lbNext').onclick=()=>lbShow(i+1);
+  lb.addEventListener('click',e=>{ if(e.target===lb) closeLightbox(); });
+
+  lbView.addEventListener('wheel',e=>{
+    e.preventDefault();
+    const r=lbView.getBoundingClientRect();
+    setZoom(zoom + (e.deltaY<0?0.35:-0.35), e.clientX-r.left-r.width/2, e.clientY-r.top-r.height/2);
+  },{passive:false});
+  lbImg.addEventListener('dblclick',()=>setZoom(zoom>1?1:2.4));
+
+  lbView.addEventListener('pointerdown',e=>{
+    if(zoom<=1) return;
+    dragging=true; lbView.classList.add('grabbing');
+    dsx=e.clientX; dsy=e.clientY; dpx=panX; dpy=panY;
+    lbView.setPointerCapture(e.pointerId);
+  });
+  lbView.addEventListener('pointermove',e=>{
+    if(!dragging) return;
+    panX=dpx+(e.clientX-dsx); panY=dpy+(e.clientY-dsy);
+    clampPan(); applyZoom();
+  });
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>lbView.addEventListener(ev,()=>{ dragging=false; lbView.classList.remove('grabbing'); }));
+
+  let pinchStart=0, pinchZoom=1;
+  lbView.addEventListener('touchstart',e=>{
+    if(e.touches.length===2){
+      pinchStart=Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+      pinchZoom=zoom;
+    }
+  },{passive:true});
+  lbView.addEventListener('touchmove',e=>{
+    if(e.touches.length===2 && pinchStart){
+      const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+      setZoom(pinchZoom*(d/pinchStart));
+    }
+  },{passive:true});
+
+  document.addEventListener('keydown',e=>{
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') closeLightbox();
+    else if(e.key==='ArrowRight') lbShow(i+1);
+    else if(e.key==='ArrowLeft') lbShow(i-1);
+    else if(e.key==='+'||e.key==='=') setZoom(zoom+0.5);
+    else if(e.key==='-') setZoom(zoom-0.5);
+  });
+
+  /* ── HOLO DECK · same `slides` array as the reader above ──
+     A ring of holographic panels (one per slide) circles a floating
+     "core" panel that mirrors whatever is currently shown up top.
+     Drag the ring, click a panel, or use the Prev/Next buttons — all of
+     it stays in lock-step with the main reader via show(). */
+  const holoRing = document.getElementById('holoRing');
+  const holoViewport = document.getElementById('holoViewport');
+  const holoCoreImg = document.getElementById('holoCoreImg');
+  const holoMeta = document.getElementById('holoMeta');
+  const HOLO_RADIUS = 230;
+  let holoAngle = 0;
+
+  function buildHoloRing(){
+    if(!holoRing || !slides.length) return;
+    holoRing.innerHTML = '';
+    const step = 360 / slides.length;
+    slides.forEach(function(s, idx){
+      const angle = idx * step;
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'holo-panel';
+      el.dataset.idx = String(idx);
+      el.style.transform = 'translate(-50%,-50%) rotateY('+angle+'deg) translateZ('+HOLO_RADIUS+'px) rotateY('+(-angle)+'deg)';
+      el.innerHTML = '<span class="num">#'+(s.n||(idx+1))+'</span><img src="'+s.src+'" alt="Slide '+(s.n||idx+1)+'" loading="lazy" draggable="false">';
+      el.onclick = function(){ show(idx); };
+      holoRing.appendChild(el);
+    });
+    updateHolo();
+  }
+  function updateHolo(){
+    if(!holoRing || !slides.length) return;
+    const step = 360 / slides.length;
+    holoAngle = -i * step;
+    holoRing.style.transform = 'rotateY('+holoAngle+'deg)';
+    Array.prototype.forEach.call(holoRing.querySelectorAll('.holo-panel'), function(el){
+      el.classList.toggle('active', Number(el.dataset.idx) === i);
+    });
+    if(holoCoreImg) holoCoreImg.src = slides[i].src;
+    if(holoMeta) holoMeta.textContent = (slides[i].n||(i+1)) + ' / ' + slides.length;
+  }
+
+  // drag the ring to rotate; release snaps to the nearest panel
+  if(holoViewport){
+    let holoDragging = false, holoDragStartX = 0, holoDragStartAngle = 0, holoPreviewAngle = null;
+    holoViewport.addEventListener('pointerdown', function(e){
+      if(e.target.closest && e.target.closest('#holoCore')) return;
+      holoDragging = true; holoDragStartX = e.clientX; holoDragStartAngle = holoAngle;
+      try{ holoViewport.setPointerCapture(e.pointerId); }catch(err){}
+    });
+    holoViewport.addEventListener('pointermove', function(e){
+      if(!holoDragging || !slides.length || !holoRing) return;
+      holoPreviewAngle = holoDragStartAngle + (e.clientX - holoDragStartX) * 0.4;
+      holoRing.style.transition = 'none';
+      holoRing.style.transform = 'rotateY('+holoPreviewAngle+'deg)';
+    });
+    ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
+      holoViewport.addEventListener(ev, function(){
+        if(!holoDragging) return;
+        holoDragging = false;
+        if(holoRing) holoRing.style.transition = '';
+        if(holoPreviewAngle != null && slides.length){
+          const step = 360 / slides.length;
+          let idx = Math.round(-holoPreviewAngle / step);
+          idx = ((idx % slides.length) + slides.length) % slides.length;
+          holoPreviewAngle = null;
+          show(idx);
+        }
+      });
+    });
+  }
+  var holoPrevBtn = document.getElementById('holoPrev');
+  var holoNextBtn = document.getElementById('holoNext');
+  var holoZoomBtn = document.getElementById('holoZoomBtn');
+  var holoCore = document.getElementById('holoCore');
+  if(holoPrevBtn) holoPrevBtn.onclick = function(){ show(i-1); };
+  if(holoNextBtn) holoNextBtn.onclick = function(){ show(i+1); };
+  if(holoZoomBtn) holoZoomBtn.onclick = function(){ openLightbox(); };
+  if(holoCore) holoCore.onclick = function(){ openLightbox(); };
+
+  // load slides from API (admin-editable) — same data feeds BOTH displays
+  async function loadSlides(){
+    try{
+      const r = await fetch('/api/classroom/slides?t='+Date.now(), {cache:'no-store'});
+      const d = await r.json();
+      slides = (d && d.slides) || [];
+    }catch(e){ slides = []; }
+    const sess = document.getElementById('sessSlides');
+    if(sess) sess.textContent = slides.length + ' slides loaded';
+    if(!slides.length){
+      prog.textContent = '0 / 0';
+      typeEl.textContent = 'No slides yet — add them in Admin → Classroom.';
+      const live = document.getElementById('sessLive');
+      if(live){ live.textContent = '○ NO SLIDES'; live.style.color = 'rgba(255,255,255,.4)'; }
+      return;
+    }
+    buildHoloRing();
+    show(0);
+  }
+  loadSlides();
+})();
+</script>
+
+<script>
+(function(){
+  async function loadClassroomNews(){
+    const box = document.getElementById('classroomNewsList');
+    if(!box) return;
+    try{
+      const r = await fetch('/api/nepse/news?t=' + Date.now(), { cache:'no-store' });
+      const d = await r.json();
+      const items = (d && d.items) || [];
+      if(!items.length){
+        box.innerHTML = '<li style="opacity:.6">No headlines right now</li>';
+        return;
+      }
+      box.innerHTML = items.map(function(it){
+        return '<li><a href="' + it.url + '" target="_blank" rel="noopener">' +
+          String(it.title||'').replace(/</g,'&lt;') + '</a></li>';
+      }).join('');
+    }catch(e){
+      box.innerHTML = '<li style="opacity:.6">News temporarily unavailable</li>';
+    }
+  }
+  loadClassroomNews();
+  setInterval(loadClassroomNews, 300000);
+})();
+</script>
+
+<script>
+(function(){
+  /* Classroom articles — section=classroom posts from Admin → Classroom posts */
+  const grid = document.getElementById('clArticlesGrid');
+  if (!grid) return;
+
+  function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s == null ? '' : String(s);
+    return d.innerHTML;
+  }
+  function when(iso) {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    return d.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  async function loadClassroomArticles() {
+    try {
+      // Prefer explicit classroom tag; fall back to price-action / darvax
+      let posts = [];
+      const r = await fetch('/api/posts?section=classroom&limit=12&t=' + Date.now(), { cache: 'no-store' });
+      const d = await r.json();
+      posts = (d && d.posts) || [];
+      // de-dupe by id if multiple tags matched in future
+      const seen = {};
+      posts = posts.filter(function(p) {
+        if (seen[p.id]) return false;
+        seen[p.id] = true;
+        return true;
+      });
+
+      if (!posts.length) {
+        grid.innerHTML =
+          '<div class="cl-articles-empty" id="clArticlesEmpty">' +
+          'No classroom articles yet.<br><br>' +
+          'Open <a href="/admin" target="_blank" rel="noopener"><b>Admin → Gurukul posts</b></a>, ' +
+          'write a post, and add the tag <b>classroom</b>. It will appear here automatically.' +
+          '</div>';
+        return;
+      }
+
+      grid.innerHTML = posts.map(function(p) {
+        const title = p.title || 'Untitled';
+        const summary = p.summary || '';
+        const img = p.image
+          ? '<img class="thumb" src="' + esc(p.image) + '" alt="" loading="lazy">'
+          : '';
+        const tags = (p.tags || []).slice(0, 4).map(function(t) {
+          return '<span class="pill">' + esc(t) + '</span>';
+        }).join('');
+        return (
+          '<article class="cl-article-card">' +
+            '<a href="/gurukul/' + esc(p.slug) + '">' +
+              img +
+              '<div class="body">' +
+                '<div class="meta">' + esc(when(p.createdAt)) +
+                  (p.views != null ? ' · ' + Number(p.views).toLocaleString() + ' views' : '') +
+                '</div>' +
+                '<h3>' + esc(title) + '</h3>' +
+                (summary ? '<p class="summary">' + esc(summary) + '</p>' : '') +
+                (tags ? '<div class="tags">' + tags + '</div>' : '') +
+              '</div>' +
+            '</a>' +
+          '</article>'
+        );
+      }).join('');
+    } catch (e) {
+      grid.innerHTML =
+        '<div class="cl-articles-empty">Could not load articles right now. Try again later.</div>';
+    }
+  }
+
+  loadClassroomArticles();
+})();
+</script>
+
+  <!-- Floating Home + NEPSE quick access -->
+  <div class="fab-home" aria-label="Quick navigation">
+    <a class="cyan" href="/nepse" title="Open NEPSE live screener">◈ NEPSE</a>
+    <a href="/" title="Back to home">⌂ Home</a>
+  </div>
+
+<script src="/assets/aaoms-core.js"></script>
+<div id="pwaBanner">
+  <div class="pwa-text">ðŸ“² Install <strong>kkpramod</strong> on your phone for instant NEPSE updates &amp; aaoms news</div>
+  <div class="pwa-actions">
+    <button id="pwaInstall">Install</button>
+    <button id="pwaNotify">ðŸ”” Notify Me</button>
+    <button id="pwaDismiss">Later</button>
+  </div>
+</div>
+<script src="/assets/pwa.js"></script>
+</body>
+</html>

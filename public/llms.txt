@@ -1,0 +1,48 @@
+# aaomsDigital — NEPSE Trading Analyzer
+
+> Nepal's #1 TradingView-class trading analyzer platform. Live NEPSE data, interactive charts, technical indicators, IPO tracking, broker analytics, and educational price action classroom.
+
+## About
+
+aaomsDigital (kkpramod.com.np) provides free, real-time NEPSE (Nepal Stock Exchange) market analysis tools. Built for Nepali retail traders — no paid tips, no broker referrals, pure education and data.
+
+## Key Pages
+
+- **Home** — https://kkpramod.com.np — Platform overview, live NEPSE summary
+- **NEPSE Screener** — https://kkpramod.com.np/nepse — Live stock board, gainers/losers, screens, TradingView charts, technical indicators
+- **AVNEPSE Live Desk** — https://kkpramod.com.np/aavnepse — Multi-source V1-V5 live market data desk
+- **MoneyControl** — https://kkpramod.com.np/moneycontrol — Aggregated NEPSE dashboard with heatmap, IPO, brokers, notices, classroom iframes
+- **Heatmap** — https://kkpramod.com.np/heatmap — Visual NEPSE sector heatmap
+- **IPO Dashboard** — https://kkpramod.com.np/ipo — Current and upcoming IPO/FPO/allotment tracking
+- **Brokers** — https://kkpramod.com.np/brokers — Broker directory and floor sheet analytics
+- **Notices** — https://kkpramod.com.np/notices — NEPSE and company announcements
+- **Price Action Classroom** — https://kkpramod.com.np/classroom — Interactive candlestick and price action education with real NEPSE charts
+- **aaomsDigital** — https://kkpramod.com.np/digital — Digital services and web development
+- **Gurukul** — https://kkpramod.com.np/gurukul — Trading education hub
+- **e-aaoms** — https://kkpramod.com.np/e-aaoms — Digital billing and receipt platform
+- **FAQ** — https://kkpramod.com.np/faq — Frequently asked questions
+- **Contact** — https://kkpramod.com.np/contact — Get in touch
+- **Print** — https://kkpramod.com.np/print — Print-friendly market reports
+- **Jobs** — https://kkpramod.com.np/jobs — Careers at aaomsDigital
+
+## AI & LLM Policy
+
+- This site is human-authored educational content
+- No AI-generated trading advice or tips
+- Market data sourced from Merolagani, yonepse, ShareSansar, and NEPSE API
+- Charts powered by TradingView lightweight charts
+- Free to use — no paywalls on educational content
+
+## Contact
+
+- **Website:** https://kkpramod.com.np
+- **Email:** info@kkpramod.com.np
+- **Location:** Nepal
+
+## Tech Stack
+
+- Node.js + Express (zero-dependency)
+- Vanilla JavaScript (no framework)
+- TradingView Lightweight Charts
+- Progressive Web App (PWA)
+- JSON file storage (no database)

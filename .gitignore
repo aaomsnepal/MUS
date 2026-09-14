@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.bak
+*.bak
+backup-*/
+data/
+aaoms-ai/
+nepse-research/
+agent/

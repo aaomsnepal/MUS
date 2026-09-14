@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>aaomsPrint — Job Board</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="/assets/favicon-infinity.png">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/aaoms-core.css">
+<link rel="stylesheet" href="/assets/board.css">
+</head>
+<body class="page">
+<div class="aa-field" aria-hidden="true"><canvas id="aaCanvas"></canvas></div>
+
+<header class="aa-header">
+  <nav class="aa-nav wrap">
+    <a class="aa-brand" href="/"><img src="/assets/logo-infinity.png" alt="">aaomsPrint</a>
+    <div class="aa-links">
+      <a href="/print">Studio</a><a href="/jobs">Job board</a><a href="/admin">Admin</a><a href="/">Site</a>
+    </div>
+    <div class="flexrow"><div class="live-pill"><i></i> QUEUE</div>
+    <button class="aa-burger" type="button" aria-label="Menu">&#9776;</button></div>
+  </nav>
+</header>
+
+<main class="wrap" style="padding-top:34px">
+  <div id="gate" class="gate glass">
+    <h2>Job board</h2>
+    <p class="dim">Enter the studio PIN to open the queue.</p>
+    <div class="field"><input id="pin" type="password" placeholder="PIN" autocomplete="off"></div>
+    <button class="btn btn-gold" id="btnLogin">Unlock</button>
+    <p class="hint" id="gateMsg"></p>
+  </div>
+
+  <div id="board" class="hide">
+    <div class="board-top">
+      <h1 style="margin:0">Print queue</h1>
+      <div class="flexrow">
+        <span class="pill cy" id="statLine">—</span>
+        <button class="btn btn-ghost btn-sm" id="btnRefresh">Refresh</button>
+        <a class="btn btn-gold btn-sm" href="/print">Open studio</a>
+      </div>
+    </div>
+    <div class="kanban" id="kanban"></div>
+  </div>
+</main>
+
+<div class="modal" id="modal"><div class="modal-in glass" id="modalIn"></div></div>
+
+<script src="/assets/aaoms-core.js"></script>
+<script src="/assets/board.js"></script>
+</body>
+</html>

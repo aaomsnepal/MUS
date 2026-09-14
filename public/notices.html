@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Notices — NEPSE Terminal · kkpramod.com.np</title>
+<meta name="description" content="NEPSE exchange notices — official announcements, circulars and market notifications.">
+<meta name="theme-color" content="#09090b">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://kkpramod.com.np/notices">
+<meta property="og:title" content="Notices — NEPSE Terminal">
+<meta property="og:description" content="NEPSE exchange notices — official announcements, circulars and market notifications.">
+<meta property="og:url" content="https://kkpramod.com.np/notices">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="/assets/favicon-infinity.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/aaoms-core.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#09090b;--fg:#fafafa;--dim:rgba(255,255,255,.55);
+  --green:#22c55e;--red:#ef4444;--gold:#e8d5a3;
+  --card:rgba(255,255,255,.03);--line:rgba(255,255,255,.08);
+}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,sans-serif;line-height:1.5;min-height:100vh}
+a{color:var(--gold);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+.back-bar{padding:18px 0 8px;font-size:13px;color:var(--dim)}
+.back-bar a{display:inline-flex;align-items:center;gap:4px}
+.hero{padding:20px 0 12px}
+.hero h1{font-size:clamp(1.4rem,3.5vw,1.8rem);font-weight:700;margin-bottom:4px}
+.hero p{font-size:13px;color:var(--dim);max-width:60ch}
+
+.notices-list{display:flex;flex-direction:column;gap:10px;margin:14px 0 32px}
+
+.notice-card{
+  background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  display:flex;flex-direction:column;gap:8px;transition:border-color .15s;
+}
+.notice-card:hover{border-color:rgba(255,255,255,.18)}
+.notice-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.notice-badge{
+  font-size:10px;font-weight:600;letter-spacing:.06em;padding:3px 8px;border-radius:999px;
+  text-transform:uppercase;flex-shrink:0;
+}
+.badge-notice{background:rgba(96,165,250,.12);color:#60a5fa;border:1px solid rgba(96,165,250,.3)}
+.badge-circular{background:rgba(167,139,250,.12);color:#a78bfa;border:1px solid rgba(167,139,250,.3)}
+.badge-mot{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.3)}
+.badge-default{background:rgba(148,163,184,.1);color:var(--dim);border:1px solid rgba(148,163,184,.2)}
+.notice-title{font-weight:600;font-size:14.5px;flex:1;min-width:200px}
+.notice-date{font-size:11.5px;color:var(--dim);font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.notice-body{font-size:13px;color:rgba(255,255,255,.6);line-height:1.55;max-width:72ch}
+.notice-expiry{font-size:11px;color:rgba(255,255,255,.35);font-family:'JetBrains Mono',monospace}
+.notice-expiry.expired{color:var(--red)}
+.notice-link a{font-size:12px;color:var(--gold)}
+
+.empty{padding:32px;text-align:center;color:var(--dim);font-size:14px}
+.err{color:var(--red);font-size:13px;padding:12px 0}
+footer{margin-top:32px;padding:20px 0;border-top:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.3);text-align:center}
+</style>
+</head>
+<body class="page">
+<header class="aa-header">
+  <nav class="aa-nav wrap">
+    <a class="aa-brand" href="/"><img src="/assets/logo-infinity.png" alt="aaoms infinity logo">Pramod KK</a>
+    <div class="aa-links">
+      <a href="/">Home</a>
+      <div class="navsub">
+        <a class="sub-top" href="/aaomsdigital">aaomsDigital <span class="car">&#9660;</span></a>
+        <div class="submenu">
+          <a href="/aaomsdigital"><b>Services</b><small>Software, AI, 3D, digitizing</small></a>
+          <a href="/aaomsdigital#store"><b>Digital Products</b><small>Embroidery files</small></a>
+          <div class="divider"></div>
+          <a href="/nepse"><b>NEPSE Screener</b><small>Gainers · losers · daily glance</small></a>
+          <a href="/moneycontrol"><b>MoneyControl</b><small>Charts · drawings · indicators</small></a>
+          <a href="/classroom"><b>Price Action Classroom</b><small>Darvas · candles · risk rules</small></a>
+          <a href="/e-aaoms"><b>e-aaoms</b><small>Billing · VAT · ops</small></a>
+          <a href="/print"><b>aaomsPrint</b><small>ID card studio</small></a>
+        </div>
+      </div>
+      <a href="/gurukul">Gurukul</a>
+      <a href="/sayhi">Say Hi</a>
+    </div>
+    <div class="flexrow">
+      <div class="live-pill"><i></i> DAILY</div>
+      <button class="aa-burger" type="button" aria-label="Menu">&#9776;</button>
+    </div>
+  </nav>
+</header>
+<div class="wrap">
+  <div class="back-bar"><a href="/nepse">&larr; Back to NEPSE Screener</a></div>
+  <section class="hero">
+    <h1>Exchange Notices</h1>
+    <p>Official NEPSE circulars, market updates and regulatory announcements. Sorted by most recent.</p>
+  </section>
+
+  <div class="notices-list" id="notices">
+    <div class="empty">Loading notices…</div>
+  </div>
+  <div class="err" id="err" style="display:none"></div>
+</div>
+<footer style="margin-top:32px;padding:20px 0;border-top:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.3);text-align:center">© 2025 Pramod KK · NEPSE Terminal · Exchange Notices<br><a href="/" style="color:rgba(255,255,255,.4);margin:0 6px">Home</a> · <a href="/print" style="color:rgba(255,255,255,.4);margin:0 6px">aaomsPrint</a> · <a href="/aaomsdigital" style="color:rgba(255,255,255,.4);margin:0 6px">aaomsDigital</a> · <a href="/nepse" style="color:rgba(255,255,255,.4);margin:0 6px">NEPSE</a> · <a href="/aavnepse" style="color:#ef4444;margin:0 6px;font-weight:600">AVNEPSE</a> · <a href="/classroom" style="color:rgba(255,255,255,.4);margin:0 6px">Classroom</a> · <a href="/gurukul" style="color:rgba(255,255,255,.4);margin:0 6px">Gurukul</a> · <a href="/faq" style="color:rgba(255,255,255,.4);margin:0 6px">FAQ</a> · <a href="/sayhi" style="color:rgba(255,255,255,.4);margin:0 6px">Say Hi</a></footer>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+
+  function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+  function fmtDate(s){
+    if(!s) return '';
+    try{var d=new Date(s);if(isNaN(d))return escapeHtml(s);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}catch(e){return escapeHtml(s)}
+  }
+
+  function badgeClass(type) {
+    var t = (type||'').toLowerCase();
+    if (t.indexOf('notice') !== -1) return 'badge-notice';
+    if (t.indexOf('circular') !== -1) return 'badge-circular';
+    if (t.indexOf('mot') !== -1 || t.indexOf('meeting') !== -1) return 'badge-mot';
+    return 'badge-default';
+  }
+
+  function render(notices) {
+    var el = $('notices');
+    if (!notices.length) {
+      el.innerHTML = '<div class="empty">No notices available right now</div>';
+      return;
+    }
+    // sort by date descending
+    notices.sort(function(a, b) {
+      var da = new Date(a.date || a.publishedAt || a.postedOn || 0);
+      var db = new Date(b.date || b.publishedAt || b.postedOn || 0);
+      return db - da;
+    });
+
+    el.innerHTML = notices.map(function(n) {
+      var type = n.type || n.category || n.noticeType || '';
+      var title = n.title || n.subject || n.heading || 'Untitled';
+      var body = n.body || n.content || n.description || n.text || '';
+      var date = n.date || n.publishedAt || n.postedOn || '';
+      var expiry = n.expiry || n.validTill || n.expiryDate || '';
+      var url = n.url || n.link || n.pdfUrl || '';
+      var isExpired = expiry && new Date(expiry) < new Date();
+
+      // truncate body
+      if (body.length > 400) body = body.slice(0, 400) + '…';
+      body = escapeHtml(body).replace(/\n/g, '<br>');
+
+      return '<div class="notice-card">' +
+        '<div class="notice-head">' +
+          (type ? '<span class="notice-badge ' + badgeClass(type) + '">' + escapeHtml(type) + '</span>' : '') +
+          '<span class="notice-title">' + escapeHtml(title) + '</span>' +
+          (date ? '<span class="notice-date">' + fmtDate(date) + '</span>' : '') +
+        '</div>' +
+        (body ? '<div class="notice-body">' + body + '</div>' : '') +
+        (expiry ? '<div class="notice-expiry' + (isExpired ? ' expired' : '') + '">' + (isExpired ? 'Expired: ' : 'Valid until: ') + fmtDate(expiry) + '</div>' : '') +
+        (url ? '<div class="notice-link"><a href="' + escapeHtml(url) + '" target="_blank" rel="noopener">View full notice →</a></div>' : '') +
+      '</div>';
+    }).join('');
+  }
+
+  async function load() {
+    try {
+      var r = await fetch('https://shubhamnpk.github.io/yonepse/data/notify/notices.json', { cache: 'default' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      var d = await r.json();
+      var notices = Array.isArray(d) ? d : (d.notices || d.data || []);
+      render(notices);
+      $('err').style.display = 'none';
+    } catch(e) {
+      $('err').style.display = 'block';
+      $('err').textContent = 'Notice feed temporarily unavailable — retrying…';
+      // retry with alternate approach
+      try {
+        var r2 = await fetch('/api/nepse/news?t=' + Date.now(), { cache: 'no-store' });
+        if (r2.ok) {
+          var d2 = await r2.json();
+          var items = (d2.items || []).map(function(it) {
+            return { type: 'Notice', title: it.title, url: it.url, date: '', body: '' };
+          });
+          if (items.length) {
+            render(items);
+            $('err').style.display = 'none';
+          }
+        }
+      } catch(e2) {}
+    }
+  }
+
+  load();
+  setInterval(load, 300000);
+})();
+</script>
+<script src="/assets/aaoms-core.js"></script>
+<div id="pwaBanner">
+  <div class="pwa-text">ðŸ“² Install <strong>kkpramod</strong> on your phone for instant NEPSE updates &amp; aaoms news</div>
+  <div class="pwa-actions">
+    <button id="pwaInstall">Install</button>
+    <button id="pwaNotify">ðŸ”” Notify Me</button>
+    <button id="pwaDismiss">Later</button>
+  </div>
+</div>
+<script src="/assets/pwa.js"></script>
+</body>
+</html>

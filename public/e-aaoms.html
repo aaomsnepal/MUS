@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>e-aaoms — Restricted | aaomsDigital</title>
+<meta name="description" content="e-aaoms is a restricted internal billing system. Authorised team access only.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#050708">
+<link rel="icon" type="image/png" href="/assets/favicon-infinity.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/aaoms-core.css">
+<link rel="stylesheet" href="/assets/digital.css">
+<style>
+  .gate-overlay{position:fixed;inset:0;z-index:9999;background:rgba(5,7,10,.92);display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+  .gate-card{width:100%;max-width:380px;background:#12161c;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px 24px 22px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .gate-card .logo{width:48px;height:48px;border-radius:12px;margin:0 auto 14px;display:block}
+  .gate-card h2{text-align:center;font-family:Fraunces,serif;font-size:1.25rem;margin:0 0 6px;color:#f0f4f8}
+  .gate-card .warn{text-align:center;font-size:13px;line-height:1.5;color:rgba(255,255,255,.55);margin:0 0 18px}
+  .gate-card .warn strong{color:#f87171;font-weight:600}
+  .gate-card input{width:100%;box-sizing:border-box;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;color:#fff;font-size:16px;letter-spacing:.2em;text-align:center;font-family:JetBrains Mono,monospace}
+  .gate-card input:focus{outline:none;border-color:rgba(212,168,75,.5)}
+  .gate-card .btn-row{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+  .gate-card .err{display:none;text-align:center;color:#f87171;font-size:12.5px;margin:8px 0 0}
+  .gate-card .err.show{display:block}
+  .gate-card .hint{text-align:center;font-size:11.5px;color:rgba(255,255,255,.35);margin-top:14px}
+  .app-hidden{display:none!important}
+  .e-hero{padding:48px 0 28px}
+  .e-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:28px}
+  @media(max-width:820px){.e-grid{grid-template-columns:1fr}}
+  .e-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:22px 24px}
+  .e-card h3{margin:0 0 8px;font-size:1.05rem}
+  .e-card p{margin:0;color:rgba(255,255,255,.62);font-size:13.5px;line-height:1.55}
+  .e-actions{display:flex;flex-wrap:wrap;gap:12px;margin:28px 0 12px;align-items:center}
+  .e-actions .btn{min-width:200px;text-align:center}
+  .e-note{font-size:12.5px;color:rgba(255,255,255,.5);max-width:62ch;line-height:1.5}
+  .e-embed-wrap{margin-top:36px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.1);background:#0a0c0e;min-height:78vh}
+  .e-embed-wrap iframe{width:100%;height:78vh;border:0;display:block;background:#f5f0e6}
+  .e-toolbar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(0,0,0,.45);border-bottom:1px solid rgba(255,255,255,.08);font-size:12.5px}
+  .feature-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 18px;margin-top:18px;font-size:13.5px}
+  .feature-list li{color:rgba(255,255,255,.72)}
+  .feature-list li::marker{color:#c9a227}
+  .pill-live{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(74,222,128,.25);padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:600}
+</style>
+</head>
+<body class="page">
+
+<div class="gate-overlay" id="gateOverlay" role="dialog" aria-modal="true">
+  <div class="gate-card">
+    <img class="logo" src="/assets/logo-infinity.png" alt="">
+    <h2>e-aaoms · restricted</h2>
+    <p class="warn"><strong>You do not have permission</strong> to open this system unless you are an authorised AAOMS team member. Enter the team PIN to continue.</p>
+    <div class="field" style="margin-bottom:12px">
+      <input id="gatePin" type="password" inputmode="numeric" maxlength="12" placeholder="• • • •" autocomplete="off" autofocus>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-gold" type="button" id="gateUnlock">Unlock</button>
+      <a class="btn btn-ghost" href="/" style="text-align:center">← Back to site</a>
+    </div>
+    <p class="err" id="gateErr">Incorrect PIN. Access denied.</p>
+    <p class="hint">Unauthorised access is not allowed. PIN is managed in Admin.</p>
+  </div>
+</div>
+
+<div id="appRoot" class="app-hidden">
+<header class="aa-header">
+  <nav class="aa-nav wrap">
+    <a class="aa-brand" href="/"><img src="/assets/logo-infinity.png" alt="">Pramod KK</a>
+    <div class="aa-links">
+      <a href="/">Home</a>
+      <a href="/aaomsdigital">aaomsDigital</a>
+      <a href="/nepse">NEPSE</a>
+      <a href="/gurukul">Gurukul</a>
+      <a href="/sayhi">Say Hi</a>
+    </div>
+    <div class="flexrow"><button class="aa-burger" type="button" aria-label="Menu">☰</button></div>
+  </nav>
+</header>
+
+<section class="aa-hero wrap e-hero">
+  <div class="aa-crumb"><a href="/">home</a> / <a href="/aaomsdigital">aaomsDigital</a> / e-aaoms</div>
+  <div class="label">aaomsDigital · operations · authorised</div>
+  <h1>e-aaoms</h1>
+  <p>Internal billing &amp; operations for <strong>AAOMS Nepal</strong>. Session unlocked for this browser tab only.</p>
+  <div class="e-actions">
+    <a class="btn btn-gold" id="openBilling" href="#" target="_blank" rel="noopener">Open e-aaoms Billing →</a>
+    <button class="btn btn-ghost" type="button" id="toggleEmbed">Show embedded view</button>
+    <span class="pill-live">Authorised</span>
+  </div>
+  <p class="e-note">Do not share this session. PIN can be changed any time from Admin.</p>
+</section>
+
+<section class="wrap" style="padding-bottom:20px">
+  <div class="sec-label">What e-aaoms includes</div>
+  <ul class="feature-list">
+    <li>Dashboard — sales, VAT, outstanding</li>
+    <li>Quotations → Orders → Challans → Invoices</li>
+    <li>13% VAT tax invoices (Nepal)</li>
+    <li>Payments, email &amp; WhatsApp share</li>
+    <li>Customers, stock, VAT registers</li>
+    <li>Hospital directory</li>
+  </ul>
+</section>
+
+<section class="wrap" style="margin-top:12px;padding-bottom:40px">
+  <div class="e-grid">
+    <div class="e-card"><h3>Tax-compliant invoicing</h3><p>Nepal VAT invoices with BS date, PAN/VAT and bilingual amount-in-words.</p></div>
+    <div class="e-card"><h3>Full sales flow</h3><p>Quotation → Order → Challan → Invoice with convert actions.</p></div>
+    <div class="e-card"><h3>VAT &amp; registers</h3><p>Sales / purchase registers and VAT summary.</p></div>
+    <div class="e-card"><h3>Hospital directory</h3><p>Verified contacts — add as customers in one click.</p></div>
+  </div>
+</section>
+
+<section class="wrap" id="embedSection" style="display:none;padding-bottom:48px">
+  <div class="e-embed-wrap">
+    <div class="e-toolbar">
+      <span>e-aaoms · embedded</span>
+      <span class="mono" id="embedHost">—</span>
+      <a class="gold" id="embedOpen" href="#" target="_blank" rel="noopener" style="font-size:12px">Open full screen ↗</a>
+    </div>
+    <iframe id="billingFrame" title="e-aaoms Billing" allow="clipboard-write" loading="lazy"></iframe>
+  </div>
+</section>
+
+<footer class="aa-footer">
+  <div class="wrap">
+    <span>© 2025 Pramod KK · e-aaoms · restricted</span>
+    <span><a href="/">Home</a> · <a href="/print">aaomsPrint</a> · <a href="/aaomsdigital">aaomsDigital</a> · <a href="/nepse">NEPSE</a> · <a href="/aavnepse" style="color:#ef4444;font-weight:600">AVNEPSE</a> · <a href="/classroom">Classroom</a> · <a href="/e-aaoms">e-aaoms</a> · <a href="/gurukul">Gurukul</a> · <a href="/faq">FAQ</a> · <a href="/sayhi">Say Hi</a> · <a href="/admin">Admin</a></span>
+  </div>
+</footer>
+</div>
+
+<script src="/assets/aaoms-core.js"></script>
+<script>
+(function () {
+  const overlay = document.getElementById('gateOverlay');
+  const pinInput = document.getElementById('gatePin');
+  const unlockBtn = document.getElementById('gateUnlock');
+  const errEl = document.getElementById('gateErr');
+  let billingUrl = null;
+
+  function showErr(msg) {
+    errEl.textContent = msg || 'Incorrect PIN. Access denied.';
+    errEl.classList.add('show');
+  }
+  function hideErr() { errEl.classList.remove('show'); }
+
+  function revealApp(url) {
+    billingUrl = url;
+    overlay.style.display = 'none';
+    document.getElementById('appRoot').classList.remove('app-hidden');
+    const openBtn = document.getElementById('openBilling');
+    if (openBtn) openBtn.href = url;
+    const embedOpen = document.getElementById('embedOpen');
+    if (embedOpen) embedOpen.href = url;
+    try {
+      // Base against location.origin so this also works for a relative,
+      // self-hosted path (e.g. /aaoms-billing/index.html) — new URL(url)
+      // alone throws on relative input and was silently swallowed here,
+      // which only mattered once the billing app could be self-hosted
+      // instead of always being an absolute external URL.
+      const u = new URL(url, location.origin);
+      const hostEl = document.getElementById('embedHost');
+      if (hostEl) hostEl.textContent = u.host + u.pathname;
+    } catch (e) {}
+    try {
+      sessionStorage.setItem('eaaoms_ok', '1');
+      sessionStorage.setItem('eaaoms_url', url);
+    } catch (e) {}
+  }
+
+  async function tryUnlock() {
+    hideErr();
+    const pin = (pinInput.value || '').trim();
+    if (!pin) { showErr('Enter the team PIN.'); return; }
+    unlockBtn.disabled = true;
+    unlockBtn.textContent = 'Checking…';
+    try {
+      const r = await fetch('/api/eaaoms/unlock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: pin })
+      });
+      const data = await r.json().catch(function () { return {}; });
+      if (!r.ok || !data.ok) {
+        showErr(data.error || 'Incorrect PIN. You do not have permission.');
+        pinInput.value = '';
+        pinInput.focus();
+        unlockBtn.disabled = false;
+        unlockBtn.textContent = 'Unlock';
+        return;
+      }
+      revealApp(data.url);
+    } catch (e) {
+      showErr('Network error. Try again.');
+      unlockBtn.disabled = false;
+      unlockBtn.textContent = 'Unlock';
+    }
+  }
+
+  unlockBtn.addEventListener('click', tryUnlock);
+  pinInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryUnlock(); });
+
+  try {
+    if (sessionStorage.getItem('eaaoms_ok') === '1' && sessionStorage.getItem('eaaoms_url')) {
+      revealApp(sessionStorage.getItem('eaaoms_url'));
+    }
+  } catch (e) {}
+
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.id === 'toggleEmbed') {
+      var sec = document.getElementById('embedSection');
+      var frame = document.getElementById('billingFrame');
+      if (!sec || !billingUrl) return;
+      var show = sec.style.display === 'none';
+      sec.style.display = show ? 'block' : 'none';
+      e.target.textContent = show ? 'Hide embedded view' : 'Show embedded view';
+      if (show && frame && !frame.src) frame.src = billingUrl;
+      if (show) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+})();
+</script>
+<div id="pwaBanner">
+  <div class="pwa-text">ðŸ“² Install <strong>kkpramod</strong> on your phone for instant NEPSE updates &amp; aaoms news</div>
+  <div class="pwa-actions">
+    <button id="pwaInstall">Install</button>
+    <button id="pwaNotify">ðŸ”” Notify Me</button>
+    <button id="pwaDismiss">Later</button>
+  </div>
+</div>
+<script src="/assets/pwa.js"></script>
+</body>
+</html>

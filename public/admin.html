@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Control Room — kkpramod.com.np</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="/assets/favicon-infinity.png">
+<link rel="manifest" href="/manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/aaoms-core.css">
+<link rel="stylesheet" href="/assets/admin.css">
+</head>
+<body class="page">
+<div class="aa-field" aria-hidden="true"><canvas id="aaCanvas"></canvas></div>
+
+<header class="aa-header">
+  <nav class="aa-nav wrap">
+    <a class="aa-brand" href="/"><img src="/assets/logo-infinity.png" alt="">Control Room</a>
+    <div class="aa-links">
+      <a href="/">Site</a><a href="/print">Studio</a><a href="/jobs">Job board</a><a href="/gurukul">Gurukul</a>
+    </div>
+    <div class="flexrow"><button class="btn btn-ghost btn-sm hide" id="btnLogout">Lock</button><div class="live-pill"><i></i> ADMIN</div>
+    <button class="aa-burger" type="button" aria-label="Menu">&#9776;</button></div>
+  </nav>
+</header>
+
+<main class="wrap" style="padding-top:30px">
+
+  <div id="gate" class="gate glass">
+    <h2>Control Room</h2>
+    <p class="dim">Studio PIN required.</p>
+    <div class="field"><input id="pin" type="password" placeholder="PIN" autocomplete="current-password"></div>
+    <button class="btn btn-gold" id="btnLogin">Unlock</button>
+    <p class="hint" id="gateMsg"></p>
+  </div>
+
+  <div id="app" class="hide">
+    <div class="tabs" id="tabs"></div>
+
+    <!-- DASHBOARD -->
+    <section class="tabpane" data-pane="dash">
+      <div class="stat-grid" id="statGrid"></div>
+      <div class="two-col mt24">
+        <div class="card glass"><h3>Latest messages</h3><div id="dashMsgs"></div></div>
+        <div class="card glass"><h3>Jobs in queue</h3><div id="dashJobs"></div></div>
+      </div>
+    </section>
+
+    <!-- GURUKUL POSTS -->
+    <section class="tabpane hide" data-pane="posts">
+      <div class="two-col">
+        <div class="card glass">
+          <h3>Write Gurukul post</h3>
+          <p class="hint">Shown on <a href="/gurukul" target="_blank">/gurukul</a>. Starting views randomized <b>2000–2700</b>, then real reads add +1.</p>
+          <div class="field">
+            <label>Language you're writing in — the other two get auto-translated</label>
+            <div class="seg" id="pLangPicker">
+              <button type="button" class="seg-btn active" data-lang="en">English</button>
+              <button type="button" class="seg-btn" data-lang="hi">हिन्दी</button>
+              <button type="button" class="seg-btn" data-lang="ne">नेपाली</button>
+            </div>
+            <p class="hint" id="pLangHint" style="margin-top:6px">Writing a new post in English — Hindi and Nepali versions are created automatically when you publish.</p>
+          </div>
+          <div class="field"><label>Title</label><input id="pTitle" placeholder="What today taught"></div>
+          <div class="field"><label>Summary (one or two lines)</label><input id="pSummary"></div>
+          <div class="field"><label>Body — leave a blank line between paragraphs</label><textarea id="pBody" rows="10"></textarea></div>
+          <div class="field"><label>Takeaway (optional highlight box)</label><input id="pLesson"></div>
+          <div class="field"><label>Tags, comma separated (optional)</label>
+            <input id="pTags" placeholder="gita, reflection, practice"></div>
+          <div class="row3">
+            <div class="field"><label>Image</label><input type="file" id="pImage" accept="image/*"></div>
+            <div class="field"><label>Short video</label><input type="file" id="pVideo" accept="video/mp4,video/webm"></div>
+            <div class="field"><label>Music / voice</label><input type="file" id="pAudio" accept="audio/*"></div>
+          </div>
+          <div class="upl" id="pUpl"></div>
+          <div class="flexrow mt8">
+            <button class="btn btn-gold" id="pSave">Publish post</button>
+            <button class="btn btn-ghost btn-sm" id="pClear">Clear</button>
+            <span class="mono muted" id="pMsg"></span>
+          </div>
+        </div>
+        <div class="card glass">
+          <h3>Published</h3>
+          <div id="postList" class="list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="tabpane hide" data-pane="products">
+      <div class="two-col">
+        <div class="card glass">
+          <h3>Add a digital product</h3>
+          <div class="field"><label>Title</label><input id="prTitle" placeholder="Lotus Motif Pack"></div>
+          <div class="row2">
+            <div class="field"><label>Category</label><input id="prCat" value="Design"></div>
+            <div class="field"><label>Formats (comma separated)</label><input id="prFormats" value="DST, PES, JEF, EXP"></div>
+          </div>
+          <div class="field"><label>Short blurb</label><input id="prBlurb"></div>
+          <div class="field"><label>Full description</label><textarea id="prDesc" rows="5"></textarea></div>
+          <div class="row3">
+            <div class="field"><label>Stitches</label><input id="prStitch" type="number" value="0"></div>
+            <div class="field"><label>Size mm</label><input id="prSize" placeholder="90 × 45"></div>
+            <div class="field"><label>Colours</label><input id="prCol" type="number" value="1"></div>
+          </div>
+          <div class="row3">
+            <div class="field"><label>Price NPR</label><input id="prNPR" type="number"></div>
+            <div class="field"><label>Price INR</label><input id="prINR" type="number"></div>
+            <div class="field"><label>Price USD</label><input id="prUSD" type="number"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Preview image</label><input type="file" id="prThumb" accept="image/*"></div>
+            <div class="field"><label>Deliverable files (private)</label><input type="file" id="prFiles" multiple></div>
+          </div>
+          <div class="upl" id="prUpl"></div>
+          <label class="tb-check"><input type="checkbox" id="prFeat"> Feature on the store</label>
+          <div class="flexrow mt8">
+            <button class="btn btn-gold" id="prSave">Add product</button>
+            <span class="mono muted" id="prMsg"></span>
+          </div>
+        </div>
+        <div class="card glass"><h3>Listed products</h3><div id="prodList" class="list"></div></div>
+      </div>
+    </section>
+
+    <!-- ORDERS -->
+    <section class="tabpane hide" data-pane="orders">
+      <div class="card glass"><h3>Digital product orders</h3><div class="tbl-wrap"><table class="tbl" id="ordTable"></table></div></div>
+    </section>
+
+    <!-- INBOX -->
+    <section class="tabpane hide" data-pane="inbox">
+      <div class="card glass"><h3>Messages from Say Hi</h3><div id="msgList" class="list"></div></div>
+    </section>
+
+    <!-- CLIENTS -->
+    <section class="tabpane hide" data-pane="clients">
+      <div class="two-col">
+        <div class="card glass">
+          <h3>Add a client</h3>
+          <div class="field"><label>Organization</label><input id="clOrg"></div>
+          <div class="row2">
+            <div class="field"><label>Contact person</label><input id="clContact"></div>
+            <div class="field"><label>Type</label><select id="clType"><option>hospital</option><option>school</option><option>corporate</option><option>gym</option><option>event</option><option>other</option></select></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Phone</label><input id="clPhone"></div>
+            <div class="field"><label>Email</label><input id="clEmail"></div>
+          </div>
+          <div class="field"><label>Address</label><input id="clAddr"></div>
+          <div class="field"><label>Notes</label><textarea id="clNotes" rows="3"></textarea></div>
+          <button class="btn btn-gold" id="clSave">Save client</button>
+        </div>
+        <div class="card glass"><h3>Clients</h3><div id="clientList" class="list"></div></div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="tabpane hide" data-pane="pricing">
+      <div class="two-col">
+        <div class="card glass">
+          <h3>Card pricing</h3>
+          <div class="row2">
+            <div class="field"><label>Single side rate</label><input id="pcSingle" type="number"></div>
+            <div class="field"><label>Double side rate</label><input id="pcDouble" type="number"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Design fee</label><input id="pcDesign" type="number"></div>
+            <div class="field"><label>Waive design fee above qty</label><input id="pcWaive" type="number"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Delivery fee</label><input id="pcDelivery" type="number"></div>
+            <div class="field"><label>VAT %</label><input id="pcVat" type="number"></div>
+          </div>
+          <label class="tb-check"><input type="checkbox" id="pcVatInc"> Prices already include VAT</label>
+          <button class="btn btn-gold mt16" id="pcSave">Save pricing</button>
+        </div>
+        <div class="card glass">
+          <h3>Quantity tiers &amp; extras</h3>
+          <p class="hint">Edit the discount at each quantity, and the price of each finishing extra.</p>
+          <div id="tierList"></div>
+          <button class="btn btn-gold mt16" id="tierSave">Save tiers &amp; extras</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRINTERS -->
+    <section class="tabpane hide" data-pane="printers">
+      <div class="card glass"><h3>Printer profiles</h3>
+        <p class="hint">These drive the export size, bleed and duplex behaviour in the studio.</p>
+        <div id="printerList"></div>
+        <div class="flexrow mt16">
+          <button class="btn btn-gold" id="prtSave">Save printer profiles</button>
+          <button class="btn btn-ghost btn-sm" id="prtAdd">Add a printer</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESIGNS -->
+    <section class="tabpane hide" data-pane="designs">
+      <div class="card glass"><h3>Saved card designs</h3><div id="designList" class="list"></div></div>
+    </section>
+
+    <!-- TERMINAL KNOWLEDGE -->
+    <section class="tabpane hide" data-pane="brain">
+      <div class="two-col">
+        <div class="card glass">
+          <h3>Identity &amp; boot</h3>
+          <div class="field"><label>Tagline</label><input id="kTagline"></div>
+          <div class="field"><label>Email</label><input id="kEmail"></div>
+          <div class="field"><label>WhatsApp</label><input id="kWa"></div>
+          <div class="field"><label>Boot lines — one per line</label><textarea id="kBoot" rows="7"></textarea></div>
+          <button class="btn btn-gold" id="kSave">Save</button>
+          <p class="mono muted mt8" id="kMsg"></p>
+        </div>
+        <div class="card glass">
+          <h3>Terminal answers — general (10,000+)</h3>
+          <p class="hint">Each entry is a set of trigger keywords and the reply the terminal gives. There are thousands of these, so search instead of scrolling.</p>
+          <div class="field"><label>Keywords (comma separated)</label><input id="qaKeys" placeholder="print, card, evolis"></div>
+          <div class="field"><label>Answer</label><textarea id="qaAns" rows="5"></textarea></div>
+          <button class="btn btn-gold btn-sm" id="qaAdd">Add answer</button>
+          <div class="field mt16"><label>Search entries</label><input id="qaSearch" placeholder="type to search keywords or answers…"></div>
+          <div id="qaList" class="list mt16"></div>
+        </div>
+      </div>
+
+      <div class="card glass mt16">
+        <h3>About you</h3>
+        <p class="hint">These fields feed the terminal whenever someone asks about you personally. Everything here is short and factual by design.</p>
+        <div class="two-col">
+          <div>
+            <div class="field"><label>Roles (comma separated)</label><input id="kRoles" placeholder="Creative Head, 3D Animator"></div>
+            <div class="field"><label>Experience</label><input id="kExperience" placeholder="~10 years production experience"></div>
+            <div class="field"><label>Tools (comma separated)</label><input id="kTools" placeholder="Maya, 3ds Max, Cinema 4D, Blender"></div>
+            <div class="field"><label>Location</label><input id="kLocation" placeholder="Nepal · work across Nepal, India, and online"></div>
+          </div>
+          <div>
+            <div class="field"><label>Career — one line per role/step</label><textarea id="kCareer" rows="4" placeholder="3D Animator — Motion Picture, Bangalore"></textarea></div>
+            <div class="field"><label>Businesses / ventures — one per line</label><textarea id="kVentures" rows="4" placeholder="Artistic Dental Lab, Bangalore"></textarea></div>
+            <div class="field"><label>Current status</label><textarea id="kStatus" rows="3" placeholder="Not job hunting, but open to the right offer"></textarea></div>
+          </div>
+        </div>
+        <button class="btn btn-gold" id="kAboutSave">Save about-you info</button>
+        <p class="mono muted mt8" id="kAboutMsg"></p>
+
+        <h3 class="mt16">Personal Q&amp;A — what the terminal says about you</h3>
+        <p class="hint">Short answers the terminal gives when someone asks about you specifically (e.g. typing "pramod", "pramod businesses"). Edit in place — nothing here shows anywhere else on the site unless someone asks.</p>
+        <div class="field"><label>New keywords (comma separated)</label><input id="pqaKeys" placeholder="pramod hobbies, what does pramod do for fun"></div>
+        <div class="field"><label>New answer</label><textarea id="pqaAns" rows="3"></textarea></div>
+        <button class="btn btn-gold btn-sm" id="pqaAdd">Add personal fact</button>
+        <div id="pqaList" class="list mt16"></div>
+      </div>
+    </section>
+
+    <!-- JOBS -->
+    <section class="tabpane hide" data-pane="jobs">
+      <div class="card glass">
+        <h3>Card print jobs</h3>
+        <p class="hint">Every job from the studio. Change a status here or open the visual board.</p>
+        <div class="flexrow" style="margin-bottom:14px">
+          <select id="jobFilter" style="max-width:200px">
+            <option value="">All statuses</option>
+            <option value="new">New</option><option value="quoted">Quoted</option>
+            <option value="approved">Approved</option><option value="printing">Printing</option>
+            <option value="done">Done</option><option value="cancelled">Cancelled</option>
+          </select>
+          <a class="btn btn-ghost btn-sm" href="/jobs">Open the board</a>
+        </div>
+        <div id="jobList" class="list"></div>
+      </div>
+    </section>
+
+    <!-- PAYMENTS -->
+    <section class="tabpane hide" data-pane="payments">
+      <div class="two-col">
+        <div class="card glass">
+          <h3>Nepal payment details (NPR)</h3>
+          <p class="hint">Whatever you fill in here is what a Nepali buyer sees at checkout. Saved instantly — no file editing.</p>
+          <div class="row2">
+            <div class="field"><label>eSewa ID</label><input id="npEsewa" placeholder="98…"></div>
+            <div class="field"><label>Khalti ID</label><input id="npKhalti" placeholder="98…"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Bank name</label><input id="npBank" placeholder="Nabil Bank"></div>
+            <div class="field"><label>Branch</label><input id="npBranch"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Account holder name</label><input id="npAccName"></div>
+            <div class="field"><label>Account number</label><input id="npAcc"></div>
+          </div>
+          <div class="field"><label>Payment QR image</label><input type="file" id="npQr" accept="image/*"></div>
+          <div class="upl" id="npUpl"></div>
+          <button class="btn btn-gold" id="npSave">Save Nepal details</button>
+        </div>
+        <div class="card glass">
+          <h3>Gateway status</h3>
+          <p class="hint">These come from the private .env file on the server and cannot be edited from a browser, by design.</p>
+          <div id="gwStatus"></div>
+          <h3 class="mt24">Where payment appears</h3>
+          <p class="hint" style="line-height:1.7">Only in the Digital Product store on aaomsDigital. aaomsPrint, Gurukul, Say Hi and the homepage carry no prices, no cart and no checkout — aaomsPrint is a design-and-print system, and card jobs are quoted and invoiced by hand.</p>
+        </div>
+      </div>
+      <div class="card glass" style="margin-top:16px">
+        <h3>e-aaoms access PIN</h3>
+        <p class="hint">Protects /e-aaoms. Visitors must enter this PIN before the billing app URL is revealed. Change any time from here.</p>
+        <div class="row2">
+          <div class="field"><label>Current PIN hint</label><input id="eaPinHint" readonly placeholder="••••"></div>
+          <div class="field"><label>New PIN</label><input id="eaPinNew" type="password" placeholder="Leave blank to keep current" autocomplete="new-password"></div>
+        </div>
+        <div class="field"><label>Billing app URL (hidden until PIN is correct)</label><input id="eaUrl" placeholder="/aaoms-billing/index.html (self-hosted) or an external https:// URL"></div>
+        <button class="btn btn-gold" id="eaSave" type="button">Save e-aaoms PIN &amp; URL</button>
+        <p class="hint mt8" id="eaMsg"></p>
+      </div>
+    </section>
+
+    <!-- CLASSROOM POSTS (separate from Gurukul) -->
+    <section class="tabpane hide" data-pane="classroomPosts">
+      <div class="two-col">
+        <div class="card glass">
+          <h3>Write classroom post</h3>
+          <p class="hint">These posts appear only under the slideshow on <a href="/classroom" target="_blank">/classroom</a>. Starting views are randomized between <b>1000–1499</b>, then grow with real reads.</p>
+          <div class="field">
+            <label>Language you're writing in — the other two get auto-translated</label>
+            <div class="seg" id="cpLangPicker">
+              <button type="button" class="seg-btn active" data-lang="en">English</button>
+              <button type="button" class="seg-btn" data-lang="hi">हिन्दी</button>
+              <button type="button" class="seg-btn" data-lang="ne">नेपाली</button>
+            </div>
+            <p class="hint" id="cpLangHint" style="margin-top:6px">Writing a new classroom post in English.</p>
+          </div>
+          <div class="field"><label>Title</label><input id="cpTitle" placeholder="e.g. How to read a Darvas box"></div>
+          <div class="field"><label>Summary (one or two lines)</label><input id="cpSummary"></div>
+          <div class="field"><label>Body — leave a blank line between paragraphs</label><textarea id="cpBody" rows="10"></textarea></div>
+          <div class="field"><label>Takeaway (optional highlight box)</label><input id="cpLesson"></div>
+          <div class="field"><label>Tags, comma separated (optional)</label><input id="cpTags" placeholder="darvas, vcp, price-action"></div>
+          <div class="row3">
+            <div class="field"><label>Image</label><input type="file" id="cpImage" accept="image/*"></div>
+            <div class="field"><label>Short video</label><input type="file" id="cpVideo" accept="video/mp4,video/webm"></div>
+            <div class="field"><label>Music / voice</label><input type="file" id="cpAudio" accept="audio/*"></div>
+          </div>
+          <div class="upl" id="cpUpl"></div>
+          <div class="flexrow mt8">
+            <button class="btn btn-gold" id="cpSave">Publish classroom post</button>
+            <button class="btn btn-ghost btn-sm" id="cpClear">Clear</button>
+            <span class="mono muted" id="cpMsg"></span>
+          </div>
+        </div>
+        <div class="card glass">
+          <h3>Classroom posts</h3>
+          <p class="hint">Only posts created in this panel. Open count starts ~1000+ and rises with real readers.</p>
+          <div id="cpList" class="list mt8"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLASSROOM SLIDES -->
+    <section class="tabpane hide" data-pane="classroom">
+      <div class="card glass">
+        <h3>Price Action Classroom slides</h3>
+        <p class="hint">Numbered slides shown on <a href="/classroom" target="_blank">/classroom</a> — feeds BOTH displays on that page (the reader up top and the Holo Deck below it), so there's only one set of images to manage. Edit text, replace image, reorder by number, add, delete, or tick "Hidden" to keep a slot without showing it publicly. Changes go live after Save.</p>
+        <div class="flexrow mt8" style="gap:10px;flex-wrap:wrap">
+          <button class="btn btn-gold btn-sm" id="clAdd">+ Add slide</button>
+          <button class="btn btn-gold" id="clSlideSave">Save all slides</button>
+          <label class="btn btn-ghost btn-sm" style="cursor:pointer;margin:0">
+            Upload image
+            <input type="file" id="clUpload" accept="image/*" style="display:none">
+          </label>
+          <span class="mono muted" id="clMsg"></span>
+          <a class="btn btn-ghost btn-sm" href="/classroom" target="_blank">Open classroom</a>
+        </div>
+        <p class="hint" style="margin-top:8px">Both displays on /classroom (reader + Holo Deck) share this one deck. Tick <b>Hidden</b> then Save to hide from both. Replace / upload writes the image immediately; click <b>Save all slides</b> to publish path &amp; caption changes.</p>
+        <div id="clList" class="list mt16"></div>
+      </div>
+    </section>
+
+    <!-- Site images -->
+    <section class="tabpane hide" data-pane="siteImages">
+      <div class="card glass">
+        <h3>Site images</h3>
+        <p class="hint">These are the only images on the site that aren't already editable elsewhere (post images, product thumbnails, client logos, payment QR and classroom slides each have their own upload field on their own tab). Replacing one here overwrites the real file, so it updates on every page that uses it immediately.</p>
+        <div id="siteImagesGrid" class="list mt16" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px"></div>
+      </div>
+    </section>
+
+    <!-- FAQ / SEO -->
+    <section class="tabpane hide" data-pane="seo">
+      <div class="card glass">
+        <h3>FAQ &amp; search answers</h3>
+        <p class="hint">These questions appear on /faq and on aaomsDigital, and are published as FAQ structured data that Google, Bing and AI assistants read. Clear, specific answers here directly improve how you are found and quoted.</p>
+        <div class="row2">
+          <div class="field"><label>New question</label><input id="fqQ" placeholder="Do you print ID cards for schools?"></div>
+          <div class="field"><label>Answer</label><input id="fqA" placeholder="Yes — CR-80 PVC cards for schools across Nepal…"></div>
+        </div>
+        <button class="btn btn-gold btn-sm" id="fqAdd">Add question</button>
+        <div id="faqList" class="list mt16"></div>
+        <div class="flexrow mt16">
+          <button class="btn btn-gold" id="fqSave">Save all changes</button>
+          <a class="btn btn-ghost btn-sm" href="/faq" target="_blank">View the page</a>
+          <a class="btn btn-ghost btn-sm" href="/llms.txt" target="_blank">llms.txt</a>
+          <a class="btn btn-ghost btn-sm" href="/sitemap.xml" target="_blank">sitemap.xml</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="aa-footer"><div class="wrap"><span>Control Room &middot; kkpramod.com.np</span>
+<span><a href="/">Home</a> &middot; <a href="/print">Studio</a> &middot; <a href="/aavnepse" style="color:#ef4444;font-weight:600">AVNEPSE</a> &middot; <a href="/jobs">Jobs</a></span></div></footer>
+
+<script src="/assets/aaoms-core.js"></script>
+<script src="/assets/admin.js"></script>
+<div id="pwaBanner">
+  <div class="pwa-text">ðŸ“² Install <strong>kkpramod</strong> on your phone for instant NEPSE updates &amp; aaoms news</div>
+  <div class="pwa-actions">
+    <button id="pwaInstall">Install</button>
+    <button id="pwaNotify">ðŸ”” Notify Me</button>
+    <button id="pwaDismiss">Later</button>
+  </div>
+</div>
+<script src="/assets/pwa.js"></script>
+</body>
+</html>

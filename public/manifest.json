@@ -1,0 +1,18 @@
+{
+  "name": "kkpramod - aaoms Digital Nepal",
+  "short_name": "kkpramod",
+  "description": "Nepal's #1 TradingView-class NEPSE analyzer, digital products, and aaoms services",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111111",
+  "theme_color": "#d4a84b",
+  "orientation": "portrait-primary",
+  "categories": ["business", "finance", "education"],
+  "lang": "en",
+  "icons": [
+    { "src": "/assets/favicon-infinity.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/assets/favicon-infinity.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}

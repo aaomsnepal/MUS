@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IPO Board — NEPSE Terminal · kkpramod.com.np</title>
+<meta name="description" content="NEPSE IPO board — upcoming and recent IPO listings with application dates and reserved status.">
+<meta name="theme-color" content="#09090b">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://kkpramod.com.np/ipo">
+<meta property="og:title" content="IPO Board — NEPSE Terminal">
+<meta property="og:description" content="NEPSE IPO board — upcoming and recent IPO listings with application dates and reserved status.">
+<meta property="og:url" content="https://kkpramod.com.np/ipo">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="/assets/favicon-infinity.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/aaoms-core.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#09090b;--fg:#fafafa;--dim:rgba(255,255,255,.55);
+  --green:#22c55e;--red:#ef4444;--gold:#e8d5a3;
+  --card:rgba(255,255,255,.03);--line:rgba(255,255,255,.08);
+}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,sans-serif;line-height:1.5;min-height:100vh}
+a{color:var(--gold);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+.back-bar{padding:18px 0 8px;font-size:13px;color:var(--dim)}
+.back-bar a{display:inline-flex;align-items:center;gap:4px}
+.hero{padding:20px 0 12px}
+.hero h1{font-size:clamp(1.4rem,3.5vw,1.8rem);font-weight:700;margin-bottom:4px}
+.hero p{font-size:13px;color:var(--dim);max-width:60ch}
+
+.section-label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin:18px 0 10px;font-weight:600}
+.section-label span{color:var(--gold)}
+
+.cards{display:grid;gap:10px;margin-bottom:24px}
+.cards.upcoming{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+.cards.archive{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+@media(max-width:500px){.cards.upcoming,.cards.archive{grid-template-columns:1fr}}
+
+.ipo-card{
+  background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  display:flex;flex-direction:column;gap:8px;transition:border-color .15s;
+}
+.ipo-card:hover{border-color:rgba(255,255,255,.18)}
+.ipo-card.highlight{border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04)}
+.ipo-card.highlight::before{
+  content:'OPEN';display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;
+  color:var(--green);background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);
+  border-radius:999px;padding:2px 8px;align-self:flex-start;
+}
+.ipo-name{font-weight:700;font-size:15px}
+.ipo-row{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12.5px;font-family:'JetBrains Mono',monospace;color:var(--dim)}
+.ipo-row span b{color:var(--fg);font-weight:500}
+.badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.06em;padding:2px 8px;border-radius:999px;text-transform:uppercase}
+.badge.reserved{background:rgba(232,213,163,.12);color:var(--gold);border:1px solid rgba(232,163,75,.3)}
+.badge.public{background:rgba(148,163,184,.1);color:var(--dim);border:1px solid rgba(148,163,184,.2)}
+.ipo-apply{margin-top:4px}
+.ipo-apply a{
+  display:inline-block;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;
+  background:rgba(232,213,163,.1);border:1px solid rgba(232,213,163,.3);color:var(--gold);
+}
+.ipo-apply a:hover{background:rgba(232,213,163,.2);text-decoration:none}
+
+.empty{padding:32px;text-align:center;color:var(--dim);font-size:14px}
+.err{color:var(--red);font-size:13px;padding:12px 0}
+footer{margin-top:32px;padding:20px 0;border-top:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.3);text-align:center}
+</style>
+</head>
+<body class="page">
+<header class="aa-header">
+  <nav class="aa-nav wrap">
+    <a class="aa-brand" href="/"><img src="/assets/logo-infinity.png" alt="aaoms infinity logo">Pramod KK</a>
+    <div class="aa-links">
+      <a href="/">Home</a>
+      <div class="navsub">
+        <a class="sub-top" href="/aaomsdigital">aaomsDigital <span class="car">&#9660;</span></a>
+        <div class="submenu">
+          <a href="/aaomsdigital"><b>Services</b><small>Software, AI, 3D, digitizing</small></a>
+          <a href="/aaomsdigital#store"><b>Digital Products</b><small>Embroidery files</small></a>
+          <div class="divider"></div>
+          <a href="/nepse"><b>NEPSE Screener</b><small>Gainers · losers · daily glance</small></a>
+          <a href="/moneycontrol"><b>MoneyControl</b><small>Charts · drawings · indicators</small></a>
+          <a href="/classroom"><b>Price Action Classroom</b><small>Darvas · candles · risk rules</small></a>
+          <a href="/e-aaoms"><b>e-aaoms</b><small>Billing · VAT · ops</small></a>
+          <a href="/print"><b>aaomsPrint</b><small>ID card studio</small></a>
+        </div>
+      </div>
+      <a href="/gurukul">Gurukul</a>
+      <a href="/sayhi">Say Hi</a>
+    </div>
+    <div class="flexrow">
+      <div class="live-pill"><i></i> DAILY</div>
+      <button class="aa-burger" type="button" aria-label="Menu">&#9776;</button>
+    </div>
+  </nav>
+</header>
+<div class="wrap">
+  <div class="back-bar"><a href="/nepse">&larr; Back to NEPSE Screener</a></div>
+  <section class="hero">
+    <h1>IPO Board</h1>
+    <p>Upcoming and recent IPO listings on the Nepal Stock Exchange. Apply via MeroShare / CDS.</p>
+  </section>
+
+  <div class="section-label"><span>Upcoming / Open</span></div>
+  <div class="cards upcoming" id="upcoming"><div class="empty">Loading IPO data…</div></div>
+
+  <div class="section-label"><span>Recent / Closed</span></div>
+  <div class="cards archive" id="archive"><div class="empty">Loading…</div></div>
+
+  <div class="err" id="err" style="display:none"></div>
+</div>
+<footer style="margin-top:32px;padding:20px 0;border-top:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.3);text-align:center">© 2025 Pramod KK · NEPSE Terminal · IPO Board<br><a href="/" style="color:rgba(255,255,255,.4);margin:0 6px">Home</a> · <a href="/print" style="color:rgba(255,255,255,.4);margin:0 6px">aaomsPrint</a> · <a href="/aaomsdigital" style="color:rgba(255,255,255,.4);margin:0 6px">aaomsDigital</a> · <a href="/nepse" style="color:rgba(255,255,255,.4);margin:0 6px">NEPSE</a> · <a href="/aavnepse" style="color:#ef4444;margin:0 6px;font-weight:600">AVNEPSE</a> · <a href="/classroom" style="color:rgba(255,255,255,.4);margin:0 6px">Classroom</a> · <a href="/gurukul" style="color:rgba(255,255,255,.4);margin:0 6px">Gurukul</a> · <a href="/faq" style="color:rgba(255,255,255,.4);margin:0 6px">FAQ</a> · <a href="/sayhi" style="color:rgba(255,255,255,.4);margin:0 6px">Say Hi</a></footer>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+
+  function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+  function fmtDate(s){
+    if(!s) return '—';
+    try{var d=new Date(s);if(isNaN(d))return escapeHtml(s);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}catch(e){return escapeHtml(s)}
+  }
+
+  function renderUpcoming(list) {
+    var el = $('upcoming');
+    if (!list.length) {
+      el.innerHTML = '<div class="empty">No upcoming IPOs right now — check back later</div>';
+      return;
+    }
+    el.innerHTML = list.map(function(ipo) {
+      var name = ipo.name || ipo.companyName || ipo.company || 'Unknown';
+      var units = ipo.units || ipo.shares || ipo.totalUnits || '—';
+      var openDate = ipo.openDate || ipo.applyFrom || ipo.startDate || '';
+      var closeDate = ipo.closeDate || ipo.applyTo || ipo.endDate || '';
+      var reserved = ipo.reservedFor || ipo.reserved || '';
+      var price = ipo.price || ipo.faceValue || ipo.bandPrice || '';
+      var isHighlighted = !closeDate || new Date(closeDate) >= new Date();
+      var badgeHtml = reserved ? '<span class="badge reserved">' + escapeHtml(reserved) + '</span>' : '<span class="badge public">Public</span>';
+      var dateRange = openDate ? (fmtDate(openDate) + (closeDate ? ' — ' + fmtDate(closeDate) : '')) : 'TBA';
+
+      return '<div class="ipo-card' + (isHighlighted ? ' highlight' : '') + '">' +
+        '<div class="ipo-name">' + escapeHtml(name) + '</div>' +
+        '<div class="ipo-row">' +
+          '<span>Units: <b>' + escapeHtml(units) + '</b></span>' +
+          (price ? '<span>Price: <b>NPR ' + escapeHtml(price) + '</b></span>' : '') +
+          '<span>Dates: <b>' + dateRange + '</b></span>' +
+        '</div>' +
+        badgeHtml +
+        '<div class="ipo-apply"><a href="https://meroshare.cdsc.com.np/" target="_blank" rel="noopener">Apply on MeroShare →</a></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderArchive(list) {
+    var el = $('archive');
+    if (!list.length) {
+      el.innerHTML = '<div class="empty">No recent IPO data available</div>';
+      return;
+    }
+    el.innerHTML = list.slice(0, 40).map(function(ipo) {
+      var name = ipo.name || ipo.companyName || ipo.company || 'Unknown';
+      var units = ipo.units || ipo.shares || ipo.totalUnits || '—';
+      var openDate = ipo.openDate || ipo.applyFrom || ipo.startDate || '';
+      var closeDate = ipo.closeDate || ipo.applyTo || ipo.endDate || '';
+      var reserved = ipo.reservedFor || ipo.reserved || '';
+      var price = ipo.price || ipo.faceValue || ipo.bandPrice || '';
+      var status = ipo.status || (closeDate && new Date(closeDate) < new Date() ? 'Closed' : '');
+      var badgeHtml = reserved ? '<span class="badge reserved">' + escapeHtml(reserved) + '</span>' : '<span class="badge public">Public</span>';
+      var dateRange = openDate ? (fmtDate(openDate) + (closeDate ? ' — ' + fmtDate(closeDate) : '')) : '—';
+
+      return '<div class="ipo-card">' +
+        '<div class="ipo-name">' + escapeHtml(name) + '</div>' +
+        '<div class="ipo-row">' +
+          '<span>Units: <b>' + escapeHtml(units) + '</b></span>' +
+          (price ? '<span>Price: <b>NPR ' + escapeHtml(price) + '</b></span>' : '') +
+          '<span>Dates: <b>' + dateRange + '</b></span>' +
+          (status ? '<span>Status: <b>' + escapeHtml(status) + '</b></span>' : '') +
+        '</div>' +
+        badgeHtml +
+      '</div>';
+    }).join('');
+  }
+
+  async function load() {
+    try {
+      var r = await fetch('/api/nepse/ipo?t=' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      var d = await r.json();
+      renderUpcoming(d.upcoming || []);
+      renderArchive(d.archive || d.old || []);
+      $('err').style.display = 'none';
+    } catch(e) {
+      $('err').style.display = 'block';
+      $('err').textContent = 'IPO feed temporarily unavailable — retrying…';
+      $('upcoming').innerHTML = '<div class="empty">Unable to load IPO data</div>';
+      $('archive').innerHTML = '';
+    }
+  }
+
+  load();
+  setInterval(load, 300000);
+})();
+</script>
+<script src="/assets/aaoms-core.js"></script>
+<div id="pwaBanner">
+  <div class="pwa-text">ðŸ“² Install <strong>kkpramod</strong> on your phone for instant NEPSE updates &amp; aaoms news</div>
+  <div class="pwa-actions">
+    <button id="pwaInstall">Install</button>
+    <button id="pwaNotify">ðŸ”” Notify Me</button>
+    <button id="pwaDismiss">Later</button>
+  </div>
+</div>
+<script src="/assets/pwa.js"></script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brokers — NEPSE Terminal · kkpramod.com.np</title>
+<meta name="description" content="NEPSE broker directory — search, sort and find brokers by code, name, type or district.">
+<meta name="theme-color" content="#09090b">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://kkpramod.com.np/brokers">
+<meta property="og:title" content="Brokers — NEPSE Terminal">
+<meta property="og:description" content="NEPSE broker directory — search, sort and find brokers by code, name, type or district.">
+<meta property="og:url" content="https://kkpramod.com.np/brokers">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="/assets/favicon-infinity.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/aaoms-core.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#09090b;--fg:#fafafa;--dim:rgba(255,255,255,.55);
+  --green:#22c55e;--red:#ef4444;--gold:#e8d5a3;
+  --card:rgba(255,255,255,.03);--line:rgba(255,255,255,.08);
+}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,sans-serif;line-height:1.5;min-height:100vh}
+a{color:var(--gold);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.back-bar{padding:18px 0 8px;font-size:13px;color:var(--dim)}
+.back-bar a{display:inline-flex;align-items:center;gap:4px}
+.hero{padding:20px 0 12px}
+.hero h1{font-size:clamp(1.4rem,3.5vw,1.8rem);font-weight:700;margin-bottom:4px}
+.hero p{font-size:13px;color:var(--dim);max-width:60ch}
+
+.search-row{margin:14px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.search-input{
+  flex:1;min-width:180px;max-width:400px;background:rgba(0,0,0,.35);border:1px solid var(--line);
+  border-radius:10px;color:#fff;padding:10px 14px;font-size:14px;font-family:'JetBrains Mono',monospace;
+}
+.search-input:focus{outline:none;border-color:rgba(232,213,163,.45)}
+.search-input::placeholder{color:rgba(255,255,255,.3)}
+.result-count{font-size:12px;color:var(--dim);font-family:'JetBrains Mono',monospace}
+
+.table-wrap{
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.25);
+  margin-bottom:32px;
+}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:500px}
+th{
+  text-align:left;padding:10px 12px;font-size:10.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:rgba(255,255,255,.4);border-bottom:1px solid var(--line);
+  white-space:nowrap;position:sticky;top:0;background:#09090b;cursor:pointer;user-select:none;
+}
+th:hover{color:rgba(255,255,255,.6)}
+th .sort-arrow{margin-left:4px;font-size:9px}
+td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tr:hover{background:rgba(255,255,255,.03)}
+.code{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--gold)}
+.name-col{color:var(--fg);max-width:200px;overflow:hidden;text-overflow:ellipsis}
+.type-badge{
+  font-size:10px;padding:2px 7px;border-radius:999px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  background:rgba(148,163,184,.1);color:var(--dim);border:1px solid rgba(148,163,184,.15);
+}
+.type-badge-member{background:rgba(34,197,94,.1);color:var(--green);border-color:rgba(34,197,94,.25)}
+.tms-link{font-size:12px}
+
+.empty{padding:32px;text-align:center;color:var(--dim);font-size:14px}
+.err{color:var(--red);font-size:13px;padding:12px 0}
+footer{margin-top:32px;padding:20px 0;border-top:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.3);text-align:center}
+</style>
+</head>
+<body class="page">
+<header class="aa-header">
+  <nav class="aa-nav wrap">
+    <a class="aa-brand" href="/"><img src="/assets/logo-infinity.png" alt="aaoms infinity logo">Pramod KK</a>
+    <div class="aa-links">
+      <a href="/">Home</a>
+      <div class="navsub">
+        <a class="sub-top" href="/aaomsdigital">aaomsDigital <span class="car">&#9660;</span></a>
+        <div class="submenu">
+          <a href="/aaomsdigital"><b>Services</b><small>Software, AI, 3D, digitizing</small></a>
+          <a href="/aaomsdigital#store"><b>Digital Products</b><small>Embroidery files</small></a>
+          <div class="divider"></div>
+          <a href="/nepse"><b>NEPSE Screener</b><small>Gainers · losers · daily glance</small></a>
+          <a href="/moneycontrol"><b>MoneyControl</b><small>Charts · drawings · indicators</small></a>
+          <a href="/classroom"><b>Price Action Classroom</b><small>Darvas · candles · risk rules</small></a>
+          <a href="/e-aaoms"><b>e-aaoms</b><small>Billing · VAT · ops</small></a>
+          <a href="/print"><b>aaomsPrint</b><small>ID card studio</small></a>
+        </div>
+      </div>
+      <a href="/gurukul">Gurukul</a>
+      <a href="/sayhi">Say Hi</a>
+    </div>
+    <div class="flexrow">
+      <div class="live-pill"><i></i> DAILY</div>
+      <button class="aa-burger" type="button" aria-label="Menu">&#9776;</button>
+    </div>
+  </nav>
+</header>
+<div class="wrap">
+  <div class="back-bar"><a href="/nepse">&larr; Back to NEPSE Screener</a></div>
+  <section class="hero">
+    <h1>Broker Directory</h1>
+    <p>Search all SEBON-registered brokers. Click column headers to sort. Find your broker for TMS access.</p>
+  </section>
+
+  <div class="search-row">
+    <input class="search-input" id="search" type="search" placeholder="Search name, code, district…" inputmode="search" autocomplete="off">
+    <span class="result-count" id="count"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th data-col="code">Code <span class="sort-arrow"></span></th>
+          <th data-col="name">Name <span class="sort-arrow"></span></th>
+          <th data-col="type">Type <span class="sort-arrow"></span></th>
+          <th data-col="districts">Districts <span class="sort-arrow"></span></th>
+          <th>TMS</th>
+        </tr>
+      </thead>
+      <tbody id="body">
+        <tr><td colspan="5" class="empty">Loading broker data…</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="err" id="err" style="display:none"></div>
+</div>
+<footer style="margin-top:32px;padding:20px 0;border-top:1px solid var(--line);font-size:12px;color:rgba(255,255,255,.3);text-align:center">© 2025 Pramod KK · NEPSE Terminal · Broker Directory<br><a href="/" style="color:rgba(255,255,255,.4);margin:0 6px">Home</a> · <a href="/print" style="color:rgba(255,255,255,.4);margin:0 6px">aaomsPrint</a> · <a href="/aaomsdigital" style="color:rgba(255,255,255,.4);margin:0 6px">aaomsDigital</a> · <a href="/nepse" style="color:rgba(255,255,255,.4);margin:0 6px">NEPSE</a> · <a href="/aavnepse" style="color:#ef4444;margin:0 6px;font-weight:600">AVNEPSE</a> · <a href="/classroom" style="color:rgba(255,255,255,.4);margin:0 6px">Classroom</a> · <a href="/gurukul" style="color:rgba(255,255,255,.4);margin:0 6px">Gurukul</a> · <a href="/faq" style="color:rgba(255,255,255,.4);margin:0 6px">FAQ</a> · <a href="/sayhi" style="color:rgba(255,255,255,.4);margin:0 6px">Say Hi</a></footer>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var brokers = [];
+  var query = '';
+  var sortCol = 'code';
+  var sortAsc = true;
+
+  function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+  function render() {
+    var list = brokers;
+    if (query) {
+      var q = query.toUpperCase();
+      list = list.filter(function(b) {
+        return (b.code||'').toUpperCase().indexOf(q) !== -1 ||
+          (b.name||'').toUpperCase().indexOf(q) !== -1 ||
+          (b.districts||'').toUpperCase().indexOf(q) !== -1 ||
+          (b.type||'').toUpperCase().indexOf(q) !== -1;
+      });
+    }
+    list.sort(function(a, b) {
+      var va = (a[sortCol] || '').toString().toLowerCase();
+      var vb = (b[sortCol] || '').toString().toLowerCase();
+      if (!isNaN(Number(va)) && !isNaN(Number(vb))) {
+        return sortAsc ? Number(va) - Number(vb) : Number(vb) - Number(va);
+      }
+      return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+    });
+    $('count').textContent = list.length + ' of ' + brokers.length + ' brokers';
+    // update sort arrows
+    document.querySelectorAll('th[data-col]').forEach(function(th) {
+      var arrow = th.querySelector('.sort-arrow');
+      if (th.getAttribute('data-col') === sortCol) {
+        arrow.textContent = sortAsc ? '▲' : '▼';
+      } else {
+        arrow.textContent = '';
+      }
+    });
+    var body = $('body');
+    if (!list.length) {
+      body.innerHTML = '<tr><td colspan="5" class="empty">No brokers match your search</td></tr>';
+      return;
+    }
+    body.innerHTML = list.map(function(b) {
+      var typeCls = (b.type||'').toLowerCase().indexOf('member') !== -1 ? ' type-badge-member' : '';
+      var tmsUrl = b.tmsUrl || b.tms || '';
+      var tmsHtml = tmsUrl ? '<a class="tms-link" href="' + escapeHtml(tmsUrl) + '" target="_blank" rel="noopener">Open TMS →</a>' : '—';
+      return '<tr>' +
+        '<td class="code">' + escapeHtml(b.code) + '</td>' +
+        '<td class="name-col">' + escapeHtml(b.name) + '</td>' +
+        '<td><span class="type-badge' + typeCls + '">' + escapeHtml(b.type || '—') + '</span></td>' +
+        '<td>' + escapeHtml(b.districts || b.district || '—') + '</td>' +
+        '<td>' + tmsHtml + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  document.querySelectorAll('th[data-col]').forEach(function(th) {
+    th.addEventListener('click', function() {
+      var col = th.getAttribute('data-col');
+      if (sortCol === col) { sortAsc = !sortAsc; }
+      else { sortCol = col; sortAsc = true; }
+      render();
+    });
+  });
+
+  $('search').addEventListener('input', function() {
+    query = ($('search').value || '').trim();
+    render();
+  });
+
+  async function load() {
+    try {
+      var r = await fetch('/api/nepse/ownership?t=' + Date.now(), { cache: 'no-store' });
+      var d = null;
+      if (r.ok) d = await r.json();
+      // If our API doesn't have broker list, fetch from yonepse
+      if (!d || !d.brokers || !d.brokers.length) {
+        try {
+          var r2 = await fetch('https://shubhamnpk.github.io/yonepse/data/other/brokers.json', { cache: 'default' });
+          if (r2.ok) d = await r2.json();
+        } catch(e2) {}
+      }
+      if (d && (d.brokers || Array.isArray(d))) {
+        brokers = (d.brokers || d || []).map(function(b) {
+          return {
+            code: b.code || b.brokerCode || b.id || '',
+            name: b.name || b.brokerName || b.company || '',
+            type: b.type || b.category || b.brokerType || 'Member',
+            districts: b.districts || b.district || b.area || '',
+            tmsUrl: b.tmsUrl || b.tms || b.tmsLink || ''
+          };
+        }).filter(function(b) { return b.code || b.name; });
+        // If TMS URLs missing, construct common pattern
+        brokers.forEach(function(b) {
+          if (!b.tmsUrl && b.code) {
+            b.tmsUrl = 'https://tms' + String(b.code).replace(/\D/g,'') + '.nepalstock.com.np';
+          }
+        });
+      }
+      render();
+      $('err').style.display = 'none';
+    } catch(e) {
+      $('err').style.display = 'block';
+      $('err').textContent = 'Failed to load broker data — retrying…';
+    }
+  }
+
+  load();
+  setInterval(load, 600000);
+})();
+</script>
+<script src="/assets/aaoms-core.js"></script>
+<div id="pwaBanner">
+  <div class="pwa-text">ðŸ“² Install <strong>kkpramod</strong> on your phone for instant NEPSE updates &amp; aaoms news</div>
+  <div class="pwa-actions">
+    <button id="pwaInstall">Install</button>
+    <button id="pwaNotify">ðŸ”” Notify Me</button>
+    <button id="pwaDismiss">Later</button>
+  </div>
+</div>
+<script src="/assets/pwa.js"></script>
+</body>
+</html>
