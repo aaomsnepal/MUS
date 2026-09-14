@@ -1,0 +1,46 @@
+kkpramod.com.np — UPDATE (classroom + chat)
+==========================================
+Admin / SITE_PIN: 476143
+
+WHAT'S NEW
+----------
+1) Classroom
+   - Exactly 102 DARVAX slides (extras removed)
+   - Perspective Tunnel Reader (2nd viewing style + zoom)
+   - Classroom articles section under slides
+     → write posts in Admin → Gurukul posts
+     → tag them: classroom  (also: price-action, darvax)
+
+2) Community chat (site-wide floating icon)
+   - Real-time WebSocket:  /ws/chat
+   - REST history + fallback:  GET/POST /api/chat
+   - Online count, auto-reconnect, polling fallback
+   - Admin clear: DELETE /api/admin/chat  (with admin PIN)
+
+INSTALL
+-------
+1. Backup your live folder
+2. Copy these files over your live site (keep your live .env if you prefer):
+     server.js
+     public/assets/aaoms-core.js
+     public/assets/aaoms-core.css
+     public/classroom.html
+     public/admin.html
+     data/classroom-slides.json
+     data/chat.json          (create if missing: {"messages":[]})
+     data/posts.json         (create if missing: [])
+3. npm install          (only express is required)
+4. Restart:  node server.js
+
+NGINX (required for live WebSocket)
+-----------------------------------
+location /ws/ {
+  proxy_pass http://127.0.0.1:3002;
+  proxy_http_version 1.1;
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection "upgrade";
+  proxy_set_header Host $host;
+  proxy_read_timeout 86400;
+}
+
+Test: open site → gold chat bubble bottom-right → Live · WebSocket

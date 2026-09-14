@@ -1,0 +1,32 @@
+kkpramod-siteX — FULL INTEGRATED BUILD
+======================================
+Replace this folder on your computer / server.
+
+WHAT'S INCLUDED
+---------------
+• Full site pages (index, print, classroom, gurukul, digital, admin, …)
+• public/moneycontrol.html — charts + drawings + indicators + Darvas + IPO/div/setups
+• public/nepse.html — screener (session Darvas + screens)
+• server.js — live NEPSE multi-source + /api/nepse/darvas + local OHLC first + moneycontrol routes
+• public/data/nepse/ — 30 major symbols multi-year OHLC + dividends + rights + setups
+• nepse-research/scripts — download ALL ~365 symbols, analyze, sync
+
+QUICK START
+-----------
+1. Unzip and replace your live kkpramod-siteX folder
+   (keep your existing .env secrets if needed — merge carefully)
+2. npm install   (if node_modules missing)
+3. node server.js
+4. Open:
+   http://localhost:PORT/moneycontrol
+   http://localhost:PORT/nepse
+
+EXPAND HISTORY TO ALL STOCKS
+----------------------------
+cd nepse-research
+pip install requests
+python scripts/download_all_history.py
+python scripts/analyze_setups.py
+python scripts/sync_to_site.py --site ..
+
+Educational only — not investment advice.

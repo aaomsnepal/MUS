@@ -1,0 +1,84 @@
+═══════════════════════════════════════════════════════════════
+  kkpramod MoneyControl — BEST FREE NEPSE RESEARCH DESK IN NEPAL
+═══════════════════════════════════════════════════════════════
+
+You asked for the best in Nepal. This package is built for that.
+
+WHAT YOU HAVE NOW
+-----------------
+1) LIVE board (multi-source)
+   - Primary: your Merolagani scrape (server.js already does this)
+   - Fallback: YONEPSE public JSON (shubhamnpk.github.io/yonepse)
+   - WebSocket push: /ws/nepse
+
+2) FULL HISTORY (backdated)
+   - 30 major symbols loaded with multi-year daily OHLC
+   - ~70,000+ bars total
+   - Dividends + rights per symbol
+   - Script ready to pull ALL ~365 symbols:
+       python scripts/download_all_history.py
+
+3) RESEARCH / TRADE SETUPS
+   - SMA20/50/200, EMA20/50, RSI14
+   - Support / resistance swings
+   - Breakout, pullback-to-EMA, RSI oversold/overbought, volume spike
+   - Shown in MoneyControl → Setups tab
+
+4) IPO + DIVIDENDS
+   - Live IPO open/upcoming from YONEPSE
+   - Dividend & rights history from Nepse-All-Scraper
+
+5) UI
+   - /moneycontrol  = TradingView-style chart + watchlist + detail
+   - /nepse         = your existing screener
+   - Mobile ready
+
+APIs USED (all free, no key)
+----------------------------
+✓ https://shubhamnpk.github.io/yonepse/data/...          (live + IPO + proposed div)
+✓ https://samirwagle.github.io/Nepse-All-Scraper/docs/api/...  (history, div, rights)
+✓ https://cdn.jsdelivr.net/gh/Aabishkar2/nepse-data@main/...    (long OHLC history)
+✓ merolagani.com (your existing server scrape)
+✓ /api/nepse/* on your own Node server (local-first cache)
+
+DEPLOY ON LIVE SITE (kkpramod.com.np)
+------------------------------------
+1. Copy into live package:
+     public/moneycontrol.html
+     public/data/nepse/          (entire folder)
+     server.js                   (or merge routes)
+
+2. Restart Node
+
+3. Open:
+     https://kkpramod.com.np/moneycontrol
+     https://kkpramod.com.np/charts
+     https://kkpramod.com.np/terminal
+
+EXPAND TO ALL STOCKS
+--------------------
+cd nepse-research-system
+pip install requests
+python scripts/download_all_history.py          # all ~365 symbols
+python scripts/analyze_setups.py
+python scripts/sync_to_site.py --site /path/to/kkpramod-siteX
+# then re-deploy public/data/nepse/
+
+PUSH TO YOUR GITHUB
+-------------------
+aaomsnepal/MoneyControl  → put data/ohlc + scripts
+aaomsnepal/e-control     → backend architecture
+aaomsnepal/NEPSE-Ecosystem → keep source map updated
+
+WHY THIS IS #1 FREE IN NEPAL
+----------------------------
+- Multi-year history for research (not only last session)
+- Live + history + IPO + dividends + rights + setups in ONE terminal
+- TradingView-style chart (Lightweight Charts)
+- Screener-style detail panes
+- Local cache so it stays fast when public CDNs are slow
+- Your brand on kkpramod.com.np
+
+Educational only. Not investment advice. Not SEBON-licensed advisory.
+
+═══════════════════════════════════════════════════════════════

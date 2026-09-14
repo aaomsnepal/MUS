@@ -1,0 +1,19 @@
+Copy into D:\X_aaoms\Pramod\kkpramod-siteX  (overwrite)
+
+  server.js
+  public\assets\aaoms-core.js
+  public\assets\aaoms-core.css
+  public\assets\admin.js
+  public\classroom.html
+  public\admin.html
+  data\classroom-slides.json
+  data\chat.json          (only if you do not have one yet)
+  data\posts.json         (only if empty / new)
+
+Keep your existing .env and darvax images.
+Restart:  node server.js
+
+Admin PIN: 476143
+New tab: Admin → Classroom posts
+Views: Classroom 1000+ | Gurukul 2000+
+Chat: gold bubble → Live WebSocket

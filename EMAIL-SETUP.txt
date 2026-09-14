@@ -1,0 +1,54 @@
+EMAIL: hello@kkpramod.com.np → aaomsnepal@gmail.com
+====================================================
+Two separate things send mail to aaomsnepal@gmail.com:
+
+  A) Real mail sent to hello@kkpramod.com.np (people emailing you directly)
+     → set up with hosting + Gmail below. No website code needed.
+
+  B) The "Say Hi" contact form on the website (public/contact.html)
+     → the site now emails you a copy of every submission automatically.
+       It still also saves to Control Room -> Messages either way.
+       To switch it on:
+         1. Open .env in the site folder
+         2. Fill in:  SMTP_PASS=<password of the hello@ mailbox>
+            (get that password from your hosting panel — same mailbox as below)
+         3. Run `npm install` once (adds the mailer library), then restart
+            the site (`node server.js`)
+       MAIL_TO in .env controls where these go — already set to
+       aaomsnepal@gmail.com. Change it there if you ever want a different inbox.
+
+PART A — DIRECT MAIL TO hello@
+===============================
+
+STEP 1 — FORWARD (hosting panel)
+--------------------------------
+1. Login to the panel that manages mail.kkpramod.com.np
+2. Email accounts → hello@kkpramod.com.np
+3. Forwarders / Forward to:
+      aaomsnepal@gmail.com
+4. Save
+
+STEP 2 — REPLY FROM GMAIL AS hello@
+------------------------------------
+1. Open Gmail as aaomsnepal@gmail.com
+2. Settings → See all settings → Accounts and Import
+3. "Send mail as" → Add another email address
+4. Email: hello@kkpramod.com.np
+5. SMTP:
+      Server:   mail.kkpramod.com.np
+      Port:     465  (SSL)   OR   587 (STARTTLS)
+      Username: hello@kkpramod.com.np
+      Password: (password of hello@ mailbox from your host — do not share in chat)
+6. Gmail sends verification → it lands in your inbox via forward → enter code
+
+STEP 3 — TEST
+-------------
+• From any other email → to hello@kkpramod.com.np → must appear in Gmail
+• Reply choosing From: hello@kkpramod.com.np
+
+SERVER CHEAT SHEET
+------------------
+IMAP  mail.kkpramod.com.np  993  SSL    hello@kkpramod.com.np
+SMTP  mail.kkpramod.com.np  465  SSL    hello@kkpramod.com.np
+SMTP  mail.kkpramod.com.np  587  STARTTLS  hello@kkpramod.com.np
+POP   mail.kkpramod.com.np  995  SSL    hello@kkpramod.com.np

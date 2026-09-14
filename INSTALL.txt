@@ -1,0 +1,27 @@
+kkpramod full update — deep NEPSE + Gemini + classroom + chat
+==============================================================
+Copy ALL of these into: D:\X_aaoms\Pramod\kkpramod-siteX
+(overwrite when asked)
+
+Keep your existing:
+  - node_modules (or run npm install)
+  - public/assets/classroom/darvax images
+  - other data JSON you already filled (orders, jobs…)
+
+Then:
+  cd D:\X_aaoms\Pramod\kkpramod-siteX
+  npm install
+  node server.js
+
+Admin PIN: 476143
+
+Features in this pack:
+- Deep NEPSE knowledge (sectors, major stocks, settlement, risk, Nepali Qs)
+- Gemini AI fallback + learns from public questions (data/learned-qa.json)
+- Nepali answers when user asks in Nepali
+- Classroom posts panel + 102 slides JSON
+- WebSocket community chat
+- Classroom articles section
+
+Test shell:
+  nepse | gainers | NABIL | how to start trading in nepal | नेप्से के हो

@@ -1,0 +1,33 @@
+kkpramod.com.np — UPDATE PACK
+=============================
+Admin PIN + e-aaoms PIN: 476143
+
+INSTALL (replace into your live folder)
+--------------------------------------
+1. Backup your current site folder first.
+2. Copy these paths OVER the same paths in your project:
+
+   server.js
+   .env                         (SITE_PIN=476143 is inside)
+   data/settings.json           (eaaoms.pin = 476143)
+   data/knowledge.json
+   public/knowledge.json
+   public/index.html
+   public/classroom.html
+   public/nepse.html
+   public/assets/classroom/darvax/   (102 slides — whole folder)
+
+3. Restart:
+   pm2 restart all
+   (or) node server.js
+
+4. Check:
+   Admin / e-aaoms login → 476143
+   /classroom → Flip book "DARVAX STYLE · By Pramod"
+   /nepse → live with Updating system fallback
+
+Included changes
+- PIN 476143 everywhere (admin + e-aaoms)
+- Identity: Creative Head & 3D Animator · BCA/BSc · MSc Multimedia
+- Classroom 102 pages + flip book
+- NEPSE multi-source live feed (no hard crash)

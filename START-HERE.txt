@@ -1,0 +1,117 @@
+════════════════════════════════════════════════════════════════
+  kkpramod.com.np  —  START HERE
+  aaomsPrint · aaomsDigital · Digital Gurukul · Say Hi · Admin
+════════════════════════════════════════════════════════════════
+
+RUN IT ON YOUR OWN PC FIRST
+---------------------------
+1. Double-click START-WINDOWS.bat
+   (or open a terminal here and type:  npm install   then   node server.js )
+2. Open http://localhost:3002
+
+WHAT IS WHERE
+-------------
+  /                     Home — Quantum Shell terminal, all sections
+  /print                aaomsPrint Card Studio (the big one)
+  /aaomsdigital         Services + Digital Products store
+  /gurukul              Digital Gurukul — your daily posts
+  /sayhi                Say Hi — write & send, lands in your inbox
+  /faq                  FAQ page (also feeds Google's FAQ results)
+  /jobs                 Print job board (PIN)
+  /admin                Control Room (PIN) — everything is managed here
+
+  PIN is 6143 unless you change SITE_PIN.
+
+PUTTING IT ON HOSTINGRAJA
+-------------------------
+1. Upload every file and folder here (except node_modules).
+2. In the Node App panel set:
+       Application root      : the folder you uploaded to
+       Application startup   : server.js
+       Node version          : 18 or newer
+3. Click "Run NPM Install", then Start.
+4. Set the environment variables listed in .env.example.
+5. Point kkpramod.com.np at the app.
+
+PAYMENTS  (Digital Product section only — nowhere else on the site)
+------------------------------------------------------------------
+Three currencies, one place: the Digital Product store on /aaomsdigital.
+The buyer's currency is detected automatically and can be switched by hand.
+
+  INDIA — Razorpay — INR                        [ WORKING NOW ]
+      Your live keys are already in the .env file. UPI, cards, net banking
+      and wallets all work. The buyer pays and the files unlock instantly,
+      with the payment signature verified on the server first.
+
+      Because these are LIVE keys, treat the .env file like cash. Anyone
+      holding that secret can charge and refund on your Razorpay account.
+      Since it travelled through a chat window, regenerating the pair in the
+      Razorpay dashboard and pasting the new secret is the safe move — it is
+      one line to change and nothing else breaks.
+
+  INTERNATIONAL — PayPal — USD                  [ WORKING NOW ]
+      PAYPAL_ME=kkpramod is set. The buyer is sent to
+      paypal.me/kkpramod with the exact amount already filled in, presses
+      "I have paid", and the order appears in Control Room -> Orders with a
+      "Release files" button. One click sends their download link.
+
+      Optional upgrade: add PAYPAL_CLIENT_ID and PAYPAL_SECRET from your
+      PayPal developer dashboard and USD checkout becomes fully automatic,
+      exactly like Razorpay. The code is already there and switches itself.
+
+  NEPAL — NPR                                   [ NEEDS YOUR DETAILS ]
+      Open .env and fill in whichever you use:
+          ESEWA_ID=          your eSewa ID
+          KHALTI_ID=         your Khalti ID
+          BANK_NAME=         e.g. Nabil Bank
+          BANK_BRANCH=
+          BANK_ACCOUNT_NAME=
+          BANK_ACCOUNT=
+          PAYMENT_QR_URL=    optional, e.g. /assets/pay-qr.png
+
+      Whatever you fill in is shown to the Nepali buyer at checkout, along
+      with the order code to put in the payment remarks. They pay, press
+      "I have paid", and you release the files from Control Room -> Orders
+      after the money shows in your account. Until you fill these in, Nepali
+      buyers are routed to WhatsApp to get the details from you directly.
+
+      Nepal has no international card gateway, so this manual step is normal
+      and is how most Nepali stores handle NPR.
+
+THE STORE SELLS ONE THING
+-------------------------
+Embroidery digitized files. Nothing else is listed and nothing else should be.
+
+One example product ships with the build so you can test the whole path:
+"Example — Embroidery Digitized File", रु500 / Rs300 / $4, carrying a real
+DST file, a colour sequence sheet and a read-me. Buy it once yourself to see
+what a customer sees, then delete it and add your own designs from
+Control Room -> Digital products.
+
+DAILY USE
+---------
+  Write a Gurukul post   : /admin → Gurukul posts → text, image, video, music → Publish
+  Add a product to sell  : /admin → Digital products → prices in NPR/INR/USD + upload files
+  Read messages          : /admin → Inbox
+  Move a card job along  : /jobs → click the card → change status
+  Design and print cards : /print
+
+PRINTING FROM YOUR OWN PC
+-------------------------
+The agent folder holds aaomsprint-agent.js. Copy that folder to the PC
+with the Evolis attached, edit START-AGENT.bat with your site address and
+agent key, and run it. It picks up any job you set to "Approved".
+
+SEO
+---
+  /robots.txt    /sitemap.xml    /llms.txt     all generated live
+  Google verification file is already in place.
+  Bing: get your token from Bing Webmaster Tools and paste it into the
+  msvalidate.01 meta tag at the top of public/index.html.
+
+NOTHING WAS REMOVED
+-------------------
+Your original files are kept as:
+  server.original-backup.js
+  public/index.original-backup.html
+  public/admin.original-backup.html

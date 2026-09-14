@@ -1,0 +1,14 @@
+{
+  "name": "kkpramod-com-np",
+  "version": "1.0.0",
+  "description": "kkpramod.com.np — aaomsPrint card studio, aaomsDigital store, Digital Gurukul, Say Hi inbox and admin control room.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemailer": "^6.9.14"
+  }
+}
