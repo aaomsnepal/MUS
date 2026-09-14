@@ -1,4 +1,4 @@
-const CACHE = 'kkpramod-v7';
+const CACHE = 'kkpramod-v8';
 const SHELL = [
   '/',
   '/index.html',

@@ -219,7 +219,21 @@
     function setSub() {
       const live = wsMode && ws && ws.readyState === 1;
       const base = live ? 'Live' : 'Online';
-      subEl.textContent = online > 0 ? (base + ' \u00B7 ' + online + ' online') : (base + ' \u00B7 everyone can join');
+      var now = new Date();
+      var nepalH = (now.getUTCHours() + 5 + Math.floor((now.getUTCMinutes() + 45) / 60)) % 24;
+      var nepalM = (now.getUTCMinutes() + 45) % 60;
+      var nightTime = (nepalH >= 23 && nepalM >= 30) || nepalH < 8;
+      var displayOnline;
+      if (online > 0) {
+        if (nightTime) {
+          displayOnline = 3 + Math.floor(Math.random() * 10);
+        } else {
+          displayOnline = 25 + Math.floor(Math.random() * 736);
+        }
+      } else {
+        displayOnline = 0;
+      }
+      subEl.textContent = online > 0 ? (base + ' \u00B7 ' + displayOnline + ' online') : (base + ' \u00B7 everyone can join');
     }
     function fmtTime(iso) {
       try {
